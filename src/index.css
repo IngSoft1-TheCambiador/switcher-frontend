@@ -42,7 +42,39 @@ body {
 
 h1 {
   font-size: 5em;
-  line-height: 3;
+  line-height: 2;
+}
+
+.infoLabel {
+  color: rgb(240, 8, 8);
+
+  /* hide infoLabels until it's needed */
+  display: none;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input {
+  padding: 0.2em 1.2em;
+  text-align: center;
+
+  font-size: 1em;
+  font-family: inherit;
+
+  background-color: #A8AA88;
+  color: rgb(255, 255, 255);
+}
+
+form > * {
+  margin-bottom: 10px; /* Space between elements */
+}
+
+input::placeholder {
+  color: rgb(224, 223, 221);
 }
 
 button {
