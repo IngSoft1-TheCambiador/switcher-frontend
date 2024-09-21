@@ -1,17 +1,18 @@
 {
   "name": "switcher",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "wouter": "^3.3.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
