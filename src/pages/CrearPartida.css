@@ -1,0 +1,15 @@
+.container-crearP {
+
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    flex-direction: column;
+
+    background-color: #808264;
+}
