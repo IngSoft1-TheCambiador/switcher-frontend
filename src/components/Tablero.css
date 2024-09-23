@@ -1,0 +1,10 @@
+.tablero {
+  display: grid;
+  aspect-ratio: 3;
+  height: 60vh;
+  width: 60vh;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 1rem;
+  background-color: #ffffff;
+}

@@ -1,14 +1,15 @@
 import React from "react";
 import Ficha from "./Ficha";
+import "./Tablero.css";
 
-const Tablero = ({ datos }) => {
+function Tablero({ datos }) {
   return (
-    <div className="grid aspect-square h-[60vh] w-[60vh] grid-cols-6 grid-rows-6 gap-1 bg-slate-100">
+    <div className="tablero">
       {datos.map(({ id, x, y, color }) => (
         <Ficha key={id} id={id} x={x} y={y} color={color} />
       ))}
     </div>
   );
-};
+}
 
 export default Tablero;
