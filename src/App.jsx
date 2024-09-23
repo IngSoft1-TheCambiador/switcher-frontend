@@ -7,8 +7,11 @@ import WaitRoom from './pages/WaitRoom';
 function App() {
 
   // hardcodeado para testear
+  let game_id = 2;
+
+  // hardcodeado para testear
   function handleClick(){
-    navigate('/SalaDeEspera/:id')
+    navigate('/SalaDeEspera/'+{game_id});
   }
 
   // hardcodeado para testear
