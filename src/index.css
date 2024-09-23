@@ -1,6 +1,4 @@
-html,
-body,
-#root {
+html, body, #root {
   height: 100%;
   width: 100%;
   margin: 0;
@@ -17,9 +15,10 @@ body {
   align-items: center;
 }
 
+
 :root {
   text-align: center;
-  font-family: "Helvetica", sans-serif;
+  font-family: 'Helvetica', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -33,7 +32,7 @@ body {
 
 .container {
   font-family: inherit;
-  color: #56351f;
+  color: #56351F;
   text-align: center;
 
   background-color: inherit;
@@ -66,7 +65,7 @@ input {
   font-size: 1em;
   font-family: inherit;
 
-  background-color: #a8aa88;
+  background-color: #A8AA88;
   color: rgb(255, 255, 255);
 }
 
@@ -85,7 +84,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #56351f;
+  background-color: #56351F;
   color: rgb(255, 255, 255);
   cursor: pointer;
   transition: border-color 0.25s;
