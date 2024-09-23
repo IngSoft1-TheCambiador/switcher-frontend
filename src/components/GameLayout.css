@@ -1,17 +1,16 @@
-.layout{
-    display: grid;
-    grid-template-columns: auto 25vw;
-    flex-direction: row;
-    width: 100%;
-    height: 100%;
-    gap: 3vw;
+.layout {
+  display: grid;
+  grid-template-columns: auto 25vw;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  gap: 3vw;
 }
 
-.players{
-
-    background-color: blue;
-    gap: 2px;
-    padding: 5px;
+.players {
+  background-color: #b3d1ad;
+  gap: 2px;
+  padding: 5px;
 }
 
 /*
@@ -26,12 +25,15 @@
 }
 */
 
-.board-side{
-    background-color: aquamarine;
-    display: grid;
-    grid-template-rows: 13vh auto 13vh;
+.board-side {
+  background-color: #b3d1ad;
+  display: grid;
+  grid-template-rows: 13vh auto 13vh;
 }
 
-.bar{
-    background-color: aqua;
+.bar {
+  background-color: #808264;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
