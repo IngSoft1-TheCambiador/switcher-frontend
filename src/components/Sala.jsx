@@ -4,7 +4,7 @@ import { useLocation } from 'wouter';
 function Sala() {
   return (
     <>
-      sala
+      Sala
     </>
   );
 }

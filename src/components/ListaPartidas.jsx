@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AppContext } from '../contexts/Context';
 import { useLocation } from 'wouter';
 import './ListaPartidas.css'
 import CrearPartida from './CrearPartida';
 
-function ListaPartidas({ name, setGameName }) {
-  const [tempGameName, setTempGameName] = useState('');
+function ListaPartidas() {
+  const { game } = useContext(AppContext);
   const [, navigate] = useLocation();
 
   const goToInicio = () => {
@@ -16,14 +17,14 @@ function ListaPartidas({ name, setGameName }) {
 
       {/* Lista de Partidas */}
       <div className="container-listaP">
-        <h2>Hola {name}!</h2>
+        <h2>Hola {game.playerName}!</h2>
         <h2>Partida 1</h2>
         <h2>Partida 2</h2>
         <button onClick={goToInicio}>Volver</button>
       </div>
 
       {/* Crear Partida */}
-      <CrearPartida tempGameName={tempGameName} setTempGameName={setTempGameName} />
+      <CrearPartida />
 
     </div>
   );
