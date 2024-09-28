@@ -6,7 +6,7 @@ function Jugador({ jugadores }) {
   return (
     <div className="jugadores">
       {jugadores.map((jugador, index) => (
-        <div key={index} className="jugador">
+        <div key={index} className="jugador" style={{ backgroundColor: jugador.color }}>
           <h3>{jugador.nombre}</h3>
           <CartaFigura figuras={jugador.figuras} />
         </div>
