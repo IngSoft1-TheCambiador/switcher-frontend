@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import CartaFigura from "./CartaFigura";
 import "./Jugador.css";
+import { AppContext } from "../contexts/Context";
 
-function Jugador({ jugadores }) {
+function Jugador() {
+  const { jugadores } = useContext(AppContext);
   return (
     <div className="jugadores">
       {jugadores.map((jugador, index) => (
