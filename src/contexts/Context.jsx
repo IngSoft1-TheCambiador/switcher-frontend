@@ -2,25 +2,27 @@ import React, { useState, useEffect } from "react";
 
 export const AppContext = React.createContext({});
 
-const AppProvider = ({children}) => {
-    const [ gameId, setGameId ] = useState(0);
-    const [ playerName, setPlayerName ] = useState("");
-    const [ gamesList, setGamesList ] = useState([{"gameName" : "lala", "minPlayers" : 2, "maxPlayers" : 4}]);
+export const AppProvider = ({children}) => {
+    const [game, setGame] = useState ({
+        gameId: 0,
+        playerName: '',
+        gameName: '',
+        gamesList:
+        [{"gameName" : "lala", "minPlayers" : 2, "maxPlayers" : 4},
+         {"gameName" : "bbbbbbbbbbbbb", "minPlayers" : 4, "maxPlayers" : 4},
+         {"gameName" : "lala", "minPlayers" : 2, "maxPlayers" : 4},
+         {"gameName" : "bbbbbbbbbbbbb", "minPlayers" : 4, "maxPlayers" : 4},
+         {"gameName" : "lala", "minPlayers" : 2, "maxPlayers" : 4},
+         {"gameName" : "bbbbbbbbbbbbb", "minPlayers" : 4, "maxPlayers" : 4},
+         {"gameName" : "lala", "minPlayers" : 2, "maxPlayers" : 4},
+         {"gameName" : "bbbbbbbbbbbbb", "minPlayers" : 4, "maxPlayers" : 4},
+        ],
+    });
 
     return (
-        <AppContext.Provider 
-          value={{
-            gameId,
-            setGameId,
-            playerName,
-            setPlayerName,
-            gamesList,
-            setGamesList
-          }}
-        >
-            {children}
-        </AppContext.Provider>
-    );
+      <AppContext.Provider 
+        value={{ game, setGame }} >
+          {children}
+      </AppContext.Provider>
+  );
 };
-
-export default AppProvider;

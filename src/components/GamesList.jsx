@@ -1,38 +1,36 @@
-import GameRow from './GameRow';
+import React, { useContext, useState } from 'react';
+import { AppContext } from '../contexts/Context';
 import '../index.css';
+import './GamesList.css';
 
-function GamesList(games)
-{
+function GameRow({ gameName, minPlayers, maxPlayers }) {
   return (
-    <div class="bg-slate-200">
-      <div class="my-[5vh]">
-        <div class="flex flex-col">
-          <div class="mx-6 my-4 flex flex-row gap-[5vh] text-4xl font-semibold tracking-wide text-slate-900">
-            <div class="h-[12vh] w-[60vh] bg-slate-500">
-              <div class="mx-4 my-3 text-left">Partida</div>
-            </div>
-            <div class="size-[12vh] bg-slate-500">
-              <div class="my-3 text-center">Min</div>
-            </div>
-            <div class="size-[12vh] bg-slate-500">
-              <div class="my-3 text-center">Max</div>
-            </div>
-          </div>
-        </div>
-        
-        { games.map( (game) => GameRow(game) ) }
+    <div>
+      <div>{gameName}</div>
+      <div>{minPlayers}</div>
+      <div>{maxPlayers}</div>
+    </div>
 
-        <div class="flex flex-row justify-center gap-[5vh] text-4xl">
-          <div class="size-[12vh] bg-slate-300 text-center">
-            <div class="my-4">
-             ⬅️
-            </div>
-          </div>
-          <div class="size-[12vh] bg-slate-300 text-center">
-            <div class="my-4">
-             ➡️
-            </div>
-          </div>
+  );
+}
+
+function GamesList() {
+  const { game } = useContext(AppContext);
+  const games = game.gamesList;
+
+  return (
+    <div className="container-General">
+      <h2>EL SWITCHER</h2>
+      <div className="container-GamesList">
+        <div>
+          <div>Partida</div>
+          <div>Min</div>
+          <div>Max</div>
+        </div>
+          { games.map( (game) => <GameRow key={game.gameName} {...game} />) }
+        <div>
+          <div>⬅️</div>
+          <div>➡️</div>
         </div>
       </div>
     </div>
