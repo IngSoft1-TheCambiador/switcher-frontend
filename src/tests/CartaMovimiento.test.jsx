@@ -1,19 +1,23 @@
-//test de prueba
-
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import CartaMovimiento from '../components/CartaMovimiento';
 
 const mockMovimientos = [
-  { id: 1, imagen: 'movimiento1.png' },
-  { id: 2, imagen: 'movimiento2.png' }
+  { imagen: 'images/mov1.png' },
+  { imagen: 'images/mov2.png' },
 ];
 
 describe('CartaMovimiento', () => {
-  test('renders the movements', () => {
-    render(<CartaMovimiento movimientos={mockMovimientos} />);
+  test('renders the correct number of movimiento elements', () => {
+    const { container } = render(<CartaMovimiento movimientos={mockMovimientos} />);
+    expect(container.getElementsByClassName('carta-movimiento').length).toBe(mockMovimientos.length);
+  });
 
-    expect(screen.getByAltText('Movimiento 0')).toBeInTheDocument();
-    expect(screen.getByAltText('Movimiento 1')).toBeInTheDocument();
+  test('renders movimiento elements with the correct images', () => {
+    const { getAllByAltText } = render(<CartaMovimiento movimientos={mockMovimientos} />);
+    mockMovimientos.forEach((movimiento, index) => {
+      const imgElement = getAllByAltText(`Movimiento ${index}`)[0];
+      expect(imgElement).toHaveAttribute('src', movimiento.imagen);
+    });
   });
 });
