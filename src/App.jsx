@@ -4,35 +4,22 @@ import './App.css';
 import './index.css';
 import Inicio from './components/Inicio';
 import ListaPartidas from './components/ListaPartidas';
-import GamesList from './components/GamesList';
 import { Route } from "wouter";
-import AppProvider, { AppContext } from './contexts/Context';
+import { AppProvider } from './contexts/Context';
 
-const App = () =>
-(
-  <div className="container">
-    <div className="row mt-5">
-      <div className="col-12">
-        <AppProvider>
-          <AppContext.Consumer>
-            {
-              ({ gameId, setGameId, playerName, setPlayerName, gamesList, setGamesList }) => 
-              (
-               <div className="app-container">
-                 <Route path="/">
-                   <Inicio setName={setPlayerName}/>
-                 </Route>
-                 <Route path="/ListaPartidas">
-                   { GamesList(gamesList) }
-                 </Route>
-               </div>
-               )
-            }
-          </AppContext.Consumer>
-        </AppProvider>
+function App() {
+  return (
+    <AppProvider>
+      <div className="app-container">
+        <Route path="/">
+          <Inicio />
+        </Route>
+        <Route path="/ListaPartidas">
+          <ListaPartidas />
+        </Route>
       </div>
-    </div>
-  </div>
-)
+    </AppProvider>
+  );
+}
 
 export default App;
