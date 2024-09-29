@@ -4,7 +4,7 @@ import CartaFigura from "./CartaFigura";
 import CartaMovimiento from "./CartaMovimiento";
 import Jugador from "./Jugador";
 import "./GameLayout.css";
-import { AppContext } from "../contexts/Context.jsx";
+import { AppContext } from "../contexts/Context";
 
 function GameLayout() {
 

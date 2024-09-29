@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 
 export const AppContext = React.createContext({});
 
-const AppProvider = ({ children }) => {
-  const [gameId, setGameId] = useState(0);
-  const [playerName, setPlayerName] = useState("");
+export const AppProvider = ({ children }) => {
+  const [game, setGame] = useState({
+    gameId: 0,
+    playerName: '',
+    gameName: ''
+  });
   const [gamesList, setGamesList] = useState([{ "gameName": "lala", "minPlayers": 2, "maxPlayers": 4 }]);
   const [fichas, setFichas] = useState(Array.from({ length: 36 }, (v, i) => ({
     id: i,
@@ -56,10 +59,8 @@ const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider
       value={{
-        gameId,
-        setGameId,
-        playerName,
-        setPlayerName,
+        game,
+        setGame,
         gamesList,
         setGamesList,
         fichas,
@@ -74,5 +75,3 @@ const AppProvider = ({ children }) => {
     </AppContext.Provider>
   );
 };
-
-export default AppProvider;

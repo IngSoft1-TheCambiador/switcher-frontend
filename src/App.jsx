@@ -1,16 +1,33 @@
-import React from "react";
-import "./App.css";
-import GameLayout from "./components/GameLayout";
-import AppProvider from "./contexts/Context";
+
+import React, { useState, useContext } from 'react';
+import './App.css';
+import './index.css';
+import Inicio from './components/Inicio';
+import ListaPartidas from './components/ListaPartidas';
+import Sala from './components/Sala';
+import GamesList from './components/GamesList';
+import GameLayout from './components/GameLayout';
+import { Route } from "wouter";
+import { AppProvider } from './contexts/Context';
 
 function App() {
   return (
     <AppProvider>
       <div className="app-container">
-        <GameLayout />
+        <Route path="/">
+          <Inicio />
+        </Route>
+        <Route path="/ListaPartidas">
+          <ListaPartidas />
+        </Route>
+        <Route path="/Sala">
+          <Sala />
+        </Route>
+        <Route path="/GameLayout">
+          <GameLayout />
+        </Route>
       </div>
     </AppProvider>
-
   );
 }
 
