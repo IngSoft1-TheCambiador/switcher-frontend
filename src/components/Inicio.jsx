@@ -2,8 +2,10 @@ import React, { useState, useContext } from 'react';
 import { AppContext } from '../contexts/Context';
 import { useLocation } from 'wouter';
 
-function Inicio({ setName }) {
+function Inicio() {
+
   const [tempName, setTempName] = useState('');
+  const { game, setGame } = useContext(AppContext);
   const [, navigate] = useLocation();
   const { game, setGame } = useContext(AppContext);
 
@@ -15,8 +17,8 @@ function Inicio({ setName }) {
       setGame({ ...game, playerName: tempName });
       navigate('/ListaPartidas');
 
-    // Invalid name: display a help message
-    } else  if (tempName!="") {
+      // Invalid name: display a help message
+    } else if (tempName != "") {
       document.getElementById("invalid-name").style.display = 'block';
     }
   };
@@ -28,15 +30,15 @@ function Inicio({ setName }) {
         <input
           placeholder='Nombre'
           value={tempName}
-          onChange={e => setTempName(e.target.value)}/>
+          onChange={e => setTempName(e.target.value)} />
         <div
           className="infoLabel"
           id="invalid-name" >
-            Ingrese un nombre alfanumerico de hasta 10 caracteres
+          Ingrese un nombre alfanumerico de hasta 10 caracteres
         </div>
         <button
           className="button">
-            Continuar
+          Continuar
         </button>
       </form>
     </div>

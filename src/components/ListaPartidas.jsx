@@ -3,6 +3,7 @@ import { AppContext } from '../contexts/Context';
 import { useLocation } from 'wouter';
 import './ListaPartidas.css'
 import GamesList from './GamesList';
+import CrearPartida from './CrearPartida';
 
 function ListaPartidas() {
   const [, navigate] = useLocation();
@@ -18,6 +19,9 @@ function ListaPartidas() {
       <div className="container-listaP">
         <GamesList />
       </div>
+
+      {/* Crear Partida */}
+      <CrearPartida />
 
     </div>
   );
