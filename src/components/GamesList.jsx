@@ -4,14 +4,17 @@ import '../index.css';
 import './GamesList.css';
 import { GET, httpRequest } from '../services/HTTPServices.jsx';
 
-function GameRow({ gameName, minPlayers, maxPlayers }) {
+const joinGame = () => {
+  console.log("aaa");
+};
+
+function GameRow({ gameID, gameName, minPlayers, maxPlayers }) {
   return (
-    <div>
+    <div onClick={joinGame}>
       <div>{gameName}</div>
       <div>{minPlayers}</div>
       <div>{maxPlayers}</div>
     </div>
-
   );
 }
 
@@ -44,7 +47,7 @@ function GamesList() {
           <div>Min</div>
           <div>Max</div>
         </div>
-        {gamesList.map(({ game_name, min_players, max_players }) => <GameRow gameName={game_name} minPlayers={min_players} maxPlayers={max_players} />)}
+        {gamesList.map(({ gameID, game_name, min_players, max_players }) => <GameRow gameID={gameID} gameName={game_name} minPlayers={min_players} maxPlayers={max_players} />)}
         <div>
           <div>⬅️</div>
           <div>➡️</div>

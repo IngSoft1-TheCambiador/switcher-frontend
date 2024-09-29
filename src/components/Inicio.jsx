@@ -7,7 +7,6 @@ function Inicio() {
   const [tempName, setTempName] = useState('');
   const { game, setGame } = useContext(AppContext);
   const [, navigate] = useLocation();
-  const { game, setGame } = useContext(AppContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();

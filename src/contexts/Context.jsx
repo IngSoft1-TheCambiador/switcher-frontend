@@ -8,7 +8,7 @@ export const AppProvider = ({ children }) => {
     playerName: '',
     gameName: ''
   });
-  const [ gamesList, setGamesList ] = useState([{"gameName" : "lala", "minPlayers" : 2, "maxPlayers" : 4}]);
+  const [ gamesList, setGamesList ] = useState([{"gameID" : 0, "gameName" : "lala", "minPlayers" : 2, "maxPlayers" : 4}]);
 
   return (
     <AppContext.Provider
