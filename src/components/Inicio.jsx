@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AppContext } from '../contexts/Context';
 import { useLocation } from 'wouter';
 
 function Inicio({ setName }) {
   const [tempName, setTempName] = useState('');
   const [, navigate] = useLocation();
+  const { game, setGame } = useContext(AppContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Chech Regex before chaning the page
     if (/^[a-zA-Z0-9]{1,10}$/.test(tempName)) {
-      setName(tempName);
+      setGame({ ...game, playerName: tempName });
       navigate('/ListaPartidas');
 
     // Invalid name: display a help message
