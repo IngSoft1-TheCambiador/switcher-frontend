@@ -24,15 +24,17 @@ function GamesList() {
 
   async function getGames(page) {
 
-    const requestData = {
-      "method": GET,
-      "service": `list_games?page=${page}`
-    };
+    if (page > 0) {
+      const requestData = {
+        "method": GET,
+        "service": `list_games?page=${page}`
+      };
 
-    const response = await httpRequest(requestData);
-    console.log("response: ", response.json.games_list);
-    setGamesList(response.json.games_list);
-    setPage(page);
+      const response = await httpRequest(requestData);
+      console.log("response: ", response.json.games_list);
+      setGamesList(response.json.games_list);
+      setPage(page);
+    }
   }
 
   useEffect(() => {
