@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../contexts/Context';
 import '../index.css';
 import './GamesList.css';
@@ -20,21 +20,23 @@ function GameRow({ gameID, gameName, minPlayers, maxPlayers }) {
 
 function GamesList() {
   const { gamesList, setGamesList } = useContext(AppContext);
+  const [page, setPage] = useState(1);
 
-  async function getGames() {
+  async function getGames(page) {
 
     const requestData = {
       "method": GET,
-      "service": "list_games"
+      "service": `list_games?page=${page}`
     };
 
     const response = await httpRequest(requestData);
     console.log("response: ", response.json.games_list);
     setGamesList(response.json.games_list);
+    setPage(page);
   }
 
   useEffect(() => {
-    getGames();
+    getGames(page);
   }
     , []);
 
@@ -48,9 +50,9 @@ function GamesList() {
           <div>Max</div>
         </div>
         {gamesList.map(({ gameID, game_name, min_players, max_players }) => <GameRow gameID={gameID} gameName={game_name} minPlayers={min_players} maxPlayers={max_players} />)}
-        <div>
-          <div>⬅️</div>
-          <div>➡️</div>
+        <div className='container-Botones'>
+          <button className='left' onClick={() => getGames(page - 1)}>⬅️</button>
+          <button className='right' onClick={() => getGames(page + 1)}>➡️</button>
         </div>
       </div>
     </div>
