@@ -1,0 +1,72 @@
+.container-General {
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    align-content: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* leave more space for the game list than for the title */
+.container-General > *:first-child {
+    height: 50px;
+}
+.container-General > *:last-child {
+    height: 400px;
+}
+
+/* the list of games is a column of games */
+.container-GamesList {
+    /* max-width: 100vw; */
+    height: 70%;
+    width: 70%;
+  
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    align-content: center;
+    flex-direction: column;
+}
+
+/* each game, the titles and the arrows are a row */
+.container-GamesList > * {
+    display: flex;
+    flex-direction: row;
+    width:100%;
+    gap: 5px;
+    padding: 0.6em 1.2em;
+}
+
+/* leave 1/10 of the space for min and max columns */
+.container-GamesList > * > * {
+    width: 100%;
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    gap: 5px;
+}
+
+/* set the color of the titles */
+.container-GamesList > *:first-child {
+    background-color: #808264;
+}
+
+/* change the color of the arrows */
+.container-GamesList > *:last-child {
+    background-color: transparent;
+}
+
+/* move the right arrow as far to the right as possible  */
+.container-GamesList > *:last-child > *:first-child {
+    flex: 1000px;
+}
+
+/* set the color of each game */
+.container-GamesList > * {
+    background-color: #a8aa88;
+}
+
+/* make the game titles occupy the other 8/10 of space */
+.container-GamesList > * > *:first-child {
+    flex: 8
+}

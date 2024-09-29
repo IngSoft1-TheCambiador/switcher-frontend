@@ -1,0 +1,56 @@
+.player{
+    list-style-type: none;
+    background-color: rgba(165, 255, 91, 0.308);
+    margin-top: 10%;
+    margin-bottom: 10%;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    padding-left: 2px;
+    padding-right: 2px;
+    color: black;
+}
+
+h2{
+    font-size: 3.3vh;
+}
+
+.waitroom-layout{
+    display: grid;
+    justify-items: center;
+    color: #56351F;
+}
+
+.room-name{
+    font-size: 8vh;
+    margin-bottom: 15vh;
+    font-weight: bold;
+}
+
+.room-setting{
+    font-size: 50%;
+    color: #56351fcc;
+}
+
+.players-layout{
+    margin-left: 25%;
+    margin-right: 25%;
+    max-width: 20vw;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.can-start:hover{
+    box-shadow: 0 0 10px 5px rgba(9, 255, 0, 0.555);;
+}
+
+.cant-start:hover{
+    background-color: #503f3471;
+    color: rgba(255, 255, 255, 0.466);
+    border-color: rgba(0, 0, 0, 0);
+    cursor: default;
+}
+
+button{
+    margin-top: 5vh;
+}

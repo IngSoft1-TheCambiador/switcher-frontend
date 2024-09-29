@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { AppContext } from '../contexts/Context';
 import { useLocation } from 'wouter';
 
@@ -16,31 +16,31 @@ function Inicio() {
       setGame({ ...game, playerName: tempName });
       navigate('/ListaPartidas');
 
-    // Invalid name: display a help message
-    } else  if (tempName!="") {
+      // Invalid name: display a help message
+    } else if (tempName != "") {
       document.getElementById("invalid-name").style.display = 'block';
     }
   };
 
   return (
-      <div className="container">
-        <h1>EL SWITCHER</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            placeholder='Nombre'
-            value={tempName}
-            onChange={e => setTempName(e.target.value)}/>
-          <div
-            className="infoLabel"
-            id="invalid-name" >
-              Ingrese un nombre alfanumerico de hasta 10 caracteres
-          </div>
-          <button
-            className="button">
-              Continuar
-          </button>
-        </form>
-      </div>
+    <div className="container">
+      <h1>EL SWITCHER</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          placeholder='Nombre'
+          value={tempName}
+          onChange={e => setTempName(e.target.value)} />
+        <div
+          className="infoLabel"
+          id="invalid-name" >
+          Ingrese un nombre alfanumerico de hasta 10 caracteres
+        </div>
+        <button
+          className="button">
+          Continuar
+        </button>
+      </form>
+    </div>
   );
 }
 
