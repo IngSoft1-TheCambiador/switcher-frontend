@@ -1,0 +1,39 @@
+.layout {
+  display: grid;
+  grid-template-columns: auto 25vw;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  gap: 3vw;
+}
+
+.players {
+  background-color: #b3d1ad;
+  gap: 2px;
+  padding: 5px;
+}
+
+/*
+
+// para el chat habria que meter otro div adentro, por encima del <input>, para contener los msg ahi y poder scrollear y que el input para msgs quede en el mismo lugar
+.chat{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: blueviolet;
+    padding: 5px;
+}
+*/
+
+.board-side {
+  background-color: #b3d1ad;
+  display: grid;
+  grid-template-rows: 13vh auto 13vh;
+}
+
+.bar {
+  background-color: #808264;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
