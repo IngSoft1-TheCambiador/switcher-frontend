@@ -9,23 +9,23 @@ function GamesList() {
   const { game, setGame, lastMessage } = useContext(AppContext);
   const [page, setPage] = useState(1);
 
-  async function getGames(page) {
+  const handleResponse = (result) => {
+    console.log("response:",result);
+    if(result.json.games_list.length > 0){
+      setGame({ ...game, gamesList: result.json.games_list });
+      setPage(page);
+    }
+  };
 
+  async function getGames(page) {
     if (page > 0) {
       const requestData = {
         "method": GET,
         "service": `list_games?page=${page}`
       };
-
-      const response = await httpRequest(requestData);
-      console.log("response: ", response.json.games_list);
-
-      if(response.json.games_list.length > 0){
-        setGame({ ...game, gamesList: response.json.games_list });
-        setPage(page);
-      }
+      await httpRequest(requestData).then(handleResponse);
     }
-  }
+  };
 
   useEffect(() => {
       getGames(page);
