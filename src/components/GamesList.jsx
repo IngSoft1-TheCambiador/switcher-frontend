@@ -1,25 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../contexts/Context';
+import GameRow from './GameRow';
 import '../index.css';
 import './GamesList.css';
 import { GET, httpRequest } from '../services/HTTPServices.jsx';
 
-const joinGame = () => {
-  console.log("aaa");
-};
-
-function GameRow({ gameID, gameName, minPlayers, maxPlayers }) {
-  return (
-    <div onClick={joinGame}>
-      <div>{gameName}</div>
-      <div>{minPlayers}</div>
-      <div>{maxPlayers}</div>
-    </div>
-  );
-}
-
 function GamesList() {
-  const { gamesList, setGamesList } = useContext(AppContext);
+  const { game, setGame } = useContext(AppContext);
   const [page, setPage] = useState(1);
 
   async function getGames(page) {
@@ -32,8 +19,11 @@ function GamesList() {
 
       const response = await httpRequest(requestData);
       console.log("response: ", response.json.games_list);
-      setGamesList(response.json.games_list);
-      setPage(page);
+
+      if(response.json.games_list.length > 0){
+        setGame({ ...game, gamesList: response.json.games_list });
+        setPage(page);
+      }
     }
   }
 
@@ -51,10 +41,12 @@ function GamesList() {
           <div>Min</div>
           <div>Max</div>
         </div>
-        {gamesList.map(({ gameID, game_name, min_players, max_players }) => <GameRow gameID={gameID} gameName={game_name} minPlayers={min_players} maxPlayers={max_players} />)}
+        {game.gamesList.map(({ game_id, game_name, min_players, max_players}) =>
+          <GameRow gameID={game_id} gameName={game_name}
+                   minPlayers={min_players} maxPlayers={max_players} />)}
         <div className='container-Botones'>
-          <button className='left' onClick={() => getGames(page - 1)}>⬅️</button>
-          <button className='right' onClick={() => getGames(page + 1)}>➡️</button>
+          <div onClick={() => getGames(page - 1)}>⬅️</div>
+          <div onClick={() => getGames(page + 1)}>➡️</div>
         </div>
       </div>
     </div>

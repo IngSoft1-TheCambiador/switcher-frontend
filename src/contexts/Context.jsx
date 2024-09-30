@@ -4,14 +4,17 @@ export const AppContext = React.createContext({});
 
 export const AppProvider = ({ children }) => {
   const [game, setGame] = useState({
-    gameId: 0,
+    playerId: null,
     playerName: '',
-    gameName: ''
+    gameId: null,
+    gameName: '',
+    gamesList: [],
+    lastMessage: ''
   });
-  const [gamesList, setGamesList] = useState([{ "gameID": 0, "gameName": "lala", "minPlayers": 2, "maxPlayers": 4 }]);
+
   return (
     <AppContext.Provider
-      value={{ game, setGame, gamesList, setGamesList }} >
+      value={{ game, setGame }} >
       {children}
     </AppContext.Provider>
   );

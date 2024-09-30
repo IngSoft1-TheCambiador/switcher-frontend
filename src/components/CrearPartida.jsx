@@ -19,7 +19,7 @@ function CrearPartida({ setGameName }) {
     };
 
     const response = await httpRequest(requestData);
-    console.log("response: ", response.json.GAME_ID);
+    console.log("response: ", response.json.game_id);
   }
 
   const handleSubmit = (e) => {

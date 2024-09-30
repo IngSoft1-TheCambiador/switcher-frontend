@@ -11,9 +11,8 @@
 .container-General>*:first-child {
     height: 50px;
 }
-
 .container-General>*:last-child {
-    height: 400px;
+    height: 450px;
 }
 
 /* the list of games is a column of games */
@@ -74,16 +73,17 @@
 
 .container-Botones {
     display: grid;
-    grid-template-columns: repeat(6);
+    grid-template-columns: repeat(50);
+        /* we don't know how else to separate the arrows
+        so we made a very large grid */
 }
 
-.left {
-    grid-column-start: 1;
-    grid-column-end: 3;
-    text-align: center;
+.container-Botones > *:first-child {
+    grid-column: 1;
+    cursor: pointer;
 }
 
-.right {
-    grid-column-start: 4;
-    grid-column-end: 6;
+.container-Botones > *:last-child {
+    grid-column: 50;
+    cursor: pointer;
 }
