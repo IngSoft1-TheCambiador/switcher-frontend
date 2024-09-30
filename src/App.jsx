@@ -6,6 +6,7 @@ import Inicio from './components/Inicio';
 import ListaPartidas from './components/ListaPartidas';
 import Sala from './components/Sala';
 import GamesList from './components/GamesList';
+import GameLayout from './components/GameLayout';
 import { Route } from "wouter";
 import { AppProvider } from './contexts/Context';
 
@@ -21,6 +22,9 @@ function App() {
         </Route>
         <Route path="/Sala">
           <Sala />
+        </Route>
+        <Route path="/GamesLayout">
+          <GameLayout />
         </Route>
       </div>
     </AppProvider>

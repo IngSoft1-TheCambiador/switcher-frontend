@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import Tablero from "./Tablero";
 import CartaFigura from "./CartaFigura";
 import CartaMovimiento from "./CartaMovimiento";
 import Jugador from "./Jugador";
 import "./GameLayout.css";
+import { AppContext } from "../contexts/Context";
 
-function GameLayout({ datos, jugadores, jugadorActual }) {
-  const { nombre, figuras, movimientos } = jugadorActual; //Medio raro esto, tendria que ver como manejarlo mejor pero no se me ocurre
+function GameLayout() {
+
+  const { game, setGame } = useContext(AppContext);
+  const jugadorActual = game.jugadorActual;
+  const { figuras, movimientos } = jugadorActual; //Medio raro esto, tendria que ver como manejarlo mejor pero no se me ocurre
   return (
     <div className="layout">
       <div className="board-side">
@@ -14,14 +18,14 @@ function GameLayout({ datos, jugadores, jugadorActual }) {
           <CartaFigura figuras={figuras} />
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }}>
-          <Tablero datos={datos} />
+          <Tablero />
         </div>
         <div className="bar">
           <CartaMovimiento movimientos={movimientos} />
         </div>
       </div>
       <div className="players">
-        <Jugador jugadores={jugadores} />
+        <Jugador />
       </div>
 
       {/*
