@@ -4,7 +4,8 @@ import "./Jugador.css";
 import { AppContext } from "../contexts/Context";
 
 function Jugador() {
-  const { jugadores } = useContext(AppContext);
+  const {game, setGame} = useContext(AppContext);
+  const jugadores  = game.jugadores;
   return (
     <div className="jugadores">
       {jugadores.map((jugador, index) => (

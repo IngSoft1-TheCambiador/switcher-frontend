@@ -23,7 +23,7 @@ function App() {
         <Route path="/Sala">
           <Sala />
         </Route>
-        <Route path="/GameLayout">
+        <Route path="/GamesLayout">
           <GameLayout />
         </Route>
       </div>

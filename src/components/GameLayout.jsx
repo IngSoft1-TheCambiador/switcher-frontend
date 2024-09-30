@@ -8,7 +8,8 @@ import { AppContext } from "../contexts/Context";
 
 function GameLayout() {
 
-  const { jugadorActual } = useContext(AppContext);
+  const { game, setGame } = useContext(AppContext);
+  const jugadorActual = game.jugadorActual;
   const { figuras, movimientos } = jugadorActual; //Medio raro esto, tendria que ver como manejarlo mejor pero no se me ocurre
   return (
     <div className="layout">

@@ -4,7 +4,8 @@ import "./Tablero.css";
 import { AppContext } from "../contexts/Context";
 
 function Tablero() {
-  const {fichas} = useContext(AppContext);
+  const {game, setGame} = useContext(AppContext);
+  const fichas = game.fichas;
   return (
     <div className="tablero">
       {fichas.map(({ id, x, y, color }) => (
