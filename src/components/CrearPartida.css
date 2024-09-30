@@ -1,0 +1,22 @@
+.container-crearP {
+
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    flex-direction: column;
+
+    background-color: #808264;
+}
+
+.infoLabel-crearP {
+    color: rgb(255, 217, 217);
+  
+    /* hide infoLabels until it's needed */
+    display: none;
+}
