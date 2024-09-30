@@ -16,7 +16,7 @@ function GameRow({ gameName, minPlayers, maxPlayers }) {
 }
 
 function GamesList() {
-  const { gamesList, setGamesList } = useContext(AppContext);
+  const { gamesList, setGamesList, lastMessage } = useContext(AppContext);
 
   async function getGames() {
 
@@ -31,9 +31,9 @@ function GamesList() {
   }
 
   useEffect(() => {
-    getGames();
-  }
-    , []);
+      getGames();
+    }
+  , [lastMessage]);
 
   return (
     <div className="container-General">
