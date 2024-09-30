@@ -28,7 +28,7 @@ function GamesList() {
   }
 
   useEffect(() => {
-      getGames();
+      getGames(page);
     }
   , [lastMessage]);
 
