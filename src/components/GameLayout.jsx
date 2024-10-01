@@ -1,12 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import Tablero from "./Tablero";
 import CartaFigura from "./CartaFigura";
 import CartaMovimiento from "./CartaMovimiento";
 import Jugador from "./Jugador";
 import "./GameLayout.css";
-import { AppContext } from "../contexts/Context";
-
-function GameLayout() {
 
 function GameLayout() {
   const jugadorActual = {nombre : "Carlos", figuras : [], movimientos : []} 
