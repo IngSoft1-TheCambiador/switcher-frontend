@@ -49,8 +49,9 @@ export const AppProvider = ({ children }) => {
   };
 
   const [game, setGame] = useState({
-    gameId: 0,
+    playerId: null,
     playerName: '',
+<<<<<<< HEAD
     gameName: '',
     gamesList: [{ "gameName": "lala", "minPlayers": 2, "maxPlayers": 4 }],
     fichas: Array.from({ length: 36 }, (v, i) => ({ id: i, color: ["blue", "red", "green", "yellow"][i % 4] })),
@@ -61,6 +62,22 @@ export const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider value={{ game, setGame }} >
+=======
+    gameId: null,
+    gameName: '',
+    gamesList: [],
+    ownerId: null,
+    playersList: []
+  });
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+  
+  const [ gameId, setGameId ] = useState(null);
+
+  return (
+    <AppContext.Provider
+      value={{ game, setGame, lastMessage, readyState, gameId, setGameId }} >
+>>>>>>> origin/Entrega-1
       {children}
     </AppContext.Provider>
   );

@@ -8,24 +8,24 @@ import { AppContext } from "../contexts/Context";
 
 function GameLayout() {
 
-  const { game, setGame } = useContext(AppContext);
-  const jugadorActual = game.jugadorActual;
-  const { figuras, movimientos } = jugadorActual; //Medio raro esto, tendria que ver como manejarlo mejor pero no se me ocurre
+function GameLayout() {
+  const jugadorActual = {nombre : "Carlos", figuras : [], movimientos : []} 
+  const { nombre, figuras, movimientos } = jugadorActual; //Medio raro esto, tendria que ver como manejarlo mejor pero no se me ocurre
   return (
     <div className="layout">
       <div className="board-side">
         <div className="bar">
-          <CartaFigura figuras={figuras} />
+          <CartaFigura figuras={[]} />
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }}>
-          <Tablero />
+          <Tablero datos={[]} />
         </div>
         <div className="bar">
-          <CartaMovimiento movimientos={movimientos} />
+          <CartaMovimiento movimientos={[]} />
         </div>
       </div>
       <div className="players">
-        <Jugador />
+        <Jugador jugadores={[]} />
       </div>
 
       {/*

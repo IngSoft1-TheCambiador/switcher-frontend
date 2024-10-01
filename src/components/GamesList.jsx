@@ -9,23 +9,23 @@ function GamesList() {
   const { game, setGame, lastMessage } = useContext(AppContext);
   const [page, setPage] = useState(1);
 
-  const handleResponse = (result) => {
-    console.log("response:",result);
-    if(result.json.games_list.length > 0){
-      setGame({ ...game, gamesList: result.json.games_list });
-      setPage(page);
-    }
-  };
-
   async function getGames(page) {
+
     if (page > 0) {
       const requestData = {
         "method": GET,
         "service": `list_games?page=${page}`
       };
-      await httpRequest(requestData).then(handleResponse);
+
+      const response = await httpRequest(requestData);
+      console.log("response: ", response.json.games_list);
+
+      if(response.json.games_list.length > 0){
+        setGame({ ...game, gamesList: response.json.games_list });
+        setPage(page);
+      }
     }
-  };
+  }
 
   useEffect(() => {
       getGames(page);
@@ -42,7 +42,7 @@ function GamesList() {
           <div>Max</div>
         </div>
         {game.gamesList.map(({ game_id, game_name, min_players, max_players}) =>
-          <GameRow gameID={game_id} gameName={game_name}
+          <GameRow key={game_id} gameID={game_id} gameName={game_name}
                    minPlayers={min_players} maxPlayers={max_players} />)}
         <div className='container-Botones'>
           <div onClick={() => getGames(page - 1)}>⬅️</div>
