@@ -4,21 +4,15 @@ import { useLocation } from 'wouter';
 import './CrearPartida.css';
 import { PUT, GET, httpRequest } from '../services/HTTPServices.jsx';
 
-function CrearPartida() {
+function CrearPartida({ setGameName }) {
   const [tempGameName, setTempGameName] = useState('');
   const [min, setMin] = useState(2);
   const [max, setMax] = useState(4);
   const { game, setGame } = useContext(AppContext);
   const [, navigate] = useLocation();
 
-  const handleResponse = (result) => {
-    console.log("response:",result);
-    if (result.json.game_id !== undefined) {
-      navigate('/Sala');
-    }
-  };
-
   async function createGame(gameName, playerName, minPlayers, maxPlayers) {
+
     const requestData = {
       "method": PUT,
       "service": `create_game/?game_name=${gameName}&player_name=${playerName}&min_players=${minPlayers}&max_players=${maxPlayers}`

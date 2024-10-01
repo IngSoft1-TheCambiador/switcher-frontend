@@ -8,12 +8,9 @@
 }
 
 .players {
-  display: flex;
-  flex-direction: column;
   background-color: #b3d1ad;
   gap: 2px;
   padding: 5px;
-  height: 100%;
 }
 
 /*
