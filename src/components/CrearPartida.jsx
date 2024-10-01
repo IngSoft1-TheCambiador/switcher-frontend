@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../contexts/Context';
 import { useLocation } from 'wouter';
 import './CrearPartida.css';
-import { PUT, httpRequest } from '../services/HTTPServices.jsx';
+import { PUT, GET, httpRequest } from '../services/HTTPServices.jsx';
 
 function CrearPartida({ setGameName }) {
   const [tempGameName, setTempGameName] = useState('');
@@ -18,11 +18,28 @@ function CrearPartida({ setGameName }) {
       "service": `create_game/?game_name=${gameName}&player_name=${playerName}&min_players=${minPlayers}&max_players=${maxPlayers}`
     };
 
-    const response = await httpRequest(requestData);
-    console.log("response: ", response.json.GAME_ID);
+    const response = await httpRequest(requestData).then(res => res.json).then((res) => {return res});
+    console.log("response id: ", response.game_id);
+    console.log("response player_id: ", response.player_id);
+    if (response.game_id != null && response.game_id != undefined) {
+      setGame({ ...game, gameID: response.game_id, playerID : response.player_id });
+    }
+    console.log("game id", game.gameID);
   }
+  
+   /* async function createGame() {
+   
+        const requestData = {
+          "method": PUT,
+          "service": `create_game?game_name=${tempGameName}&player_name=${game.playerName}&min_players=${min}&max_players=${max}`
+        };
 
-  const handleSubmit = (e) => {
+        const response = await httpRequest(requestData);
+        console.log("full response: ", response.json);
+        setGame({ ...game, gameId: response.json.game_id });
+  } */
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const min_int = parseInt(min);
@@ -31,7 +48,8 @@ function CrearPartida({ setGameName }) {
     if (/^[a-zA-Z0-9]{1,15}$/.test(tempGameName) &&
       min_int <= max_int && min_int >= 2 && max_int <= 4) {
       setGame({ ...game, gameName: tempGameName });
-      createGame(tempGameName, game.playerName, min_int, max_int);
+      await createGame(tempGameName, game.playerName, min, max);
+      console.log("game id outside", game.gameId);
       navigate('/Sala');
     }
 
@@ -50,7 +68,7 @@ function CrearPartida({ setGameName }) {
   return (
     <div className="container-crearP">
       <h2>Crear Partida</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} >
         <h3>Nombre de la partida</h3>
         <input
           placeholder='Nombre'

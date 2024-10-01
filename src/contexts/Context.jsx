@@ -8,16 +8,22 @@ export const AppProvider = ({ children }) => {
   const socketUrl = "ws://localhost:8000/ws/connect"
 
   const [game, setGame] = useState({
-    gameId: 0,
+    playerId: null,
     playerName: '',
-    gameName: ''
+    gameId: null,
+    gameName: '',
+    gamesList: [],
+    ownerId: null,
+    playersList: []
   });
-  const [ gamesList, setGamesList ] = useState([{"gameName" : "lala", "minPlayers" : 2, "maxPlayers" : 4}]);
+
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+  
+  const [ gameId, setGameId ] = useState(null);
 
   return (
     <AppContext.Provider
-      value={{ game, setGame, gamesList, setGamesList, lastMessage, readyState }} >
+      value={{ game, setGame, lastMessage, readyState, gameId, setGameId }} >
       {children}
     </AppContext.Provider>
   );

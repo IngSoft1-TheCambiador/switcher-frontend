@@ -5,23 +5,24 @@ import CartaMovimiento from "./CartaMovimiento";
 import Jugador from "./Jugador";
 import "./GameLayout.css";
 
-function GameLayout({ datos, jugadores, jugadorActual }) {
+function GameLayout() {
+  const jugadorActual = {nombre : "Carlos", figuras : [], movimientos : []} 
   const { nombre, figuras, movimientos } = jugadorActual; //Medio raro esto, tendria que ver como manejarlo mejor pero no se me ocurre
   return (
     <div className="layout">
       <div className="board-side">
         <div className="bar">
-          <CartaFigura figuras={figuras} />
+          <CartaFigura figuras={[]} />
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }}>
-          <Tablero datos={datos} />
+          <Tablero datos={[]} />
         </div>
         <div className="bar">
-          <CartaMovimiento movimientos={movimientos} />
+          <CartaMovimiento movimientos={[]} />
         </div>
       </div>
       <div className="players">
-        <Jugador jugadores={jugadores} />
+        <Jugador jugadores={[]} />
       </div>
 
       {/*
