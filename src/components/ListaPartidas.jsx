@@ -5,12 +5,8 @@ import './ListaPartidas.css'
 import GamesList from './GamesList';
 import CrearPartida from './CrearPartida';
 
-function ListaPartidas() {
+function ListaPartidas({ onSubmit }) {
   const [, navigate] = useLocation();
-
-  const goToInicio = () => {
-    navigate('/');
-  };
 
   return (
     <div className="container-row">
@@ -21,7 +17,7 @@ function ListaPartidas() {
       </div>
 
       {/* Crear Partida */}
-      <CrearPartida />
+      <CrearPartida onSubmit={onSubmit} />
 
     </div>
   );

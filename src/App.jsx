@@ -17,6 +17,7 @@ function App() {
 
   const [playerName, setPlayerName] = useState();
   const [socketId, setSocketId] = useState(0);
+  const [gameId, setGameId] = useState(0);
   const [clientId, setClientId] = useState(180);
 
   const socketUrl = "ws://localhost:8000/ws/connect";
@@ -40,22 +41,19 @@ function App() {
   }
 
   return (
-    <AppContext.Provider value={{ playerName, socketId, lastMessage, handleNewPlayer, clientId }}>
+    <AppContext.Provider value={{ playerName, socketId, lastMessage, handleNewPlayer, clientId, gameId }}>
       <div className="app-container">
         <Route path="/">
           <Inicio onSubmit={(name) => setPlayerName(name)} />
         </Route>
         <Route path="/ListaPartidas">
-          <ListaPartidas />
+          <ListaPartidas onSubmit={(id) => setGameId(id)} />
         </Route>
         <Route path="/Sala">
           <WaitRoom />
         </Route>
-        <Route path="/GamesLayout">
+        <Route path="/GameLayout">
           <GameLayout />
-        </Route>
-        <Route path="/CrearPartida">
-          <CrearPartida />
         </Route>
         <Route path="/GamesList">
           <GamesList />

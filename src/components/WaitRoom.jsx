@@ -2,11 +2,11 @@ import React, { useContext, useState, useEffect } from "react";
 import './WaitRoom.css'
 import { useLocation } from 'wouter';
 import { AppContext } from "../App.jsx";
-import { GET, httpRequest } from '../services/HTTPServices.jsx';
+import { GET, PUT, httpRequest } from '../services/HTTPServices.jsx';
 
 function WaitRoom() {
     const [, navigate] = useLocation();
-    const { lastMessage, socketId, clientId } = useContext(AppContext);
+    const { lastMessage, socketId, clientId, gameId } = useContext(AppContext);
     const [ownerId, setOwnerId] = useState(0);
     const [playerNames, setPlayerNames] = useState([]);
     const [ready, setReady] = useState(false);
@@ -26,8 +26,6 @@ function WaitRoom() {
         };
 
         const response = await httpRequest(requestData);
-        console.log("PLAYER JOIN", response);
-        console.log(response.json.player_names);
         if (response.json.player_names !== undefined) {
             console.log("OWNER_ID: ", response.json.owner_id);
             console.log("CLIENT_ID: ", clientId);
@@ -36,13 +34,26 @@ function WaitRoom() {
             setMaxPlayers(response.json.max_players);
             setMinPlayers(response.json.min_players);
             setName(response.json.name);
+            if (response.json.initialized) {
+                navigate("/GameLayout");
+            }
         }
+    }
+
+    async function startGame() {
+        const requestData = {
+            "method": PUT,
+            "service": `start_game?game_id=${gameId}`
+        };
+        const response = await httpRequest(requestData);
+        console.log("message: ", response.json.message);
     }
 
     function handleClick() {
         if (ready) {
             // placeholder
-            navigate("/");
+            startGame();
+            navigate("/GameLayout");
         }
     }
 
