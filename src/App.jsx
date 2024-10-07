@@ -5,10 +5,10 @@ import Inicio from './components/Inicio';
 import ListaPartidas from './components/ListaPartidas';
 import WaitRoom from './components/WaitRoom';
 import GamesList from './components/GamesList';
-import CrearPartida from './components/CrearPartida';
 import GameLayout from './components/GameLayout';
 import { Route } from "wouter";
 import GameRow from './components/GameRow';
+import Winner from './components/Winner';
 import useWebSocket from 'react-use-websocket';
 
 export const AppContext = React.createContext();
@@ -49,7 +49,7 @@ function App() {
         <Route path="/ListaPartidas">
           <ListaPartidas onSubmit={(id) => setGameId(id)} />
         </Route>
-        <Route path="/Sala">
+        <Route path="/WaitRoom">
           <WaitRoom />
         </Route>
         <Route path="/GameLayout">
@@ -60,6 +60,9 @@ function App() {
         </Route>
         <Route path="/GameRow">
           <GameRow />
+        </Route>
+        <Route path="/Winner">
+          <Winner />
         </Route>
       </div>
     </AppContext.Provider>

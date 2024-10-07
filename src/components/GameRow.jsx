@@ -14,7 +14,7 @@ function GameRow({ gameID, gameName, minPlayers, maxPlayers }) {
     console.log(response);
     if (response.json.error === undefined) {
       handleNewPlayer(response.json.player_id);
-      navigate('/Sala');
+      navigate('/WaitRoom');
     }
   };
 
@@ -42,7 +42,7 @@ function GameRow({ gameID, gameName, minPlayers, maxPlayers }) {
   //   console.log(response)
   //   setGame({ ...game, playerId: response.player_id });
   //   setGame({ ...game, gameId: response.game_id });
-  //   navigate('/Sala');
+  //   navigate('/WaitRoom');
   // };
 
   return (
