@@ -2,18 +2,17 @@ import React, { useState, useContext } from 'react';
 import { AppContext } from '../contexts/Context';
 import { useLocation } from 'wouter';
 
-function Inicio() {
+function Inicio({ onSubmit }) {
 
   const [tempName, setTempName] = useState('');
-  const { game, setGame } = useContext(AppContext);
   const [, navigate] = useLocation();
 
-  const handleSubmit = (e) => {
+  const checkName = (e) => {
     e.preventDefault();
 
     // Chech Regex before chaning the page
     if (/^[a-zA-Z0-9]{1,10}$/.test(tempName)) {
-      setGame({ ...game, playerName: tempName });
+      onSubmit(tempName);
       navigate('/ListaPartidas');
 
       // Invalid name: display a help message
@@ -24,8 +23,8 @@ function Inicio() {
 
   return (
     <div className="container">
-      <h1>EL SWITCHER</h1>
-      <form onSubmit={handleSubmit}>
+      <h1>EL SWITCHER </h1>
+      <form onSubmit={checkName}>
         <input
           placeholder='Nombre'
           value={tempName}
