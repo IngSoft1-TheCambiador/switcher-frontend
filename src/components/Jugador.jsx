@@ -1,11 +1,25 @@
 import React, { useContext } from "react";
 import CartaFigura from "./CartaFigura";
 import "./Jugador.css";
-import { AppContext } from "../contexts/Context";
 
 function Jugador() {
-  const {game, setGame} = useContext(AppContext);
-  const jugadores  = game.jugadores;
+  const jugadores  = [
+    {
+      nombre: "Jugador 1",
+      color: "blue",
+      figuras: [{ id: 2 }, { id: 3 }, { id: 3 }],
+    },
+    {
+      nombre: "Jugador 2",
+      color: "red",
+      figuras: [{ id: 1 }, { id: 2 }, { id: 2 }],
+    },
+    {
+      nombre: "Jugador 3",
+      color: "green",
+      figuras: [{ id: 2 }, { id: 1 }, { id: 24 }],
+    },
+  ];
   return (
     <div className="jugadores">
       {jugadores.map((jugador, index) => (

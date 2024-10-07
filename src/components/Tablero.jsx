@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import Ficha from "./Ficha";
 import "./Tablero.css";
-import { AppContext } from "../contexts/Context";
 
 function Tablero() {
-  const { game } = useContext(AppContext);
-  const fichas = game.fichas;
+  const fichas = Array.from({ length: 36 }, (v, i) => ({
+    id: i,
+    color: ["blue", "red", "green", "yellow"][i % 4],
+  }));
 
   return (
     <div className="tablero">
