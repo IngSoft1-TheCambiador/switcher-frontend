@@ -7,17 +7,18 @@ function validPos (x, y, original_x, original_y) {
   return  ! (x<1 || x>BOARD_SIZE || y<1 || y>BOARD_SIZE || [x,y] == [original_x,original_y] );
 }
 
-function rotate(arr, x, y){
-  const diff_x = x - arr[0][0];
-  const diff_y = y - arr[0][1];
-  if(validPos(-diff_y, diff_x)){  // 2nd quadrant
-    arr.push([-diff_y, diff_x]);
+function rotate(arr, a, b){
+  if(validPos(a, b)){   // 1st quadrant
+    arr.push([a, b]);
   }
-  if(validPos(-diff_x, -diff_y)){  // 3rd quadrant
-    arr.push([-diff_x, -diff_y]);
+  if(validPos(-b, a)){  // 2nd quadrant
+    arr.push([-b, a]);
   }
-  if(validPos(diff_y, -diff_x)){  // 4th quadrant
-    arr.push([diff_y, -diff_x]);
+  if(validPos(-a, -b)){ // 3rd quadrant
+    arr.push([-a, -b]);
+  }
+  if(validPos(b, -a)){  // 4th quadrant
+    arr.push([b, -a]);
   }
   return arr;
 }
@@ -31,32 +32,29 @@ function removeWrongMoves(positions, x, y){
   return arr;
 }
 
-export function calculatePositions({ mov, x, y }) {
+export function calculatePositions(mov, x, y) {
   var positions = [];
   if(1<=mov && mov<=6) {
     switch(expression) {
       case 1:
-        positions.push([x+2, y+2]);
+        rotate(positions, 2, 2);
         break;
       case 2:
-        positions.push([x, y+2]);
+        rotate(positions, 0, 2);
         break;
       case 3:
-        positions.push([x, y+1]);
+        rotate(positions, 0, 1);
         break;
       case 4:
-        positions.push([x+1, y+1]);
+        rotate(positions, 1, 1);
         break;
       case 5:
-        positions.push([x+1, y+2]);
+        rotate(positions, 1, 2);
         break;
       case 6:
-        positions.push([x+2, y+1]);
+        rotate(positions, 2, 1);
         break;
-      default:
-        // default
     }
-    return rotate(positions, x, y);
   }
   else if(mov==7) {
     positions.push([x,1]);
@@ -64,10 +62,7 @@ export function calculatePositions({ mov, x, y }) {
     positions.push([1,y]);
     positions.push([BOARD_SIZE,y]);
   }
-  // else {
-  //   // error
-  // }
-  removeWrongMoves(positions);
+  return removeWrongMoves(positions);
 }
 
 const imagenes = {
