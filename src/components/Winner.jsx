@@ -1,19 +1,17 @@
-import React, { useContext } from 'react';
-import { useLocation } from 'wouter';
-import { GameContext } from './GameLayout.jsx';
+import React from 'react';
 import "./Winner.css";
 
-function Winner() {
-  const [, navigate] = useLocation();
-  // const { winner } = useContext(GameContext);
-  const winner = "Pedro";
+// This component cannot have hooks
+// because of the conditional rendering in GameLayout.jsx
+
+function Winner(winnerName, backToListaPartidas) {
 
   return (
     <div className="container-winner" >
       <h1>
-        ¡{winner} ganó la partida!
+        ¡{winnerName} ganó la partida!
       </h1>
-      <button className='return-button'>
+      <button className='return-button' onClick={backToListaPartidas} >
         <img src="return.png" alt="Volver" className="button-icon" />
       </button>
     </div>
