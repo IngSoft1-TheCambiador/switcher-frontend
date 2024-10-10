@@ -1,5 +1,6 @@
 import React from "react";
 import "./CartaMovimiento.css";
+// import { assert } from "vitest";
 
 const BOARD_SIZE = 6;
 
@@ -7,72 +8,65 @@ function validPos (x, y, original_x, original_y) {
   return  ! (x<1 || x>BOARD_SIZE || y<1 || y>BOARD_SIZE || [x,y] == [original_x,original_y] );
 }
 
-function rotate(arr, a, b){
-  if(validPos(a, b)){   // 1st quadrant
-    arr.push([a, b]);
-  }
-  if(validPos(-b, a)){  // 2nd quadrant
-    arr.push([-b, a]);
-  }
-  if(validPos(-a, -b)){ // 3rd quadrant
-    arr.push([-a, -b]);
-  }
-  if(validPos(b, -a)){  // 4th quadrant
-    arr.push([b, -a]);
-  }
+function calculateQuadrants(arr, x, y, a, b){
+  arr.push([x+a, y+b]);     // 1st quadrant
+  arr.push([x-b, y+a]);     // 2nd quadrant
+  arr.push([x-a, y-b]);     // 3rd quadrant
+  arr.push([x+b, y-a]);     // 4th quadrant
   return arr;
 }
 
 function removeWrongMoves(positions, x, y){
   var newPositions = [];
   for (let i = 0; i < positions.length; i++) {
-    if  (validPos(positions[0][0],positions[0][1]))
-        newPositions.push(positions[0]);
-    };
-  return arr;
+    if  (validPos(positions[i][0],positions[i][1],x,y))
+        newPositions.push(positions[i]);
+  };
+  return newPositions;
 }
 
 export function calculatePositions(mov, x, y) {
+  // assert(x.isInteger() && y.isInteger() && x>0 && x<=BOARD_SIZE && y>0 && y<=BOARD_SIZE);
   var positions = [];
-  if(1<=mov && mov<=6) {
-    switch(expression) {
-      case 1:
-        rotate(positions, 2, 2);
-        break;
-      case 2:
-        rotate(positions, 0, 2);
-        break;
-      case 3:
-        rotate(positions, 0, 1);
-        break;
-      case 4:
-        rotate(positions, 1, 1);
-        break;
-      case 5:
-        rotate(positions, 1, 2);
-        break;
-      case 6:
-        rotate(positions, 2, 1);
-        break;
-    }
-  }
-  else if(mov==7) {
-    positions.push([x,1]);
-    positions.push([x,BOARD_SIZE]);
-    positions.push([1,y]);
-    positions.push([BOARD_SIZE,y]);
+  switch(mov) {
+    case "mov1":
+      calculateQuadrants(positions, x, y, 2, 2);
+      break;
+    case "mov2":
+      calculateQuadrants(positions, x, y, 0, 2);
+      break;
+    case "mov3":
+      calculateQuadrants(positions, x, y, 0, 1);
+      break;
+    case "mov4":
+      calculateQuadrants(positions, x, y, 1, 1);
+      break;
+    case "mov5":
+      calculateQuadrants(positions, x, y, 1, 2);
+      break;
+    case "mov6":
+      calculateQuadrants(positions, x, y, 2, 1);
+      break;
+    case "mov7":
+      positions.push([x,1]);
+      positions.push([x,BOARD_SIZE]);
+      positions.push([1,y]);
+      positions.push([BOARD_SIZE,y]);
+      break;
+    default:
+      throw new Error("Invalid movement");
   }
   return removeWrongMoves(positions);
 }
 
 const imagenes = {
-  1: "mov1.svg",
-  2: "mov2.svg",
-  3: "mov3.svg",
-  4: "mov4.svg",
-  5: "mov5.svg",
-  6: "mov6.svg",
-  7: "mov7.svg",
+  mov1: "mov1.svg",
+  mov2: "mov2.svg",
+  mov3: "mov3.svg",
+  mov4: "mov4.svg",
+  mov5: "mov5.svg",
+  mov6: "mov6.svg",
+  mov7: "mov7.svg",
 };
 
 function CartaMovimiento({ movimientos }) {
@@ -81,8 +75,8 @@ function CartaMovimiento({ movimientos }) {
       {movimientos.map((movimiento, index) => (
         <div key={index} className="carta-movimiento">
           <img
-            src={imagenes[movimiento.id]}
-            alt={`Movimiento ${movimiento.id}`}
+            src={imagenes[movimiento]}
+            alt={`Movimiento ${movimiento}`}
           />
         </div>
       ))}

@@ -8,8 +8,8 @@ import "./GameLayout.css";
 function GameLayout() {
   const jugadorActual = {
     nombre: "Jasds",
-    figuras: [{ id: 1 }, { id: 2 }, { id: 3 }],
-    movimientos: [{ id: 1 }, { id: 2 }, { id: 3 }],
+    figuras: ["h1", "h8", "s2"],
+    movimientos: ["mov3", "mov7", "mov1"],
   };
   const { figuras, movimientos } = jugadorActual;
 

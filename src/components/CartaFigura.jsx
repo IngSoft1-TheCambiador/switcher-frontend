@@ -2,39 +2,39 @@ import React from "react";
 import "./CartaFigura.css";
 
 const imagenesFiguras = {
-  1: "fig01.svg",
-  2: "fig02.svg",
-  3: "fig03.svg",
-  4: "fig04.svg",
-  5: "fig05.svg",
-  6: "fig06.svg",
-  7: "fig07.svg",
-  8: "fig08.svg",
-  9: "fig09.svg",
-  10: "fig10.svg",
-  11: "fig11.svg",
-  12: "fig12.svg",
-  13: "fig13.svg",
-  14: "fig14.svg",
-  15: "fig15.svg",
-  16: "fig16.svg",
-  17: "fig17.svg",
-  18: "fig18.svg",
-  19: "fige01.svg",
-  20: "fige02.svg",
-  21: "fige03.svg",
-  22: "fige04.svg",
-  23: "fige05.svg",
-  24: "fige06.svg",
-  25: "fige07.svg",
+  h1: "fig01.svg",
+  h2: "fig02.svg",
+  h3: "fig03.svg",
+  h4: "fig04.svg",
+  h5: "fig05.svg",
+  h6: "fig06.svg",
+  h7: "fig07.svg",
+  h8: "fig08.svg",
+  h9: "fig09.svg",
+  h10: "fig10.svg",
+  h11: "fig11.svg",
+  h12: "fig12.svg",
+  h13: "fig13.svg",
+  h14: "fig14.svg",
+  h15: "fig15.svg",
+  h16: "fig16.svg",
+  h17: "fig17.svg",
+  h18: "fig18.svg",
+  s1: "fige01.svg",
+  s2: "fige02.svg",
+  s3: "fige03.svg",
+  s4: "fige04.svg",
+  s5: "fige05.svg",
+  s6: "fige06.svg",
+  s7: "fige07.svg",
 };
 
 function CartaFigura({ figuras }) {
   return (
     <div className="carta-figura-container">
-      {figuras.map((figura, index) => (
+      {figuras.slice(0, 3).map((figura, index) => (
         <div key={index} className="carta-figura">
-          <img src={imagenesFiguras[figura.id]} alt={`Figura ${figura.id}`} />
+          <img src={imagenesFiguras[figura]} alt={`Figura ${figura}`} />
         </div>
       ))}
     </div>
