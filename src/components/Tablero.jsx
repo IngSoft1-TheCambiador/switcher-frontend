@@ -1,20 +1,51 @@
-import React, { useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Ficha from "./Ficha";
 import "./Tablero.css";
+import { AppContext } from "../App.jsx";
+import {GET, httpRequest} from "../services/HTTPServices";
+
+
+const BOARD_SIZE = 6;
 
 function Tablero() {
-  const fichas = Array.from({ length: 36 }, (v, i) => ({
-    id: i,
-    color: ["blue", "red", "green", "yellow"][i % 4],
-  }));
+  const { socketId } = useContext(AppContext);
+  const [fichas, setFichas] = useState([]);
+
+  useEffect(() => {
+    getGameState();
+  }, []);
+
+  async function getGameState() {
+    const requestData = {
+      method: GET,
+      service: `game_state?socket_id=${socketId}`,
+    };
+
+    const response = await httpRequest(requestData);
+     
+    if (response.json.board_state !== undefined) {
+      const boardState = response.json.board_state; 
+      const newFichas = [];
+      
+      for (let i = 0; i < boardState.length; i++) {
+        const color = boardState[i];
+        const x = Math.floor(i / BOARD_SIZE);
+        const y = i % BOARD_SIZE; 
+        newFichas.push({ id: i, color: color, x: x, y: y });
+      }
+      
+      setFichas(newFichas);
+    }
+  }
 
   return (
     <div className="tablero">
-      {fichas.map(({ id, x, y }) => (
-        <Ficha key={id} id={id} x={x} y={y} />
+      {fichas.map(({ id, x, y, color }) => (
+        <Ficha key={id} id={id} x={x} y={y} color={color} />
       ))}
     </div>
   );
 }
 
 export default Tablero;
+

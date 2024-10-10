@@ -2,16 +2,14 @@ import React from "react";
 import "./Ficha.css";
 
 const imagenesFichas = {
-  1: "A.svg",
-  2: "B.svg",
-  3: "C.svg",
-  4: "D.svg",
+  "r": "A.svg",
+  "y": "B.svg",
+  "g": "C.svg",
+  "b": "D.svg",
 };
 
-function Ficha({ id, x, y }) {
-  // Asigno una imagen a la ficha de acuerdo al id
-  const imagenIndex = (id % 4) + 1; //Indice entre 1 y 4
-  const imagen = imagenesFichas[imagenIndex];
+function Ficha({ id, x, y, color}) {
+  const imagen = imagenesFichas[color];
 
   return (
     <div className="ficha">
@@ -21,3 +19,4 @@ function Ficha({ id, x, y }) {
 }
 
 export default Ficha;
+
