@@ -5,7 +5,8 @@ import "./CartaMovimiento.css";
 const BOARD_SIZE = 6;
 
 function validPos (x, y, original_x, original_y) {
-  return  ! (x<1 || x>BOARD_SIZE || y<1 || y>BOARD_SIZE || [x,y] == [original_x,original_y] );
+  return  ! (x<1 || x>BOARD_SIZE || y<1 || y>BOARD_SIZE ||
+            (x==original_x && y==original_y) );
 }
 
 function calculateQuadrants(arr, x, y, a, b){
@@ -56,7 +57,7 @@ export function calculatePositions(mov, x, y) {
     default:
       throw new Error("Invalid movement");
   }
-  return removeWrongMoves(positions);
+  return removeWrongMoves(positions, x, y);
 }
 
 const imagenes = {

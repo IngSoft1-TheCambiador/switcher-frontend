@@ -8,3 +8,7 @@ The frontend can be started with the following commands:
 npm install
 npm run dev
 ```
+To run the tests:
+```bash
+npm run test
+```
