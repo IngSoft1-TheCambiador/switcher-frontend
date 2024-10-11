@@ -4,18 +4,20 @@ import CartaFigura from "./CartaFigura";
 import CartaMovimiento from "./CartaMovimiento";
 import Jugador from "./Jugador";
 import "./GameLayout.css";
+import { useLocation } from 'wouter';
 import { AppContext } from "../App.jsx";
-import { GET, httpRequest } from "../services/HTTPServices";
+import { GET, POST, httpRequest } from "../services/HTTPServices";
 
 
 
 function GameLayout() {
-  const { socketId, lastMessage, clientId } = useContext(AppContext);
+  const { socketId, lastMessage, clientId, gameId } = useContext(AppContext);
   const [boardState, setBoardState] = useState([]);
   const [playerNames, setPlayerNames] = useState([]);
   const [playerColors, setPlayerColors] = useState({});
   const [playerFCards, setPlayerFCards] = useState({});
   const [playerMCards, setPlayerMCards] = useState({});
+  const [, navigate] = useLocation(); 
 
 
   useEffect(() => {
@@ -38,6 +40,20 @@ function GameLayout() {
     console.log(response.json.player_m_cards);
   }
 
+  async function leaveGame() {
+    const requestData = {
+        "method": POST,
+        "service": `leave_game?game_id=${gameId}&player_name=${playerNames[clientId]}`,
+    };
+    const response = await httpRequest(requestData);
+    if (response.ok) { 
+      navigate("/ListaPartidas");
+    } else {
+      console.error("Error al abandonar la partida: ", response);
+    }
+  }
+
+
   const jugadorActual = {
     nombre: playerNames[clientId],
     figuras: playerFCards[clientId] || [],
@@ -59,7 +75,7 @@ function GameLayout() {
             <img src="siguiente.png" alt="Pasar Turno" className="button-icon" />
           </button>
           <CartaMovimiento movimientos={movimientos} />
-          <button className="leave-button">
+          <button className="leave-button" onClick={leaveGame}>
             <img src="salir.png" alt="Abandonar Partida" className="button-icon" />
           </button>
         </div>
