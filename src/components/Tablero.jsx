@@ -7,35 +7,14 @@ import { GET, httpRequest } from "../services/HTTPServices";
 
 const BOARD_SIZE = 6;
 
-function Tablero() {
-  const { socketId, lastMessage } = useContext(AppContext);
-  const [fichas, setFichas] = useState([]);
+function Tablero({ boardState }) {
+  const fichas = [];
 
-  useEffect(() => {
-    getGameState();
-  }, [lastMessage]);
-
-  async function getGameState() {
-    const requestData = {
-      method: GET,
-      service: `game_state?socket_id=${socketId}`,
-    };
-
-    const response = await httpRequest(requestData);
-
-    if (response.json.board !== undefined) {
-      const board = response.json.board;
-      const newFichas = [];
-
-      for (let i = 0; i < board.length; i++) {
-        const color = board[i];
-        const x = Math.floor(i / BOARD_SIZE);
-        const y = i % BOARD_SIZE;
-        newFichas.push({ id: i, color: color, x: x, y: y });
-      }
-
-      setFichas(newFichas);
-    }
+  for (let i = 0; i < boardState.length; i++) {
+    const color = boardState[i];
+    const x = Math.floor(i / BOARD_SIZE);
+    const y = i % BOARD_SIZE;
+    fichas.push({ id: i, color: color, x: x, y: y });
   }
 
   return (

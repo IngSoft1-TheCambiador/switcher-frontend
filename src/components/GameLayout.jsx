@@ -1,11 +1,39 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Tablero from "./Tablero";
 import CartaFigura from "./CartaFigura";
 import CartaMovimiento from "./CartaMovimiento";
 import Jugador from "./Jugador";
 import "./GameLayout.css";
+import { AppContext } from "../App.jsx";
+import { GET, httpRequest } from "../services/HTTPServices";
+
+
 
 function GameLayout() {
+  const { socketId, lastMessage } = useContext(AppContext);
+  const [boardState, setBoardState] = useState([]);
+  const [playerNames, setPlayerNames] = useState([]);
+  const [playerColors, setPlayerColors] = useState({});
+  const [playerFCards, setPlayerFCards] = useState({});
+  const [playerMCards, setPlayerMCards] = useState({});
+
+
+  useEffect(() => {
+    getGameState();
+  }, [lastMessage]);
+
+  async function getGameState() {
+    const requestData = {
+      method: GET,
+      service: `game_state?socket_id=${socketId}`,
+    };
+
+    const response = await httpRequest(requestData);
+    setBoardState(response.json.board);
+    setPlayerNames(response.json.player_names);
+    setPlayerColors(response.json.player_colors);
+  }
+
   const jugadorActual = {
     nombre: "Jasds",
     figuras: [{ id: 1 }, { id: 2 }, { id: 3 }],
@@ -20,7 +48,7 @@ function GameLayout() {
           <CartaFigura figuras={figuras} />
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }}>
-          <Tablero />
+          <Tablero boardState={boardState} />
         </div>
         <div className="bar bar-movements">
           <button className="turn-button">
@@ -28,12 +56,12 @@ function GameLayout() {
           </button>
           <CartaMovimiento movimientos={movimientos} />
           <button className="leave-button">
-            <img src="salir.png" alt="Abandonar Partida" className="button-icon" /> 
+            <img src="salir.png" alt="Abandonar Partida" className="button-icon" />
           </button>
         </div>
       </div>
       <div className="players">
-        <Jugador />
+        <Jugador playerNames={playerNames} playerColors={playerColors} />
       </div>
 
       {/*
