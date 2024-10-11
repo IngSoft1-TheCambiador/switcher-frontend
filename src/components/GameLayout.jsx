@@ -40,8 +40,8 @@ function GameLayout() {
 
   const jugadorActual = {
     nombre: playerNames[clientId],
-    figuras: playerFCards[clientId],
-    movimientos: playerMCards[clientId],
+    figuras: playerFCards[clientId] || [],
+    movimientos: playerMCards[clientId] || [],
   };
   const { figuras, movimientos } = jugadorActual;
 
