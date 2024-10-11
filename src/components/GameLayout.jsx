@@ -10,7 +10,7 @@ import { GET, httpRequest } from "../services/HTTPServices";
 
 
 function GameLayout() {
-  const { socketId, lastMessage } = useContext(AppContext);
+  const { socketId, lastMessage, clientId } = useContext(AppContext);
   const [boardState, setBoardState] = useState([]);
   const [playerNames, setPlayerNames] = useState([]);
   const [playerColors, setPlayerColors] = useState({});
@@ -29,15 +29,19 @@ function GameLayout() {
     };
 
     const response = await httpRequest(requestData);
-    setBoardState(response.json.board);
+    setBoardState(response.json.actual_board);
     setPlayerNames(response.json.player_names);
     setPlayerColors(response.json.player_colors);
+    setPlayerFCards(response.json.player_f_hand);
+    setPlayerMCards(response.json.player_m_cards);
+    console.log(response.json.player_f_hand);
+    console.log(response.json.player_m_cards);
   }
 
   const jugadorActual = {
-    nombre: "Jasds",
-    figuras: [{ id: 1 }, { id: 2 }, { id: 3 }],
-    movimientos: [{ id: 1 }, { id: 2 }, { id: 3 }],
+    nombre: playerNames[clientId],
+    figuras: playerFCards[clientId],
+    movimientos: playerMCards[clientId],
   };
   const { figuras, movimientos } = jugadorActual;
 
@@ -61,7 +65,7 @@ function GameLayout() {
         </div>
       </div>
       <div className="players">
-        <Jugador playerNames={playerNames} playerColors={playerColors} />
+        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards} playerMovements={playerMCards}/>
       </div>
 
       {/*

@@ -2,27 +2,11 @@ import React, { useContext } from "react";
 import CartaFigura from "./CartaFigura";
 import "./Jugador.css";
 import { AppContext } from "../App.jsx";
+import CartaMovimiento from "./CartaMovimiento.jsx";
 
 
-function Jugador({ playerNames, playerColors }) {
-
-  /*const jugadores = [
-    {
-      nombre: "Jugador 1",
-      color: "blue",
-      figuras: [{ id: 2 }, { id: 3 }, { id: 3 }],
-    },
-    {
-      nombre: "Jugador 2",
-      color: "red",
-      figuras: [{ id: 1 }, { id: 2 }, { id: 2 }],
-    },
-    {
-      nombre: "Jugador 3",
-      color: "green",
-      figuras: [{ id: 2 }, { id: 1 }, { id: 24 }],
-    },
-  ];*/
+function Jugador({ playerNames, playerColors, playerShapes, playerMovements }) {
+  
   const { clientId } = useContext(AppContext);
 
   function parseColor(color) {
@@ -37,7 +21,10 @@ function Jugador({ playerNames, playerColors }) {
       {
         nombre: playerNames[id],
         color: parseColor(playerColors[id]),
-        figuras: [{ id: 2 }, { id: 3 }, { id: 3 }],
+        figuras: playerShapes[id],
+        //["h3", "h1", "h10"]
+        movimientos: playerMovements[id],
+        //["mov1", "mov2", "mov3"]
       }
     ));
 
@@ -47,6 +34,7 @@ function Jugador({ playerNames, playerColors }) {
         <div key={index} className="jugador" style={{ backgroundColor: jugador.color }}>
           <h3>{jugador.nombre}</h3>
           <CartaFigura figuras={jugador.figuras} />
+          <CartaMovimiento movimientos={jugador.movimientos} />
         </div>
       ))}
     </div>
