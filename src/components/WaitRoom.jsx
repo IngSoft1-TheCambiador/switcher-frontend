@@ -29,6 +29,7 @@ function WaitRoom() {
         if (response.json.player_names !== undefined) {
             console.log("OWNER_ID: ", response.json.owner_id);
             console.log("CLIENT_ID: ", clientId);
+            console.log("TIPO DE DATOS: ", typeof (response.json.player_names));
             setOwnerId(response.json.owner_id);
             setPlayerNames(response.json.player_names);
             setMaxPlayers(response.json.max_players);
@@ -58,7 +59,7 @@ function WaitRoom() {
     }
 
     function handleOnMouseEnter() {
-        if ((minPlayers <= playerNames.length) && (playerNames.length <= maxPlayers)) {
+        if ((minPlayers <= Object.values(playerNames).length) && (Object.values(playerNames).length <= maxPlayers)) {
             setReady(true);
         } else {
             setReady(false);
@@ -76,8 +77,8 @@ function WaitRoom() {
             <div className="players-layout">
                 <h2>JUGADORES</h2>
                 <div>
-                    {playerNames.map((player_name) => (
-                        <li className="player">
+                    {Object.entries(playerNames).map(([id, player_name]) => (
+                        <li className="player" key={id}>
                             {player_name}
                         </li>
                     ))}
