@@ -16,6 +16,8 @@ function GameLayout() {
   const [playerColors, setPlayerColors] = useState({});
   const [playerFCards, setPlayerFCards] = useState({});
   const [playerMCards, setPlayerMCards] = useState({});
+  const [playerIds, setPlayerIds] = useState([]);
+  const [currentPlayer, setCurrentPlayer] = useState(-1);
 
 
   useEffect(() => {
@@ -34,6 +36,8 @@ function GameLayout() {
     setPlayerColors(response.json.player_colors);
     setPlayerFCards(response.json.player_f_hand);
     setPlayerMCards(response.json.player_m_cards);
+    setPlayerIds(response.json.player_ids);
+    setCurrentPlayer(response.json.current_player);
     console.log(response.json.player_f_hand);
     console.log(response.json.player_m_cards);
   }
@@ -50,8 +54,13 @@ function GameLayout() {
       <div className="board-side">
         <div className="bar">
           <CartaFigura figuras={figuras} />
+          <div className="turn-symbol-container">
+            {(currentPlayer === clientId) && 
+              <img src="A.svg" alt="ola" className="turn-symbol"/>
+            }
+          </div>
         </div>
-        <div style={{ justifySelf: "center", alignSelf: "center" }}>
+        <div style={{ justifySelf: "center", alignSelf: "center" }} className={(currentPlayer === clientId) ? "current-turn" : ""}>
           <Tablero boardState={boardState} />
         </div>
         <div className="bar bar-movements">
@@ -65,7 +74,7 @@ function GameLayout() {
         </div>
       </div>
       <div className="players">
-        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards} playerMovements={playerMCards}/>
+        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards} playerMovements={playerMCards} currentPlayer={currentPlayer} />
       </div>
 
       {/*
