@@ -2,18 +2,18 @@ import React, { useState, useContext, useEffect } from "react";
 import Ficha from "./Ficha";
 import "./Tablero.css";
 import { AppContext } from "../App.jsx";
-import {GET, httpRequest} from "../services/HTTPServices";
+import { GET, httpRequest } from "../services/HTTPServices";
 
 
 const BOARD_SIZE = 6;
 
 function Tablero() {
-  const { socketId } = useContext(AppContext);
+  const { socketId, lastMessage } = useContext(AppContext);
   const [fichas, setFichas] = useState([]);
 
   useEffect(() => {
     getGameState();
-  }, []);
+  }, [lastMessage]);
 
   async function getGameState() {
     const requestData = {
@@ -22,18 +22,18 @@ function Tablero() {
     };
 
     const response = await httpRequest(requestData);
-     
-    if (response.json.board_state !== undefined) {
-      const boardState = response.json.board_state; 
+
+    if (response.json.board !== undefined) {
+      const board = response.json.board;
       const newFichas = [];
-      
-      for (let i = 0; i < boardState.length; i++) {
-        const color = boardState[i];
+
+      for (let i = 0; i < board.length; i++) {
+        const color = board[i];
         const x = Math.floor(i / BOARD_SIZE);
-        const y = i % BOARD_SIZE; 
+        const y = i % BOARD_SIZE;
         newFichas.push({ id: i, color: color, x: x, y: y });
       }
-      
+
       setFichas(newFichas);
     }
   }
