@@ -6,7 +6,7 @@ import CartaMovimiento from "./CartaMovimiento.jsx";
 
 
 function Jugador({ playerNames, playerColors, playerShapes, playerMovements }) {
-  
+
   const { clientId } = useContext(AppContext);
 
   function parseColor(color) {
@@ -22,9 +22,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements }) {
         nombre: playerNames[id],
         color: parseColor(playerColors[id]),
         figuras: playerShapes[id],
-        //["h3", "h1", "h10"]
         movimientos: playerMovements[id],
-        //["mov1", "mov2", "mov3"]
       }
     ));
 
