@@ -1,0 +1,27 @@
+.container-winner {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    flex-direction: column;
+
+    background-color: #475758;
+}
+
+.return-button {
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 7px;
+    width: 70px; 
+    height: 70px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #646d75;
+    margin: 0; 
+  }

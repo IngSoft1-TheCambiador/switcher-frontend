@@ -1,28 +1,40 @@
 import React, { useContext, useState, useEffect } from "react";
 import Tablero from "./Tablero";
 import BotonTurno from "./BotonTurno.jsx";
+import BotonAbandonar from "./BotonAbandonar.jsx";
 import CartaFigura from "./CartaFigura";
 import CartaMovimiento from "./CartaMovimiento";
 import Jugador from "./Jugador";
+import Winner from "./Winner";
 import "./GameLayout.css";
+import { useLocation } from 'wouter';
 import { AppContext } from "../App.jsx";
-import { GET, httpRequest } from "../services/HTTPServices";
+import { GET, POST, httpRequest } from "../services/HTTPServices";
 
 
 
 function GameLayout() {
-  const { socketId, lastMessage, clientId } = useContext(AppContext);
+  const { socketId, lastMessage, clientId, gameId } = useContext(AppContext);
+  const [winner, setWinner] = useState("");
   const [boardState, setBoardState] = useState([]);
   const [playerNames, setPlayerNames] = useState([]);
   const [playerColors, setPlayerColors] = useState({});
   const [playerFCards, setPlayerFCards] = useState({});
   const [playerMCards, setPlayerMCards] = useState({});
+  const [, navigate] = useLocation();
   const [playerIds, setPlayerIds] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState(-1);
 
 
   useEffect(() => {
-    getGameState();
+    if (lastMessage.data.includes("GAME_ENDED")) {
+      const splitMsg = lastMessage.data.split(' ');
+      setWinner(splitMsg[1]);
+    }
+    else {
+      getGameState();
+    }
+
   }, [lastMessage]);
 
   async function getGameState() {
@@ -32,14 +44,21 @@ function GameLayout() {
     };
 
     const response = await httpRequest(requestData);
-    setBoardState(response.json.actual_board);
-    setPlayerNames(response.json.player_names);
-    setPlayerColors(response.json.player_colors);
-    setPlayerFCards(response.json.player_f_hand);
-    setPlayerMCards(response.json.player_m_cards);
-    setPlayerIds(response.json.player_ids);
-    setCurrentPlayer(response.json.current_player);
-    console.log("CURRENT PLAYER: ", response.json.current_player);
+    if (response.json.player_names.length === 1) {
+      console.log("QUEDA 1 JUGADOR");
+      setWinner(response.json.player_names[0]);
+    }
+    else {
+      setBoardState(response.json.actual_board);
+      setPlayerNames(response.json.player_names);
+      setPlayerColors(response.json.player_colors);
+      setPlayerFCards(response.json.player_f_hand);
+      setPlayerMCards(response.json.player_m_cards);
+      setPlayerIds(response.json.player_ids);
+      setCurrentPlayer(response.json.current_player);
+      console.log("CURRENT PLAYER: ", response.json.current_player);
+    }
+
   }
 
   const jugadorActual = {
@@ -48,6 +67,11 @@ function GameLayout() {
     movimientos: playerMCards[clientId] || [],
   };
   const { figuras, movimientos } = jugadorActual;
+
+  if (winner != "") {
+    console.log("winner: ", winner);
+    return (<Winner winnerName = {winner} />);
+  }
 
   return (
     <div className="layout">
@@ -66,9 +90,7 @@ function GameLayout() {
         <div className="bar bar-movements">
           <BotonTurno />
           <CartaMovimiento movimientos={movimientos} shown={true} />
-          <button className="leave-button">
-            <img src="salir.png" alt="Abandonar Partida" className="button-icon" />
-          </button>
+          <BotonAbandonar />
         </div>
       </div>
       <div className="players">
@@ -84,7 +106,7 @@ function GameLayout() {
             <input type="text" placeholder="Type something">
             </input>
         </div>
-      */}
+        */}
     </div>
   );
 }
