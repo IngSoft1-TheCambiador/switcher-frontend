@@ -71,6 +71,7 @@ const imagenes = {
 };
 
 function CartaMovimiento({ movimientos, shown }) {
+  movimientos.sort();
   return (
     <div className="carta-movimiento-container">
       {movimientos.map((movimiento, index) => (
