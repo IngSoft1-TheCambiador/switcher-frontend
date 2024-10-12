@@ -7,13 +7,13 @@ import { POST, httpRequest } from '../services/HTTPServices.jsx';
 
 function GameRow({ gameID, gameName, minPlayers, maxPlayers }) {
   const [, navigate] = useLocation();
-  const { socketId, playerName, handleNewPlayer} = useContext(AppContext);
+  const { socketId, playerName, handleNewPlayer } = useContext(AppContext);
 
   const handleResponse = (response) => {
     console.log("result: ", response);
     console.log(response);
     if (response.json.error === undefined) {
-      handleNewPlayer(response.json.player_id);
+      handleNewPlayer(response.json.player_id, gameID);
       navigate('/Sala');
     }
   };

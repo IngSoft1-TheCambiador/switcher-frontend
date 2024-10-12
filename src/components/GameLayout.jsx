@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import Tablero from "./Tablero";
+import BotonTurno from "./BotonTurno.jsx";
 import CartaFigura from "./CartaFigura";
 import CartaMovimiento from "./CartaMovimiento";
 import Jugador from "./Jugador";
@@ -38,8 +39,7 @@ function GameLayout() {
     setPlayerMCards(response.json.player_m_cards);
     setPlayerIds(response.json.player_ids);
     setCurrentPlayer(response.json.current_player);
-    console.log(response.json.player_f_hand);
-    console.log(response.json.player_m_cards);
+    console.log("CURRENT PLAYER: ", response.json.current_player);
   }
 
   const jugadorActual = {
@@ -64,9 +64,7 @@ function GameLayout() {
           <Tablero boardState={boardState} />
         </div>
         <div className="bar bar-movements">
-          <button className="turn-button">
-            <img src="siguiente.png" alt="Pasar Turno" className="button-icon" />
-          </button>
+          <BotonTurno />
           <CartaMovimiento movimientos={movimientos} shown={true} />
           <button className="leave-button">
             <img src="salir.png" alt="Abandonar Partida" className="button-icon" />

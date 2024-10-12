@@ -4,7 +4,7 @@ import { useLocation } from 'wouter';
 import './CrearPartida.css';
 import { PUT, httpRequest } from '../services/HTTPServices.jsx';
 
-function CrearPartida({ onSubmit }) {
+function CrearPartida() {
   const [tempGameName, setTempGameName] = useState('');
   const [min, setMin] = useState(2);
   const [max, setMax] = useState(4);
@@ -21,8 +21,7 @@ function CrearPartida({ onSubmit }) {
     const response = await httpRequest(requestData);
     console.log("response.json.game_id: ", response.json.game_id);
     console.log("response.json.player_id: ", response.json.player_id);
-    onSubmit(response.json.game_id);
-    handleNewPlayer(response.json.player_id);
+    handleNewPlayer(response.json.player_id, response.json.game_id);
     navigate('/Sala');
   }
 
