@@ -16,7 +16,7 @@ export const AppContext = React.createContext();
 function App() {
 
   const [playerName, setPlayerName] = useState();
-  const [socketId, setSocketId] = useState(0);
+  const [socketId, setSocketId] = useState(-1);
   const [gameId, setGameId] = useState(0);
   const [clientId, setClientId] = useState(180);
 
@@ -31,13 +31,14 @@ function App() {
     });
 
   useEffect(() => {
-    if (lastJsonMessage !== null && lastJsonMessage.socketId !== null && lastJsonMessage.socketId !== undefined) {
+    if (socketId === -1 && lastJsonMessage !== null && lastJsonMessage.socketId !== null && lastJsonMessage.socketId !== undefined) {
       setSocketId(lastJsonMessage.socketId);
     }
   }, [lastJsonMessage]);
 
-  function handleNewPlayer(id) {
-    setClientId(id);
+  function handleNewPlayer(clientId, gameId) {
+    setClientId(clientId);
+    setGameId(gameId);
   }
 
   return (
@@ -47,7 +48,7 @@ function App() {
           <Inicio onSubmit={(name) => setPlayerName(name)} />
         </Route>
         <Route path="/ListaPartidas">
-          <ListaPartidas onSubmit={(id) => setGameId(id)} />
+          <ListaPartidas />
         </Route>
         <Route path="/Sala">
           <WaitRoom />
