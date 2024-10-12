@@ -10,10 +10,10 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, cur
   const { clientId } = useContext(AppContext);
 
   function parseColor(color) {
-    if (color === "r") return "red";
-    else if (color === "g") return "green";
-    else if (color === "b") return "blue";
-    else return "yellow";
+    if (color === "r") return "#EC1C24";
+    else if (color === "g") return "#00A551";
+    else if (color === "b") return "#00ADEE";
+    else return "#FFF100";
   }
 
   const jugadores = Object.keys(playerNames).filter((id) => parseInt(id) !== clientId)
@@ -30,12 +30,12 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, cur
   return (
     <div className="jugadores">
       {jugadores.map((jugador, index) => (
-        <div key={index} className={(parseInt(currentPlayer) === parseInt(jugador.player_id)) ? "jugador current-turn" : "jugador"} style={{ backgroundColor: jugador.color }} >
+        <div key={index} className="jugador" style={{ backgroundColor: jugador.color }} >
           {console.log("jugador: ", jugador.nombre, "id: ", jugador.player_id, "turno actual: ", currentPlayer)}
           <div className="name-bar">
             <h3>{jugador.nombre}</h3>
             {parseInt(currentPlayer) === parseInt(jugador.player_id) &&
-              <img src="A.svg" alt="ola" className="turn-symbol" />
+              <img src="hourglass.svg" alt="hourglass" className="turn-symbol"/>
             }
           </div>
           <CartaFigura className={(currentPlayer === jugador.player_id) ? "current-turn" : ""} figuras={jugador.figuras} />
