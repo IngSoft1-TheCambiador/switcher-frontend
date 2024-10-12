@@ -16,7 +16,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, cur
     else return "yellow";
   }
 
-  const jugadores = Object.keys(playerNames).filter((id) => parseInt(id) !== clientId )
+  const jugadores = Object.keys(playerNames).filter((id) => parseInt(id) !== clientId)
     .map((id) => (
       {
         nombre: playerNames[id],
@@ -31,15 +31,15 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, cur
     <div className="jugadores">
       {jugadores.map((jugador, index) => (
         <div key={index} className={(parseInt(currentPlayer) === parseInt(jugador.player_id)) ? "jugador current-turn" : "jugador"} style={{ backgroundColor: jugador.color }} >
-          {console.log("jugador: ",jugador.nombre, "id: ",jugador.player_id,"turno actual: ", currentPlayer)}
+          {console.log("jugador: ", jugador.nombre, "id: ", jugador.player_id, "turno actual: ", currentPlayer)}
           <div className="name-bar">
             <h3>{jugador.nombre}</h3>
-            {parseInt(currentPlayer) === parseInt(jugador.player_id) && 
-              <img src="A.svg" alt="ola" className="turn-symbol"/>
+            {parseInt(currentPlayer) === parseInt(jugador.player_id) &&
+              <img src="A.svg" alt="ola" className="turn-symbol" />
             }
           </div>
           <CartaFigura className={(currentPlayer === jugador.player_id) ? "current-turn" : ""} figuras={jugador.figuras} />
-          <CartaMovimiento movimientos={jugador.movimientos} />
+          <CartaMovimiento movimientos={jugador.movimientos} shown={false} />
         </div>
       ))}
     </div>

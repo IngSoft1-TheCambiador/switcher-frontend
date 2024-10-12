@@ -55,8 +55,8 @@ function GameLayout() {
         <div className="bar">
           <CartaFigura figuras={figuras} />
           <div className="turn-symbol-container">
-            {(currentPlayer === clientId) && 
-              <img src="A.svg" alt="ola" className="turn-symbol"/>
+            {(currentPlayer === clientId) &&
+              <img src="A.svg" alt="ola" className="turn-symbol" />
             }
           </div>
         </div>
@@ -67,7 +67,7 @@ function GameLayout() {
           <button className="turn-button">
             <img src="siguiente.png" alt="Pasar Turno" className="button-icon" />
           </button>
-          <CartaMovimiento movimientos={movimientos} />
+          <CartaMovimiento movimientos={movimientos} shown={true} />
           <button className="leave-button">
             <img src="salir.png" alt="Abandonar Partida" className="button-icon" />
           </button>
