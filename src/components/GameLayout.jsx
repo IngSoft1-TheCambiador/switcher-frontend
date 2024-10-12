@@ -4,6 +4,7 @@ import BotonTurno from "./BotonTurno.jsx";
 import CartaFigura from "./CartaFigura";
 import CartaMovimiento from "./CartaMovimiento";
 import Jugador from "./Jugador";
+import Winner from "./Winner";
 import "./GameLayout.css";
 import { useLocation } from 'wouter';
 import { AppContext } from "../App.jsx";
@@ -18,7 +19,7 @@ function GameLayout() {
   const [playerColors, setPlayerColors] = useState({});
   const [playerFCards, setPlayerFCards] = useState({});
   const [playerMCards, setPlayerMCards] = useState({});
-  const [, navigate] = useLocation(); 
+  const [, navigate] = useLocation();
   const [playerIds, setPlayerIds] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState(-1);
 
@@ -46,11 +47,11 @@ function GameLayout() {
 
   async function leaveGame() {
     const requestData = {
-        "method": POST,
-        "service": `leave_game?game_id=${gameId}&player_name=${playerNames[clientId]}`,
+      "method": POST,
+      "service": `leave_game?game_id=${gameId}&player_name=${playerNames[clientId]}`,
     };
     const response = await httpRequest(requestData);
-    if (response.ok) { 
+    if (response.ok) {
       navigate("/ListaPartidas");
     } else {
       console.error("Error al abandonar la partida: ", response);
@@ -64,6 +65,21 @@ function GameLayout() {
     movimientos: playerMCards[clientId] || [],
   };
   const { figuras, movimientos } = jugadorActual;
+  const [winner, setWinner] = useState("");
+
+
+  const backToListaPartidas = () => {
+    navigate("/ListaPartidas");
+  };
+
+  if (winner != "") {
+    console.log("winner: ", winner);
+    return Winner(winner, backToListaPartidas);
+  };
+
+  const nombreProvisorio = () => {
+    setWinner("August");
+  };
 
   return (
     <div className="layout">
@@ -100,7 +116,7 @@ function GameLayout() {
             <input type="text" placeholder="Type something">
             </input>
         </div>
-      */}
+        */}
     </div>
   );
 }

@@ -22,7 +22,7 @@ function CrearPartida() {
     console.log("response.json.game_id: ", response.json.game_id);
     console.log("response.json.player_id: ", response.json.player_id);
     handleNewPlayer(response.json.player_id, response.json.game_id);
-    navigate('/Sala');
+    navigate('/WaitRoom');
   }
 
   const handleSubmit = (e) => {
