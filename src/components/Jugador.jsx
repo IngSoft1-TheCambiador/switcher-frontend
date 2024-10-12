@@ -16,7 +16,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements }) {
     else return "yellow";
   }
 
-  const jugadores = Object.keys(playerNames).filter((id) => parseInt(id) !== clientId )
+  const jugadores = Object.keys(playerNames).filter((id) => parseInt(id) !== clientId)
     .map((id) => (
       {
         nombre: playerNames[id],
@@ -32,7 +32,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements }) {
         <div key={index} className="jugador" style={{ backgroundColor: jugador.color }}>
           <h3>{jugador.nombre}</h3>
           <CartaFigura figuras={jugador.figuras} />
-          <CartaMovimiento movimientos={jugador.movimientos} />
+          <CartaMovimiento movimientos={jugador.movimientos} shown={false} />
         </div>
       ))}
     </div>
