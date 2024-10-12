@@ -6,7 +6,7 @@ import { useLocation } from 'wouter';
 
 function BotonAbandonar() {
 
-    const { gameId, playerName, } = useContext(AppContext);
+    const { gameId, playerName, socketId } = useContext(AppContext);
     const [, navigate] = useLocation();
 
 
@@ -14,7 +14,7 @@ function BotonAbandonar() {
 
         const requestData = {
             "method": POST,
-            "service": `leave_game?game_id=${gameId}&player_name=${playerName}`
+            "service": `leave_game?socket_id=${socketId}&game_id=${gameId}&player_name=${playerName}`
         };
         const response = await httpRequest(requestData);
         if (response.ok) {
