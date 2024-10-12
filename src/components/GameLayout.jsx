@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import Tablero from "./Tablero";
 import BotonTurno from "./BotonTurno.jsx";
+import BotonAbandonar from "./BotonAbandonar.jsx";
 import CartaFigura from "./CartaFigura";
 import CartaMovimiento from "./CartaMovimiento";
 import Jugador from "./Jugador";
@@ -14,6 +15,7 @@ import { GET, POST, httpRequest } from "../services/HTTPServices";
 
 function GameLayout() {
   const { socketId, lastMessage, clientId, gameId } = useContext(AppContext);
+  const [winner, setWinner] = useState("");
   const [boardState, setBoardState] = useState([]);
   const [playerNames, setPlayerNames] = useState([]);
   const [playerColors, setPlayerColors] = useState({});
@@ -25,7 +27,14 @@ function GameLayout() {
 
 
   useEffect(() => {
-    getGameState();
+    if (lastMessage.data.includes("GAME_ENDED")) {
+      const splitMsg = lastMessage.data.split(' ');
+      setWinner(splitMsg[1]);
+    }
+    else {
+      getGameState();
+    }
+
   }, [lastMessage]);
 
   async function getGameState() {
@@ -35,29 +44,22 @@ function GameLayout() {
     };
 
     const response = await httpRequest(requestData);
-    setBoardState(response.json.actual_board);
-    setPlayerNames(response.json.player_names);
-    setPlayerColors(response.json.player_colors);
-    setPlayerFCards(response.json.player_f_hand);
-    setPlayerMCards(response.json.player_m_cards);
-    setPlayerIds(response.json.player_ids);
-    setCurrentPlayer(response.json.current_player);
-    console.log("CURRENT PLAYER: ", response.json.current_player);
-  }
-
-  async function leaveGame() {
-    const requestData = {
-      "method": POST,
-      "service": `leave_game?game_id=${gameId}&player_name=${playerNames[clientId]}`,
-    };
-    const response = await httpRequest(requestData);
-    if (response.ok) {
-      navigate("/ListaPartidas");
-    } else {
-      console.error("Error al abandonar la partida: ", response);
+    if (response.json.player_names.length === 1) {
+      console.log("QUEDA 1 JUGADOR");
+      setWinner(response.json.player_names[0]);
     }
-  }
+    else {
+      setBoardState(response.json.actual_board);
+      setPlayerNames(response.json.player_names);
+      setPlayerColors(response.json.player_colors);
+      setPlayerFCards(response.json.player_f_hand);
+      setPlayerMCards(response.json.player_m_cards);
+      setPlayerIds(response.json.player_ids);
+      setCurrentPlayer(response.json.current_player);
+      console.log("CURRENT PLAYER: ", response.json.current_player);
+    }
 
+  }
 
   const jugadorActual = {
     nombre: playerNames[clientId],
@@ -65,21 +67,11 @@ function GameLayout() {
     movimientos: playerMCards[clientId] || [],
   };
   const { figuras, movimientos } = jugadorActual;
-  const [winner, setWinner] = useState("");
-
-
-  const backToListaPartidas = () => {
-    navigate("/ListaPartidas");
-  };
 
   if (winner != "") {
     console.log("winner: ", winner);
-    return Winner(winner, backToListaPartidas);
-  };
-
-  const nombreProvisorio = () => {
-    setWinner("August");
-  };
+    return (<Winner winnerName = {winner} />);
+  }
 
   return (
     <div className="layout">
@@ -98,9 +90,7 @@ function GameLayout() {
         <div className="bar bar-movements">
           <BotonTurno />
           <CartaMovimiento movimientos={movimientos} shown={true} />
-          <button className="leave-button" onClick={leaveGame}>
-            <img src="salir.png" alt="Abandonar Partida" className="button-icon" />
-          </button>
+          <BotonAbandonar />
         </div>
       </div>
       <div className="players">
