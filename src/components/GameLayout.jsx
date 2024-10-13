@@ -3,7 +3,7 @@ import Tablero from "./Tablero";
 import BotonTurno from "./BotonTurno.jsx";
 import BotonAbandonar from "./BotonAbandonar.jsx";
 import CartaFigura from "./CartaFigura";
-import CartaMovimiento from "./CartaMovimiento";
+import CartaMovimiento, {calculatePositions} from "./CartaMovimiento";
 import Jugador from "./Jugador";
 import Winner from "./Winner";
 import "./GameLayout.css";
@@ -24,8 +24,11 @@ function GameLayout() {
   const [, navigate] = useLocation();
   const [playerIds, setPlayerIds] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState(-1);
+  const [selectedMov, setSelectedMov] = useState(null);
+  const [selectedCell, setSelectedCell] = useState({});
+  const [validPos, setValidPos] = useState([]);
 
-
+  setSelectedCell
   useEffect(() => {
     if (lastMessage.data.includes("GAME_ENDED")) {
       const splitMsg = lastMessage.data.split(' ');
@@ -68,10 +71,53 @@ function GameLayout() {
   };
   const { figuras, movimientos } = jugadorActual;
 
+  async function makePartialMove(x,y) {
+    const requestData = {
+      method: POST,
+      service: `partial_move?game_id=${gameId}&a=${selectedCell.x}&b=${selectedCell.y}&x=${x}&y=${y}`,
+    };
+
+    const response = await httpRequest(requestData);
+    setBoardState(response.json.actual_board);
+    setSelectedMov(null);
+    setSelectedCell({});
+    setValidPos([]);
+  }
+
+  function selectMov(mov,i) {
+    console.log(i==selectedMov ? null : i);
+    i==selectedMov ? setSelectedMov(null) : setSelectedMov(i);
+  };
+
+  function selectCell(x,y) {
+    console.log("inside selectCell");
+    if (selectedCell.x != undefined){
+      console.log("inside if");
+      console.log("pos: ", [x,y]);
+      console.log("includes?: ", validPos.some(p => p[0]==x && p[1]==y));
+      if (selectedCell.x==x && selectedCell.y==y){
+        console.log("deseleccionada")
+        setSelectedCell({});
+      }
+      else if (validPos.some(p => p[0]==x && p[1]==y)){
+        makePartialMove(x,y);
+      }
+    } else if (selectedMov != null) {
+      console.log("inside else");
+      setSelectedCell({x:x, y:y});
+      console.log("x: ",x);
+      console.log("y: ",y);
+      setValidPos(calculatePositions(movimientos[selectedMov],x,y));
+      console.log(calculatePositions(movimientos[selectedMov],x,y));
+    }
+  }
+
+
+
   if (winner != "") {
     console.log("winner: ", winner);
     return (<Winner winnerName = {winner} />);
-  }
+  };
 
   return (
     <div className="layout">
@@ -85,11 +131,11 @@ function GameLayout() {
           </div>
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }} >
-          <Tablero boardState={boardState} />
+          <Tablero boardState={boardState} setSelectedCell={(x,y)=>selectCell(x,y)} />
         </div>
         <div className="bar bar-movements">
           <BotonTurno />
-          <CartaMovimiento movimientos={movimientos} shown={true} />
+          <CartaMovimiento movimientos={movimientos} shown={true} setSelectedMov={(mov,i)=>selectMov(mov,i)} />
           <BotonAbandonar />
         </div>
       </div>

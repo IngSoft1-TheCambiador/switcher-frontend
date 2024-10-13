@@ -5,15 +5,15 @@ import "./CartaMovimiento.css";
 const BOARD_SIZE = 6;
 
 function validPos(x, y, original_x, original_y) {
-  return !(x < 1 || x > BOARD_SIZE || y < 1 || y > BOARD_SIZE ||
+  return !(x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE ||
     (x == original_x && y == original_y));
 }
 
 function calculateQuadrants(arr, x, y, a, b) {
-  arr.push([x + a, y + b]);     // 1st quadrant
-  arr.push([x - b, y + a]);     // 2nd quadrant
-  arr.push([x - a, y - b]);     // 3rd quadrant
-  arr.push([x + b, y - a]);     // 4th quadrant
+  arr.push([x - b, y + a]);     // 1st quadrant
+  arr.push([x - a, y - b]);     // 2nd quadrant
+  arr.push([x + b, y - a]);     // 3rd quadrant
+  arr.push([x + a, y + b]);     // 4th quadrant
   return arr;
 }
 
@@ -49,10 +49,10 @@ export function calculatePositions(mov, x, y) {
       calculateQuadrants(positions, x, y, 2, 1);
       break;
     case "mov7":
-      positions.push([x, 1]);
-      positions.push([x, BOARD_SIZE]);
-      positions.push([1, y]);
-      positions.push([BOARD_SIZE, y]);
+      positions.push([x, 0]);
+      positions.push([x, BOARD_SIZE-1]);
+      positions.push([0, y]);
+      positions.push([BOARD_SIZE-1, y]);
       break;
     default:
       throw new Error("Invalid movement");
@@ -70,12 +70,12 @@ const imagenes = {
   mov7: "mov7.svg",
 };
 
-function CartaMovimiento({ movimientos, shown }) {
-  movimientos.sort();
+function CartaMovimiento({ movimientos, shown, setSelectedMov }) {
+  // movimientos.sort();
   return (
     <div className="carta-movimiento-container">
       {movimientos.map((movimiento, index) => (
-        <div key={index} className="carta-movimiento">
+        <div key={index} className="carta-movimiento" onClick={()=>setSelectedMov(movimiento, index)}>
           {shown ? <img src={imagenes[movimiento]} alt={`Movimiento ${movimiento}`} /> : <img src="back-mov.svg" />}
         </div>
       ))}

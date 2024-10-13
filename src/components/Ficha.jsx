@@ -8,11 +8,11 @@ const imagenesFichas = {
   "b": "D.svg",
 };
 
-function Ficha({ id, x, y, color}) {
+function Ficha({ id, x, y, color, setSelectedCell}) {
   const imagen = imagenesFichas[color];
 
   return (
-    <div className="ficha">
+    <div className="ficha" onClick={()=>setSelectedCell(x,y)}>
       <img src={imagen} alt={`Ficha ${id}`} />
     </div>
   );
