@@ -101,7 +101,7 @@ function WaitRoom() {
                     <button onMouseEnter={handleOnMouseEnter} onClick={handleClick} className={(ready) ? "can-start" : "cant-start"}>EMPEZAR PARTIDA</button>
                 }
                 <button className="leave-waitroom" onClick={leaveGame}>
-                    <img src="salir.png" alt="Abandonar Partida" />
+                    <img src="salir.png" alt="Abandonar Partida" className="leave-waitroom-img"/>
                 </button>
             </div>
         </div>
