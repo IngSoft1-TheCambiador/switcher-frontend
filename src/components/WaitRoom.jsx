@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import './WaitRoom.css'
 import { useLocation } from 'wouter';
 import { AppContext } from "../App.jsx";
-import { GET, PUT, httpRequest } from '../services/HTTPServices.jsx';
+import { GET, POST, PUT, httpRequest } from '../services/HTTPServices.jsx';
 
 function WaitRoom() {
     const [, navigate] = useLocation();
@@ -38,6 +38,20 @@ function WaitRoom() {
             if (response.json.initialized) {
                 navigate("/GameLayout");
             }
+        }
+    }
+
+    async function leaveGame() {
+        console.log(playerNames[clientId])
+        const requestData = {
+            "method": POST,
+            "service": `leave_game?socket_id=${socketId}&game_id=${gameId}&player_id=${clientId}`
+        };
+        const response = await httpRequest(requestData);
+        console.log("message de leave game: ", response.json.message);
+        console.log("lastmessage de abandono: ", lastMessage.data)
+        if (response.json.message.startsWith("Succesfully removed player")) {
+            navigate("/ListaPartidas");
         }
     }
 
@@ -86,6 +100,9 @@ function WaitRoom() {
                 {(clientId === ownerId) &&
                     <button onMouseEnter={handleOnMouseEnter} onClick={handleClick} className={(ready) ? "can-start" : "cant-start"}>EMPEZAR PARTIDA</button>
                 }
+                <button className="leave-waitroom" onClick={leaveGame}>
+                    <img src="salir.png" alt="Abandonar Partida" />
+                </button>
             </div>
         </div>
     )

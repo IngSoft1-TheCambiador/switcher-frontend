@@ -54,3 +54,13 @@ h2{
 button{
     margin-top: 5vh;
 }
+
+.leave-waitroom{
+    width: fit-content;
+    height: fit-content;
+    justify-self: center;
+}
+
+img{
+    height: 4vh;
+}
