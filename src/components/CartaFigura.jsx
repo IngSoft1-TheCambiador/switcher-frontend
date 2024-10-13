@@ -30,6 +30,7 @@ const imagenesFiguras = {
 };
 
 function CartaFigura({ figuras }) {
+  figuras.sort();
   return (
     <div className="carta-figura-container">
       {figuras.slice(0, 3).map((figura, index) => (

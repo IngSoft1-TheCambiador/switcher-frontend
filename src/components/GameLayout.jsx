@@ -80,11 +80,11 @@ function GameLayout() {
           <CartaFigura figuras={figuras} />
           <div className="turn-symbol-container">
             {(currentPlayer === clientId) &&
-              <img src="A.svg" alt="ola" className="turn-symbol" />
+              <img src="hourglass.svg" alt="hourglass" className="turn-symbol"/>
             }
           </div>
         </div>
-        <div style={{ justifySelf: "center", alignSelf: "center" }} className={(currentPlayer === clientId) ? "current-turn" : ""}>
+        <div style={{ justifySelf: "center", alignSelf: "center" }} >
           <Tablero boardState={boardState} />
         </div>
         <div className="bar bar-movements">
