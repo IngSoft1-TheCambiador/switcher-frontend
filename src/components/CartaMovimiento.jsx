@@ -60,6 +60,7 @@ export function calculatePositions(mov, x, y) {
   return removeWrongMoves(positions, x, y);
 }
 
+
 const imagenes = {
   mov1: "mov1.svg",
   mov2: "mov2.svg",
@@ -70,17 +71,29 @@ const imagenes = {
   mov7: "mov7.svg",
 };
 
-function CartaMovimiento({ movimientos, shown, setSelectedMov }) {
-  // movimientos.sort();
+
+export function CartaMovimientoAjena({ movimientos, show }) {
+  console.log("show: ",show);
   return (
     <div className="carta-movimiento-container">
       {movimientos.map((movimiento, index) => (
-        <div key={index} className="carta-movimiento" onClick={()=>setSelectedMov(movimiento, index)}>
-          {shown ? <img src={imagenes[movimiento]} alt={`Movimiento ${movimiento}`} /> : <img src="back-mov.svg" />}
+        <div key={index} className="carta-movimiento" >
+          {show[index] ? <img src={imagenes[movimiento]} alt={`Movimiento ${movimiento}`} /> : <img src="back-mov.svg" />}
         </div>
       ))}
     </div>
   );
 }
 
-export default CartaMovimiento;
+export function CartaMovimientoPropia({ movimientos, selectedMov, setSelectedMov, used }) {
+  return (
+    <div className="carta-movimiento-container">
+      {movimientos.map((movimiento, index) => (
+        <div key={index} className="carta-movimiento" onClick={()=>setSelectedMov(movimiento, index)}>
+          {<img src={imagenes[movimiento]} alt={`Movimiento ${movimiento}`}
+                style={{filter: selectedMov == index ? 'drop-shadow(0px 0px 20px white)' : '', opacity: used[index] ? 0 : 1}} />}
+        </div>
+      ))}
+    </div>
+  );
+}

@@ -3,7 +3,7 @@ import Tablero from "./Tablero";
 import BotonTurno from "./BotonTurno.jsx";
 import BotonAbandonar from "./BotonAbandonar.jsx";
 import CartaFigura from "./CartaFigura";
-import CartaMovimiento, {calculatePositions} from "./CartaMovimiento";
+import { CartaMovimientoPropia, calculatePositions } from "./CartaMovimiento";
 import Jugador from "./Jugador";
 import Winner from "./Winner";
 import "./GameLayout.css";
@@ -27,8 +27,9 @@ function GameLayout() {
   const [selectedMov, setSelectedMov] = useState(null);
   const [selectedCell, setSelectedCell] = useState({});
   const [validPos, setValidPos] = useState([]);
+  const [usedMoves, setUsedMoves] = useState([false, false, false]);
+  const [cellOpacity, setCellOpacity] = useState(Array(6).fill().map(() => Array(6).fill(false)));
 
-  setSelectedCell
   useEffect(() => {
     if (lastMessage.data.includes("GAME_ENDED")) {
       const splitMsg = lastMessage.data.split(' ');
@@ -47,6 +48,7 @@ function GameLayout() {
     };
 
     const response = await httpRequest(requestData);
+
     if (response.json.player_names.length === 1) {
       console.log("QUEDA 1 JUGADOR");
       setWinner(response.json.player_names[0]);
@@ -61,7 +63,6 @@ function GameLayout() {
       setCurrentPlayer(response.json.current_player);
       console.log("CURRENT PLAYER: ", response.json.current_player);
     }
-
   }
 
   const jugadorActual = {
@@ -79,15 +80,40 @@ function GameLayout() {
 
     const response = await httpRequest(requestData);
     setBoardState(response.json.actual_board);
+
+    // hide the card
+    var usedM = usedMoves;
+    usedM[selectedMov]=true;
+    setUsedMoves(usedM);
+
     setSelectedMov(null);
     setSelectedCell({});
     setValidPos([]);
   }
 
   function selectMov(mov,i) {
-    console.log(i==selectedMov ? null : i);
-    i==selectedMov ? setSelectedMov(null) : setSelectedMov(i);
+    validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
+    if(currentPlayer == clientId && !usedMoves[i]){
+      if (i==selectedMov){
+        setSelectedCell({});
+        setSelectedMov(null);
+      } else {
+        setSelectedMov(i);
+      }
+    }
   };
+
+  const updateCellOpacity = (row, col, value) => {
+    setCellOpacity(prevOpacity => {
+      const newOpacity = prevOpacity.map(row => [...row]);
+      newOpacity[row][col] = value;
+      return newOpacity;
+    });
+  };
+
+  useEffect(() => {
+    validPos.map(pos => updateCellOpacity(pos[0],pos[1],true));
+  }, [validPos]);
 
   function selectCell(x,y) {
     console.log("inside selectCell");
@@ -96,10 +122,12 @@ function GameLayout() {
       console.log("pos: ", [x,y]);
       console.log("includes?: ", validPos.some(p => p[0]==x && p[1]==y));
       if (selectedCell.x==x && selectedCell.y==y){
-        console.log("deseleccionada")
+        validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
+        console.log("deseleccionada");
         setSelectedCell({});
       }
       else if (validPos.some(p => p[0]==x && p[1]==y)){
+        validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
         makePartialMove(x,y);
       }
     } else if (selectedMov != null) {
@@ -108,11 +136,16 @@ function GameLayout() {
       console.log("x: ",x);
       console.log("y: ",y);
       setValidPos(calculatePositions(movimientos[selectedMov],x,y));
-      console.log(calculatePositions(movimientos[selectedMov],x,y));
+      console.log("valid pos: ",calculatePositions(movimientos[selectedMov],x,y));
     }
   }
 
+  const resetUsedMoves = () => {
 
+    // TODO: call endpoint to reset board
+
+    setUsedMoves([false, false, false]);
+  };
 
   if (winner != "") {
     console.log("winner: ", winner);
@@ -131,11 +164,11 @@ function GameLayout() {
           </div>
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }} >
-          <Tablero boardState={boardState} setSelectedCell={(x,y)=>selectCell(x,y)} />
+          <Tablero boardState={boardState} setSelectedCell={(x,y)=>selectCell(x,y)} cellOpacity={cellOpacity} />
         </div>
         <div className="bar bar-movements">
-          <BotonTurno />
-          <CartaMovimiento movimientos={movimientos} shown={true} setSelectedMov={(mov,i)=>selectMov(mov,i)} />
+          <BotonTurno resetUsedMoves={resetUsedMoves} />
+          <CartaMovimientoPropia movimientos={movimientos} selectedMov={selectedMov} setSelectedMov={(mov,i)=>selectMov(mov,i)} used={usedMoves} />
           <BotonAbandonar />
         </div>
       </div>

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import CartaFigura from "./CartaFigura";
 import "./Jugador.css";
 import { AppContext } from "../App.jsx";
-import CartaMovimiento from "./CartaMovimiento.jsx";
+import { CartaMovimientoAjena } from "./CartaMovimiento.jsx";
 
 
 function Jugador({ playerNames, playerColors, playerShapes, playerMovements, currentPlayer }) {
@@ -39,7 +39,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, cur
             }
           </div>
           <CartaFigura className={(currentPlayer === jugador.player_id) ? "current-turn" : ""} figuras={jugador.figuras} />
-          <CartaMovimiento movimientos={jugador.movimientos} shown={false} />
+          <CartaMovimientoAjena movimientos={jugador.movimientos} show={[false, false, false]} />
         </div>
       ))}
     </div>

@@ -7,7 +7,7 @@ import { GET, httpRequest } from "../services/HTTPServices";
 
 const BOARD_SIZE = 6;
 
-function Tablero({ boardState, setSelectedCell }) {
+function Tablero({ boardState, setSelectedCell, cellOpacity}) {
   const fichas = [];
 
   for (let i = 0; i < boardState.length; i++) {
@@ -20,11 +20,10 @@ function Tablero({ boardState, setSelectedCell }) {
   return (
     <div className="tablero">
       {fichas.map(({ id, x, y, color }) => (
-        <Ficha key={id} id={id} x={x} y={y} color={color} setSelectedCell={setSelectedCell} />
+        <Ficha key={id} id={id} x={x} y={y} color={color} setSelectedCell={setSelectedCell} cellOpacity={cellOpacity} />
       ))}
     </div>
   );
 }
 
 export default Tablero;
-
