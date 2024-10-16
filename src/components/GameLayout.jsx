@@ -36,11 +36,11 @@ function GameLayout() {
       const splitMsg = lastMessage.data.split(' ');
       setWinner(splitMsg[1]);
     }
-    else if (lastMessage.data.includes("PARTIAL_MOVE")) {
-      const params = lastMessage.data.split(" ");
-      setMoves(params[1], params[2]);
-    }
     else {
+      if (lastMessage.data.includes("PARTIAL_MOVE")) {
+        const params = lastMessage.data.split(" ");
+        setMoves(params[1], params[2]);
+      }
       getGameState();
     }
 
@@ -72,14 +72,16 @@ function GameLayout() {
       setPlayerMCards(response.json.player_m_cards);
       setPlayerIds(response.json.player_ids);
       setCurrentPlayer(response.json.current_player);
-      setPlayersUsedM(
-        Object.fromEntries(
-          Object.entries(response.json.player_m_cards).map(([key, value]) => [
-              key,
-              value.map(() => false)
-          ])
-        )
-      )
+      if (Object.keys(playersUsedM).length === 0){
+        setPlayersUsedM(
+          Object.fromEntries(
+            Object.entries(response.json.player_m_cards).map(([key, value]) => [
+                key,
+                value.map(() => false)
+            ])
+          )
+        );
+      }
       console.log("CURRENT PLAYER: ", response.json.current_player);
     }
   }
