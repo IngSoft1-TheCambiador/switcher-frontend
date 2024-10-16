@@ -21,6 +21,7 @@ function GameLayout() {
   const [playerColors, setPlayerColors] = useState({});
   const [playerFCards, setPlayerFCards] = useState({});
   const [playerMCards, setPlayerMCards] = useState({});
+  const [playersUsedM, setPlayersUsedM] = useState({});
   const [, navigate] = useLocation();
   const [playerIds, setPlayerIds] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState(-1);
@@ -35,11 +36,21 @@ function GameLayout() {
       const splitMsg = lastMessage.data.split(' ');
       setWinner(splitMsg[1]);
     }
+    else if (lastMessage.data.includes("PARTIAL_MOVE")) {
+      const params = lastMessage.data.split(" ");
+      setMoves(params[1], params[2]);
+    }
     else {
       getGameState();
     }
 
   }, [lastMessage]);
+
+  function setMoves(player_id, card_id) {
+    var usedM = playersUsedM;
+    usedM[player_id][card_id] = true;
+    setPlayersUsedM(usedM);
+  }
 
   async function getGameState() {
     const requestData = {
@@ -61,6 +72,14 @@ function GameLayout() {
       setPlayerMCards(response.json.player_m_cards);
       setPlayerIds(response.json.player_ids);
       setCurrentPlayer(response.json.current_player);
+      setPlayersUsedM(
+        Object.fromEntries(
+          Object.entries(response.json.player_m_cards).map(([key, value]) => [
+              key,
+              value.map(() => false)
+          ])
+        )
+      )
       console.log("CURRENT PLAYER: ", response.json.current_player);
     }
   }
@@ -75,7 +94,7 @@ function GameLayout() {
   async function makePartialMove(x,y) {
     const requestData = {
       method: POST,
-      service: `partial_move?game_id=${gameId}&a=${selectedCell.x}&b=${selectedCell.y}&x=${x}&y=${y}`,
+      service: `partial_move?game_id=${gameId}&player_id=${clientId}&mov=${selectedMov}&a=${selectedCell.x}&b=${selectedCell.y}&x=${x}&y=${y}`,
     };
 
     const response = await httpRequest(requestData);
@@ -173,7 +192,7 @@ function GameLayout() {
         </div>
       </div>
       <div className="players">
-        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards} playerMovements={playerMCards} currentPlayer={currentPlayer} />
+        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards} playerMovements={playerMCards} playersUsedMovs={playersUsedM} currentPlayer={currentPlayer} />
       </div>
 
       {/*

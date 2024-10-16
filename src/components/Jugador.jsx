@@ -5,7 +5,7 @@ import { AppContext } from "../App.jsx";
 import { CartaMovimientoAjena } from "./CartaMovimiento.jsx";
 
 
-function Jugador({ playerNames, playerColors, playerShapes, playerMovements, currentPlayer }) {
+function Jugador({ playerNames, playerColors, playerShapes, playerMovements, playersUsedMovs, currentPlayer}) {
 
   const { clientId } = useContext(AppContext);
 
@@ -24,6 +24,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, cur
         color: parseColor(playerColors[id]),
         figuras: playerShapes[id],
         movimientos: playerMovements[id],
+        movUsados: playersUsedMovs[id],
       }
     ));
 
@@ -39,7 +40,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, cur
             }
           </div>
           <CartaFigura className={(currentPlayer === jugador.player_id) ? "current-turn" : ""} figuras={jugador.figuras} />
-          <CartaMovimientoAjena movimientos={jugador.movimientos} show={[false, false, false]} />
+          <CartaMovimientoAjena movimientos={jugador.movimientos} show={jugador.movUsados} />
         </div>
       ))}
     </div>
