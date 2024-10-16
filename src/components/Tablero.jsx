@@ -7,20 +7,20 @@ import { GET, httpRequest } from "../services/HTTPServices";
 
 const BOARD_SIZE = 6;
 
-function Tablero({ boardState, setSelectedCell, cellOpacity}) {
+function Tablero({ boardState, setSelectedCell, cellOpacity, highlightedCells }) {
   const fichas = [];
 
   for (let i = 0; i < boardState.length; i++) {
     const color = boardState[i];
     const x = Math.floor(i / BOARD_SIZE);
     const y = i % BOARD_SIZE;
-    fichas.push({ id: i, color: color, x: x, y: y });
+    fichas.push({ id: i, color: color, x: x, y: y, isHighlighted: highlightedCells[i] });
   }
 
   return (
     <div className="tablero">
-      {fichas.map(({ id, x, y, color }) => (
-        <Ficha key={id} id={id} x={x} y={y} color={color} setSelectedCell={setSelectedCell} cellOpacity={cellOpacity} />
+      {fichas.map(({ id, x, y, color, isHighlighted }) => (
+        <Ficha key={id} id={id} x={x} y={y} color={color} setSelectedCell={setSelectedCell} cellOpacity={cellOpacity} isHighlighted = {isHighlighted} />
       ))}
     </div>
   );

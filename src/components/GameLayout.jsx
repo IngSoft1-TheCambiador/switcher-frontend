@@ -30,6 +30,7 @@ function GameLayout() {
   const [validPos, setValidPos] = useState([]);
   const [usedMoves, setUsedMoves] = useState([false, false, false]);
   const [cellOpacity, setCellOpacity] = useState(Array(6).fill().map(() => Array(6).fill(false)));
+  const [highlightedCells, setHighlightedCells] = useState([])
 
   useEffect(() => {
     if (lastMessage.data.includes("GAME_ENDED")) {
@@ -72,6 +73,7 @@ function GameLayout() {
       setPlayerMCards(response.json.player_m_cards);
       setPlayerIds(response.json.player_ids);
       setCurrentPlayer(response.json.current_player);
+      setHighlightedCells(response.json.highlighted_squares);
       if (Object.keys(playersUsedM).length === 0){
         setPlayersUsedM(
           Object.fromEntries(
@@ -185,7 +187,7 @@ function GameLayout() {
           </div>
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }} >
-          <Tablero boardState={boardState} setSelectedCell={(x,y)=>selectCell(x,y)} cellOpacity={cellOpacity} />
+          <Tablero boardState={boardState} setSelectedCell={(x,y)=>selectCell(x,y)} cellOpacity={cellOpacity} highlightedCells = {highlightedCells} />
         </div>
         <div className="bar bar-movements">
           <BotonTurno resetUsedMoves={resetUsedMoves} />
