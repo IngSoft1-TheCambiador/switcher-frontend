@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import Tablero from "./Tablero";
 import BotonTurno from "./BotonTurno.jsx";
 import BotonAbandonar from "./BotonAbandonar.jsx";
+import BotonDeshacer from "./BotonDeshacer.jsx";
 import CartaFigura from "./CartaFigura";
 import { CartaMovimientoPropia, calculatePositions } from "./CartaMovimiento";
 import Jugador from "./Jugador";
@@ -36,15 +37,16 @@ function GameLayout() {
     if (lastMessage.data.includes("GAME_ENDED")) {
       const splitMsg = lastMessage.data.split(' ');
       setWinner(splitMsg[1]);
-    }
-    else {
-      if (lastMessage.data.includes("PARTIAL_MOVE")) {
-        const params = lastMessage.data.split(" ");
-        setMoves(params[1], params[2]);
-      }
+    } else if (lastMessage.data.includes("PARTIAL_MOVE")) {
+      const params = lastMessage.data.split(" ");
+      setMoves(params[1], params[2]);
+      getGameState();
+    } else if (lastMessage.data.includes("PARTIAL MOVES WERE DISCARDED")) {
+      getGameState();
+      resetUsedMoves();
+    } else {
       getGameState();
     }
-
   }, [lastMessage]);
 
   function setMoves(player_id, card_id) {
@@ -164,10 +166,16 @@ function GameLayout() {
   }
 
   const resetUsedMoves = () => {
-
     // TODO: call endpoint to reset board
-
     setUsedMoves([false, false, false]);
+
+    setPlayersUsedM(prevState => {
+      const newState = { ...prevState };
+      Object.keys(newState).forEach(playerId => {
+        newState[playerId] = newState[playerId].map(() => false);
+      });
+      return newState;
+    });
   };
 
   if (winner != "") {
@@ -190,7 +198,11 @@ function GameLayout() {
           <Tablero boardState={boardState} setSelectedCell={(x,y)=>selectCell(x,y)} cellOpacity={cellOpacity} highlightedCells = {highlightedCells} />
         </div>
         <div className="bar bar-movements">
-          <BotonTurno resetUsedMoves={resetUsedMoves} />
+          <div className="button-container"> 
+              <BotonTurno resetUsedMoves={resetUsedMoves} />
+              {(currentPlayer === clientId) &&
+              <BotonDeshacer setBoardState={setBoardState} />}
+          </div>
           <CartaMovimientoPropia movimientos={movimientos} selectedMov={selectedMov} setSelectedMov={(mov,i)=>selectMov(mov,i)} used={usedMoves} />
           <BotonAbandonar />
         </div>

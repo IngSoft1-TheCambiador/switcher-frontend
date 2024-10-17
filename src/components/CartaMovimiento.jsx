@@ -91,7 +91,7 @@ export function CartaMovimientoPropia({ movimientos, selectedMov, setSelectedMov
       {movimientos.map((movimiento, index) => (
         <div key={index} className="carta-movimiento" onClick={()=>setSelectedMov(movimiento, index)}>
           {<img src={imagenes[movimiento]} alt={`Movimiento ${movimiento}`}
-                style={{filter: selectedMov == index ? 'drop-shadow(0px 0px 20px white)' : '', opacity: used[index] ? 0 : 1}} />}
+                style={{filter: selectedMov == index ? 'drop-shadow(0px 0px 20px white)' : '', opacity: used[index] ? 0.4 : 1}} />}
         </div>
       ))}
     </div>
