@@ -31,7 +31,7 @@ function GameLayout() {
   const [validPos, setValidPos] = useState([]);
   const [usedMoves, setUsedMoves] = useState([false, false, false]);
   const [cellOpacity, setCellOpacity] = useState(Array(6).fill().map(() => Array(6).fill(false)));
-  const [highlightedCells, setHighlightedCells] = useState([])
+  const [highlightedCells, setHighlightedCells] = useState([]);
 
   useEffect(() => {
     if (lastMessage.data.includes("GAME_ENDED")) {
@@ -42,8 +42,8 @@ function GameLayout() {
       setMoves(params[1], params[2]);
       getGameState();
     } else if (lastMessage.data.includes("PARTIAL MOVES WERE DISCARDED")) {
-      getGameState();
-      resetUsedMoves();
+        getGameState();
+        resetPlayersUsedMoves();
     } else {
       getGameState();
     }
@@ -165,8 +165,8 @@ function GameLayout() {
     }
   }
 
-  const resetUsedMoves = () => {
-    // TODO: call endpoint to reset board
+
+  const resetPlayersUsedMoves = () => {
     setUsedMoves([false, false, false]);
 
     setPlayersUsedM(prevState => {
@@ -177,6 +177,22 @@ function GameLayout() {
       return newState;
     });
   };
+
+  async function resetUsedMoves() {
+    const requestData = {
+      method: POST,
+      service: `undo_moves?game_id=${gameId}`,
+    };
+
+    const response = await httpRequest(requestData);
+    if (response.ok) {
+      setBoardState(response.json.true_board);
+    } else {
+      console.error("Error al deshacer movimientos:", response);
+    }
+
+  };
+  
 
   if (winner != "") {
     console.log("winner: ", winner);
@@ -204,7 +220,7 @@ function GameLayout() {
               <BotonDeshacer setBoardState={setBoardState} />}
           </div>
           <CartaMovimientoPropia movimientos={movimientos} selectedMov={selectedMov} setSelectedMov={(mov,i)=>selectMov(mov,i)} used={usedMoves} />
-          <BotonAbandonar />
+          <BotonAbandonar resetUsedMoves={resetUsedMoves} />
         </div>
       </div>
       <div className="players">
