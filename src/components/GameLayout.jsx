@@ -200,7 +200,8 @@ function GameLayout() {
         <div className="bar bar-movements">
           <div className="button-container"> 
               <BotonTurno resetUsedMoves={resetUsedMoves} />
-              <BotonDeshacer setBoardState={setBoardState} />
+              {(currentPlayer === clientId) &&
+              <BotonDeshacer setBoardState={setBoardState} />}
           </div>
           <CartaMovimientoPropia movimientos={movimientos} selectedMov={selectedMov} setSelectedMov={(mov,i)=>selectMov(mov,i)} used={usedMoves} />
           <BotonAbandonar />
