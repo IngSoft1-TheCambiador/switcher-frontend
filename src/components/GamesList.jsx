@@ -7,10 +7,11 @@ import { GET, httpRequest } from '../services/HTTPServices.jsx';
 
 function GamesList() {
   const [games, setGames] = useState([]);
-  const { lastMessage } = useContext(AppContext);
+  const { lastMessage, clientId } = useContext(AppContext);
   const [page, setPage] = useState(1);
 
   useEffect(() => {
+    console.log("WS: ", lastMessage.data);
     getGames(page);
   }, [lastMessage]);
 
@@ -19,13 +20,18 @@ function GamesList() {
     if (page > 0) {
       const requestData = {
         "method": GET,
-        "service": `list_games?page=${page}`
+        "service": `list_games?player_id=${clientId}&page=${page}`
       };
 
       const response = await httpRequest(requestData);
       console.log("response: ", response.json.games_list);
-      setGames(response.json.games_list);
-      setPage(page);
+      if(page == 1 || response.json.games_list.length != 0){
+        setGames(response.json.games_list);
+        setPage(page);
+      }
+      else {
+        getGames(page-1);
+      }
     }
   }
 
