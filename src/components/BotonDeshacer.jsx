@@ -1,4 +1,3 @@
-// src/components/BotonDeshacer.jsx
 import { POST, httpRequest } from "../services/HTTPServices";
 import { AppContext } from "../App.jsx";
 import React, { useContext } from "react";
@@ -21,8 +20,8 @@ function BotonDeshacer({ setBoardState }) {
   }
 
   return (
-    <button className="boton-deshacer" onClick={handleUndoMoves}>
-      Deshacer Movimientos
+    <button className="undo-button" onClick={handleUndoMoves}>
+      <img src="deshacer.png" alt="Deshacer Movimientos" className="button-icon" />
     </button>
   );
 }

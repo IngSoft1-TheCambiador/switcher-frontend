@@ -3,7 +3,7 @@ import { AppContext } from "../App.jsx";
 import React, { useContext } from "react";
 
 
-function BotonTurno() {
+function BotonTurno({ resetUsedMoves }) {
 
     const { gameId, clientId } = useContext(AppContext);
 
@@ -14,6 +14,7 @@ function BotonTurno() {
         };
 
         await httpRequest(requestData);
+        resetUsedMoves();
     }
 
     return (

@@ -2,3 +2,18 @@
   width: 9vh;
   height: 9vh;
 }
+
+.intermitente{
+  animation: infinite resplandorAnimation 1.2s;
+  
+}
+@keyframes resplandorAnimation {
+  0%,100%{
+    opacity: 0.3;
+  }
+  50%{
+    opacity: 1;
+  
+  }
+
+}
