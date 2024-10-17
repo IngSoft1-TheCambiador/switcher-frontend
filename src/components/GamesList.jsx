@@ -25,9 +25,12 @@ function GamesList() {
 
       const response = await httpRequest(requestData);
       console.log("response: ", response.json.games_list);
-      if(response.json.games_list.length != 0){
+      if(page == 1 || response.json.games_list.length != 0){
         setGames(response.json.games_list);
         setPage(page);
+      }
+      else {
+        getGames(page-1);
       }
     }
   }
