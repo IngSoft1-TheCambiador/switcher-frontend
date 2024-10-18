@@ -29,7 +29,7 @@ const imagenesFiguras = {
   s7: "fige07.svg",
 };
 
-function CartaFigura({ figuras }) {
+export function CartaFiguraAjena({ figuras }) {
   return (
     <div className="carta-figura-container">
       {figuras.slice(0, 3).map((figura, index) => (
@@ -41,4 +41,15 @@ function CartaFigura({ figuras }) {
   );
 }
 
-export default CartaFigura;
+export function CartaFiguraPropia({ figuras, selectedFCard, setSelectedFCard }) {
+  return (
+    <div className="carta-figura-container">
+      {figuras.slice(0, 3).map((figura, index) => (
+        <div key={index} className="carta-figura" onClick={() => setSelectedFCard(figura, index)}>
+          <img src={imagenesFiguras[figura]} alt={`Figura ${figura}`} 
+            style={{filter: selectedFCard == index ? 'drop-shadow(0px 0px 20px white)' : ''}}/>
+        </div>
+      ))}
+    </div>
+  );
+}

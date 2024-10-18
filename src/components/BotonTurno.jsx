@@ -3,7 +3,7 @@ import { AppContext } from "../App.jsx";
 import React, { useContext } from "react";
 
 
-function BotonTurno({ resetUsedMoves }) {
+function BotonTurno({ resetUsedMoves, setSelectedMov, setSelectedCell, setValidPos, setSelectedFCard, validPos, updateCellOpacity }) {
 
     const { gameId, clientId } = useContext(AppContext);
 
@@ -14,6 +14,11 @@ function BotonTurno({ resetUsedMoves }) {
         };
 
         await httpRequest(requestData);
+        setSelectedMov(null);
+        setSelectedCell({});
+        setSelectedFCard(null);
+        validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
+        setValidPos([]);
         resetUsedMoves();
     }
 
