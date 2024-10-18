@@ -39,7 +39,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
               <img src="hourglass.svg" alt="hourglass" className="turn-symbol"/>
             }
           </div>
-          <CartaFigura className={(currentPlayer === jugador.player_id) ? "current-turn" : ""} figuras={jugador.figuras} />
+          <CartaFigura figuras={jugador.figuras} />
           <CartaMovimientoAjena movimientos={jugador.movimientos} show={jugador.movUsados} />
         </div>
       ))}

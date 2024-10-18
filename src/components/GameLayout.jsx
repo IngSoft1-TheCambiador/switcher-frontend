@@ -10,7 +10,7 @@ import Winner from "./Winner";
 import "./GameLayout.css";
 import { useLocation } from 'wouter';
 import { AppContext } from "../App.jsx";
-import { GET, POST, httpRequest } from "../services/HTTPServices";
+import { GET, POST, PUT, httpRequest } from "../services/HTTPServices";
 
 
 
@@ -32,6 +32,7 @@ function GameLayout() {
   const [usedMoves, setUsedMoves] = useState([false, false, false]);
   const [cellOpacity, setCellOpacity] = useState(Array(6).fill().map(() => Array(6).fill(false)));
   const [highlightedCells, setHighlightedCells] = useState([]);
+  const [selectedFCard, setSelectedFCard] = useState(null);
 
   useEffect(() => {
     if (lastMessage.data.includes("GAME_ENDED")) {
@@ -119,7 +120,7 @@ function GameLayout() {
   function selectMov(mov,i) {
     validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
     if(currentPlayer == clientId && !usedMoves[i]){
-      if (i==selectedMov){
+      if (i==selectedMov || selectedFCard != null){
         setSelectedCell({});
         setSelectedMov(null);
       } else {
@@ -127,6 +128,46 @@ function GameLayout() {
       }
     }
   };
+
+  function selectFigure(fig, i){
+    if (currentPlayer == clientId){
+      if (i === selectedFCard || selectedMov != null){
+        setSelectedFCard(null);
+      } else {
+        setSelectedFCard(i);
+      }
+    }
+  }
+
+  async function claimFigure(x, y) {
+    
+    // get the usedMoves str code for the endpoint to use
+    const moves_to_remove = [];
+
+    for (let i = 0; i < usedMoves.length; i++){
+      if (usedMoves[i]) {
+        moves_to_remove.push(movimientos[i]);
+      }
+    }
+
+    const requestData = {
+      method: PUT,
+      service: `claim_figure?game_id=${gameId}&player_id=${clientId}&fig=${figuras[selectedFCard]}&x=${x}&y=${y}`,
+    }
+    
+    const response = await httpRequest(requestData);
+
+    console.log(response.json.true_board);
+
+    if (response.json.true_board != undefined){
+      setBoardState(response.json.true_board);
+    }
+
+    
+
+    setSelectedFCard(null);
+    setSelectedCell({});
+  }
 
   const updateCellOpacity = (row, col, value) => {
     setCellOpacity(prevOpacity => {
@@ -162,6 +203,8 @@ function GameLayout() {
       console.log("y: ",y);
       setValidPos(calculatePositions(movimientos[selectedMov],x,y));
       console.log("valid pos: ",calculatePositions(movimientos[selectedMov],x,y));
+    } else if (selectedFCard != null && clientId === currentPlayer) {
+      claimFigure(x,y);
     }
   }
 
@@ -203,7 +246,7 @@ function GameLayout() {
     <div className="layout">
       <div className="board-side">
         <div className="bar">
-          <CartaFigura figuras={figuras} />
+          <CartaFigura figuras={figuras} selectedFCard={selectedFCard} setSelectedFCard={(fig, i) => selectFigure(fig, i)} />
           <div className="turn-symbol-container">
             {(currentPlayer === clientId) &&
               <img src="hourglass.svg" alt="hourglass" className="turn-symbol"/>
@@ -215,7 +258,8 @@ function GameLayout() {
         </div>
         <div className="bar bar-movements">
           <div className="button-container"> 
-              <BotonTurno resetUsedMoves={resetUsedMoves} />
+              <BotonTurno resetUsedMoves={resetUsedMoves} setSelectedMov={setSelectedMov} setSelectedCell={setSelectedCell} setValidPos={setValidPos} 
+              setSelectedFCard={setSelectedFCard} validPos={validPos} updateCellOpacity={updateCellOpacity}/>
               {(currentPlayer === clientId) &&
               <BotonDeshacer setBoardState={setBoardState} />}
           </div>
