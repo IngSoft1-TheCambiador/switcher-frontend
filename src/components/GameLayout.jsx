@@ -3,7 +3,7 @@ import Tablero from "./Tablero";
 import BotonTurno from "./BotonTurno.jsx";
 import BotonAbandonar from "./BotonAbandonar.jsx";
 import BotonDeshacer from "./BotonDeshacer.jsx";
-import CartaFigura from "./CartaFigura";
+import { CartaFiguraPropia } from "./CartaFigura";
 import { CartaMovimientoPropia, calculatePositions } from "./CartaMovimiento";
 import Jugador from "./Jugador";
 import Winner from "./Winner";
@@ -152,7 +152,7 @@ function GameLayout() {
 
     const requestData = {
       method: PUT,
-      service: `claim_figure?game_id=${gameId}&player_id=${clientId}&fig=${figuras[selectedFCard]}&x=${x}&y=${y}`,
+      service: `claim_figure?game_id=${gameId}&player_id=${clientId}&fig=${figuras[selectedFCard]}&used_movs=${moves_to_remove}&x=${x}&y=${y}`,
     }
     
     const response = await httpRequest(requestData);
@@ -161,6 +161,7 @@ function GameLayout() {
 
     if (response.json.true_board != undefined){
       setBoardState(response.json.true_board);
+      setUsedMoves([false, false, false]);
     }
 
     
@@ -246,7 +247,7 @@ function GameLayout() {
     <div className="layout">
       <div className="board-side">
         <div className="bar">
-          <CartaFigura figuras={figuras} selectedFCard={selectedFCard} setSelectedFCard={(fig, i) => selectFigure(fig, i)} />
+          <CartaFiguraPropia figuras={figuras} selectedFCard={selectedFCard} setSelectedFCard={(fig, i) => selectFigure(fig, i)} />
           <div className="turn-symbol-container">
             {(currentPlayer === clientId) &&
               <img src="hourglass.svg" alt="hourglass" className="turn-symbol"/>

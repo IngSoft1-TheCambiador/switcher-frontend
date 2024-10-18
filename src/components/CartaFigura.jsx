@@ -29,7 +29,19 @@ const imagenesFiguras = {
   s7: "fige07.svg",
 };
 
-function CartaFigura({ figuras, selectedFCard, setSelectedFCard }) {
+export function CartaFiguraAjena({ figuras }) {
+  return (
+    <div className="carta-figura-container">
+      {figuras.slice(0, 3).map((figura, index) => (
+        <div key={index} className="carta-figura">
+          <img src={imagenesFiguras[figura]} alt={`Figura ${figura}`} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function CartaFiguraPropia({ figuras, selectedFCard, setSelectedFCard }) {
   return (
     <div className="carta-figura-container">
       {figuras.slice(0, 3).map((figura, index) => (
@@ -41,5 +53,3 @@ function CartaFigura({ figuras, selectedFCard, setSelectedFCard }) {
     </div>
   );
 }
-
-export default CartaFigura;

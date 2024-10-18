@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import CartaFigura from "./CartaFigura";
+import { CartaFiguraAjena } from "./CartaFigura";
 import "./Jugador.css";
 import { AppContext } from "../App.jsx";
 import { CartaMovimientoAjena } from "./CartaMovimiento.jsx";
@@ -39,7 +39,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
               <img src="hourglass.svg" alt="hourglass" className="turn-symbol"/>
             }
           </div>
-          <CartaFigura figuras={jugador.figuras} />
+          <CartaFiguraAjena figuras={jugador.figuras} />
           <CartaMovimientoAjena movimientos={jugador.movimientos} show={jugador.movUsados} />
         </div>
       ))}
