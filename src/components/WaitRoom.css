@@ -1,6 +1,6 @@
 .player{
     list-style-type: none;
-    background-color: rgba(165, 255, 91, 0.308);
+    background-color: #b1c2ae;
     margin-top: 10%;
     margin-bottom: 10%;
     border-radius: 4px;
@@ -11,18 +11,29 @@
 }
 
 h2{
-    font-size: 3.3vh;
+    font-size: 3.5vh;
 }
 
 .waitroom-layout{
-    display: grid;
-    justify-items: center;
+
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    flex-direction: column;
+
+    background-color: #9ead9b;
     color: #56351F;
 }
 
 .room-name{
     font-size: 8vh;
-    margin-bottom: 15vh;
+    margin-bottom: 12vh;
     font-weight: bold;
 }
 
@@ -41,7 +52,7 @@ h2{
 }
 
 .can-start:hover{
-    box-shadow: 0 0 10px 5px rgba(9, 255, 0, 0.555);;
+    box-shadow: 0 0 10px 5px #09ff008e;;
 }
 
 .cant-start:hover{
@@ -52,5 +63,7 @@ h2{
 }
 
 button{
-    margin-top: 5vh;
+    margin-top: 10vh;
+    background-color: #ffd42a;
+    color: black;
 }

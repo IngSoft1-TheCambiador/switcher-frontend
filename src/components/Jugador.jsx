@@ -10,10 +10,10 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
   const { clientId } = useContext(AppContext);
 
   function parseColor(color) {
-    if (color === "r") return "#EC1C24";
-    else if (color === "g") return "#00A551";
-    else if (color === "b") return "#00ADEE";
-    else return "#FFF100";
+    if (color === "r") return "#ff5757";
+    else if (color === "g") return "#41d867";
+    else if (color === "b") return "#38b6ff";
+    else return "#f8cf31";
   }
 
   const jugadores = Object.keys(playerNames).filter((id) => parseInt(id) !== clientId)

@@ -9,6 +9,9 @@ function GamesList() {
   const [games, setGames] = useState([]);
   const { lastMessage, clientId } = useContext(AppContext);
   const [page, setPage] = useState(1);
+  const [searchGame, setSearchGame] = useState("");
+  const [searchMin, setSearchMin] = useState(0);
+  const [searchMax, setSearchMax] = useState(0);
 
   useEffect(() => {
     console.log("WS: ", lastMessage.data);
@@ -37,13 +40,27 @@ function GamesList() {
 
   return (
     <div className="container-General">
-      <h2>EL SWITCHER</h2>
+      <div className='h1-gamesList '>EL SWITCHER</div>
       <div className="container-GamesList">
         <div>
           <div>Partida</div>
           <div>Min</div>
           <div>Max</div>
         </div>
+        <form onSubmit={(e) => console.log("submited: ", searchGame)}>
+          <input
+            placeholder='Nombre'
+            value={searchGame}
+            onChange={e => setSearchGame(e.target.value)} />
+          <input
+            placeholder='Min'
+            value={searchMin}
+            onChange={e => setSearchMin(e.target.value)} />
+          <input
+            placeholder='Max'
+            value={searchMax}
+            onChange={e => setSearchMax(e.target.value)} />
+        </form>
         {games.map(({ game_id, game_name, min_players, max_players }) =>
           <GameRow key={game_id} gameID={game_id} gameName={game_name}
             minPlayers={min_players} maxPlayers={max_players} />)}

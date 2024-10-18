@@ -4,13 +4,15 @@
   flex-direction: row;
   width: 100%;
   height: 100%;
-  gap: 3vw;
+  gap: 0vw;
+
+  background-color: #a8aa88;
 }
 
 .players {
   display: flex;
   flex-direction: column;
-  background-color: #b3d1ad;
+  background-color: #a8aa88;
   gap: 2px;
   padding: 5px;
   height: 100%;
@@ -29,7 +31,7 @@
 */
 
 .board-side {
-  background-color: #b3d1ad;
+  background-color: #a8aa88;
   display: grid;
   grid-template-rows: 13vh auto 13vh;
 }

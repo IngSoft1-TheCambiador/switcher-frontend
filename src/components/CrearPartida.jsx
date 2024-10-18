@@ -51,7 +51,7 @@ function CrearPartida() {
 
   return (
     <div className="container-crearP">
-      <h2>Crear Partida</h2>
+      <div className='h1-crearP'>CREAR PARTIDA</div>
       <form onSubmit={handleSubmit}>
         <h3>Nombre de la partida</h3>
         <input
@@ -78,7 +78,7 @@ function CrearPartida() {
           Ingrese 2, 3 o 4
         </div>
         <button
-          className="button">
+          className="button-yellow">
           Continuar
         </button>
       </form>
