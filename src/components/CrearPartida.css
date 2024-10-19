@@ -21,7 +21,7 @@
 }
 
 .infoLabel-crearP {
-    color: rgb(255, 217, 217);
+    color: #ffd9d9;
   
     /* hide infoLabels until it's needed */
     display: none;

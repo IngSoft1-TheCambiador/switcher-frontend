@@ -1,8 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import Ficha from "./Ficha";
 import "./Tablero.css";
-import { AppContext } from "../App.jsx";
-import { GET, httpRequest } from "../services/HTTPServices";
 
 
 const BOARD_SIZE = 6;

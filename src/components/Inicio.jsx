@@ -1,5 +1,4 @@
-import React, { useState, useContext } from 'react';
-import { AppContext } from '../contexts/Context';
+import React, { useState } from 'react';
 import { useLocation } from 'wouter';
 
 function Inicio({ onSubmit }) {
