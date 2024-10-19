@@ -3,9 +3,10 @@ import { CartaFiguraAjena } from "./CartaFigura";
 import "./Jugador.css";
 import { AppContext } from "../App.jsx";
 import { CartaMovimientoAjena } from "./CartaMovimiento.jsx";
+import { CartasRestantes } from "./CartasRestantes.jsx";
 
 
-function Jugador({ playerNames, playerColors, playerShapes, playerMovements, playersUsedMovs, currentPlayer}) {
+function Jugador({ playerNames, playerColors, playerShapes, playerMovements, playersUsedMovs, currentPlayer, playerShapeCount}) {
 
   const { clientId } = useContext(AppContext);
 
@@ -25,6 +26,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
         figuras: playerShapes[id],
         movimientos: playerMovements[id],
         movUsados: playersUsedMovs[id],
+        cantFiguras: playerShapeCount[id],
       }
     ));
 
@@ -33,6 +35,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
       {jugadores.map((jugador, index) => (
         <div key={index} className="jugador" style={{ backgroundColor: jugador.color }} >
           {console.log("jugador: ", jugador.nombre, "id: ", jugador.player_id, "turno actual: ", currentPlayer)}
+          {/*<CartasRestantes cantidad={jugador.cantFiguras} />*/}
           <div className="name-bar">
             <h3>{jugador.nombre}</h3>
             {parseInt(currentPlayer) === parseInt(jugador.player_id) &&
