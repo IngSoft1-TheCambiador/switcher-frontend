@@ -4,14 +4,14 @@ import React, { useContext } from "react";
 import { useLocation } from 'wouter';
 
 
-function BotonAbandonar() {
+function BotonAbandonar({ resetUsedMoves }) {
 
     const { gameId, clientId, socketId } = useContext(AppContext);
     const [, navigate] = useLocation();
 
 
     async function handleLeaveGame() {
-
+        resetUsedMoves();
         const requestData = {
             "method": POST,
             "service": `leave_game?socket_id=${socketId}&game_id=${gameId}&player_id=${clientId}`

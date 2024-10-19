@@ -12,6 +12,12 @@
     flex-direction: column;
 
     background-color: #808264;
+    color: white;
+}
+
+.h1-crearP {
+    font-size: 28px;
+    font-weight: bold;
 }
 
 .infoLabel-crearP {
@@ -19,4 +25,21 @@
   
     /* hide infoLabels until it's needed */
     display: none;
+}
+
+.button-yellow {
+    border-width: 3px;
+    border-radius: 0;
+    background-color: #ffd42a;
+    color: black;
+    font-weight: bold;
+}
+
+.button-return {
+    border-width: 5px;
+    border-radius: 0;
+    background-color: #ffd42a;
+    color: black;
+    font-weight: bold;
+    margin: 0; 
 }

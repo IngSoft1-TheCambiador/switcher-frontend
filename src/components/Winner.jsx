@@ -14,10 +14,10 @@ function Winner({ winnerName }) {
       <h1>
         ¡{winnerName} ganó la partida!
       </h1>
-      <button className='return-button' onClick={() => {
+      <button className='button-return' onClick={() => {
         navigate("/ListaPartidas");
       }} >
-        <img src="return.png" alt="Volver" className="button-icon" />
+        Volver
       </button>
     </div>
   );

@@ -7,12 +7,17 @@
     width: 100%;
 }
 
+.h1-gamesList {
+    font-size: 50px;
+    font-weight: bold;
+}
+
 /* leave more space for the game list than for the title */
 .container-General>*:first-child {
-    height: 50px;
+    height: 130px;
 }
 .container-General>*:last-child {
-    height: 450px;
+    height: 420px;
 }
 
 /* the list of games is a column of games */
@@ -48,6 +53,11 @@
 
 /* set the color of the titles */
 .container-GamesList>*:first-child {
+    background-color: #808264;
+}
+
+/* set the color of the search field */
+.container-GamesList>*:nth-child(2) {
     background-color: #808264;
 }
 

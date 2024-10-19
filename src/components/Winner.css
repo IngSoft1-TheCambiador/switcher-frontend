@@ -9,7 +9,7 @@
     place-items: center;
     flex-direction: column;
 
-    background-color: #475758;
+    background-color: #a8aa88;
 }
 
 .return-button {
@@ -22,6 +22,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #646d75;
+    background-color: #ffd42a;
     margin: 0; 
-  }
+}
+
+  .button-return {
+    border-width: 5px;
+    border-radius: 0;
+    background-color: #ffd42a;
+    color: black;
+    font-weight: bold;
+    margin: 0; 
+}
