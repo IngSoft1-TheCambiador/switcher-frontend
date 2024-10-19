@@ -16,7 +16,13 @@ function WaitRoom() {
 
     useEffect(() => {
         console.log("MENSAJE WS: ", lastMessage);
-        getGameState();
+        if (lastMessage.data.includes("GAME CANCELLED BY OWNER") && ownerId !== clientId){
+            console.log(gameId);
+            navigate("/ListaPartidas");
+        } else {
+            console.log(gameId);
+            getGameState();
+        }
     }, [lastMessage]);
 
     async function getGameState() {
@@ -42,7 +48,6 @@ function WaitRoom() {
     }
 
     async function leaveGame() {
-        console.log(playerNames[clientId])
         const requestData = {
             "method": POST,
             "service": `leave_game?socket_id=${socketId}&game_id=${gameId}&player_id=${clientId}`
