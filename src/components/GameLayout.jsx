@@ -183,14 +183,9 @@ function GameLayout() {
   }, [validPos]);
 
   function selectCell(x,y) {
-    console.log("inside selectCell");
     if (selectedCell.x != undefined){
-      console.log("inside if");
-      console.log("pos: ", [x,y]);
-      console.log("includes?: ", validPos.some(p => p[0]==x && p[1]==y));
       if (selectedCell.x==x && selectedCell.y==y){
         validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
-        console.log("deseleccionada");
         setSelectedCell({});
       }
       else if (validPos.some(p => p[0]==x && p[1]==y)){
@@ -198,12 +193,8 @@ function GameLayout() {
         makePartialMove(x,y);
       }
     } else if (selectedMov != null) {
-      console.log("inside else");
       setSelectedCell({x:x, y:y});
-      console.log("x: ",x);
-      console.log("y: ",y);
       setValidPos(calculatePositions(movimientos[selectedMov],x,y));
-      console.log("valid pos: ",calculatePositions(movimientos[selectedMov],x,y));
     } else if (selectedFCard != null && clientId === currentPlayer) {
       claimFigure(x,y);
     }
@@ -239,7 +230,6 @@ function GameLayout() {
   
 
   if (winner != "") {
-    console.log("winner: ", winner);
     return (<Winner winnerName = {winner} />);
   };
 

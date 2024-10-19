@@ -15,7 +15,6 @@ function WaitRoom() {
     const [name, setName] = useState('');
 
     useEffect(() => {
-        console.log("MENSAJE WS: ", lastMessage);
         if (lastMessage.data.includes("GAME CANCELLED BY OWNER") && ownerId !== clientId){
             console.log(gameId);
             navigate("/ListaPartidas");
@@ -32,10 +31,7 @@ function WaitRoom() {
         };
 
         const response = await httpRequest(requestData);
-        if (response.json.player_names !== undefined) {
-            console.log("OWNER_ID: ", response.json.owner_id);
-            console.log("CLIENT_ID: ", clientId);
-            console.log("TIPO DE DATOS: ", typeof (response.json.player_names));
+        if (response.json.response_status == 0) {
             setOwnerId(response.json.owner_id);
             setPlayerNames(response.json.player_names);
             setMaxPlayers(response.json.max_players);
@@ -53,8 +49,6 @@ function WaitRoom() {
             "service": `leave_game?socket_id=${socketId}&game_id=${gameId}&player_id=${clientId}`
         };
         const response = await httpRequest(requestData);
-        console.log("message de leave game: ", response.json.message);
-        console.log("lastmessage de abandono: ", lastMessage.data)
         if (response.json.message.startsWith("Succesfully removed player")) {
             navigate("/ListaPartidas");
         }
@@ -66,7 +60,6 @@ function WaitRoom() {
             "service": `start_game?game_id=${gameId}`
         };
         const response = await httpRequest(requestData);
-        console.log("message: ", response.json.message);
     }
 
     function handleClick() {

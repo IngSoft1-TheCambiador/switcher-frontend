@@ -12,15 +12,12 @@ function CrearPartida() {
   const [, navigate] = useLocation();
 
   async function createGame(minPlayers, maxPlayers) {
-    console.log("SOCKET ID ANTES REQUEST ", socketId);
     const requestData = {
       "method": PUT,
       "service": `create_game/?socket_id=${socketId}&game_name=${tempGameName}&player_name=${playerName}&min_players=${minPlayers}&max_players=${maxPlayers}`
     };
 
     const response = await httpRequest(requestData);
-    console.log("response.json.game_id: ", response.json.game_id);
-    console.log("response.json.player_id: ", response.json.player_id);
     handleNewPlayer(response.json.player_id, response.json.game_id);
     navigate('/WaitRoom');
   }
