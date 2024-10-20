@@ -5,6 +5,7 @@ import BotonAbandonar from "./BotonAbandonar.jsx";
 import BotonDeshacer from "./BotonDeshacer.jsx";
 import { CartaFiguraPropia } from "./CartaFigura";
 import { CartaMovimientoPropia, calculatePositions } from "./CartaMovimiento";
+import CartasRestantes from "./CartasRestantes.jsx";
 import Jugador from "./Jugador";
 import Winner from "./Winner";
 import "./GameLayout.css";
@@ -21,6 +22,8 @@ function GameLayout() {
   const [playerNames, setPlayerNames] = useState([]);
   const [playerColors, setPlayerColors] = useState({});
   const [playerFCards, setPlayerFCards] = useState({});
+  const [playersCantFCards, setPlayersCantFCards] = useState({});
+  const [initialFiguresCount, setInitialFiguresCount] = useState({});
   const [playerMCards, setPlayerMCards] = useState({});
   const [playersUsedM, setPlayersUsedM] = useState({});
   const [, navigate] = useLocation();
@@ -72,6 +75,16 @@ function GameLayout() {
       setBoardState(response.json.actual_board);
       setPlayerNames(response.json.player_names);
       setPlayerColors(response.json.player_colors);
+      const playerCantFCards = Object.fromEntries(
+        Object.entries(response.json.player_f_cards).map(([key, value]) => [
+          key,
+          value.length,
+        ])
+      );
+      setPlayersCantFCards(playerCantFCards);
+      if (Object.keys(initialFiguresCount).length === 0) {
+        setInitialFiguresCount(playerCantFCards);
+      }
       setPlayerFCards(response.json.player_f_hand);
       setPlayerMCards(response.json.player_m_cards);
       setPlayerIds(response.json.player_ids);
@@ -95,8 +108,9 @@ function GameLayout() {
     nombre: playerNames[clientId],
     figuras: playerFCards[clientId] || [],
     movimientos: playerMCards[clientId] || [],
+    cantFiguras: playersCantFCards[clientId] || 0,
   };
-  const { figuras, movimientos } = jugadorActual;
+  const { figuras, movimientos, cantFiguras} = jugadorActual;
 
   async function makePartialMove(x,y) {
     const requestData = {
@@ -237,6 +251,7 @@ function GameLayout() {
     <div className="layout">
       <div className="board-side">
         <div className="bar">
+          <CartasRestantes cantidad={cantFiguras} className="cartas-grandes"/>
           <CartaFiguraPropia figuras={figuras} selectedFCard={selectedFCard} setSelectedFCard={(fig, i) => selectFigure(fig, i)} />
           <div className="turn-symbol-container">
             {(currentPlayer === clientId) &&
@@ -259,7 +274,7 @@ function GameLayout() {
         </div>
       </div>
       <div className="players">
-        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards} playerMovements={playerMCards} playersUsedMovs={playersUsedM} currentPlayer={currentPlayer} />
+        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards} playerMovements={playerMCards} playersUsedMovs={playersUsedM} currentPlayer={currentPlayer} playerShapeCount={playersCantFCards} initialFiguresCount={initialFiguresCount}/>
       </div>
 
       {/*
