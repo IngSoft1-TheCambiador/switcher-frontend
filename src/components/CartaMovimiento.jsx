@@ -73,7 +73,6 @@ const imagenes = {
 
 
 export function CartaMovimientoAjena({ movimientos, show }) {
-  console.log("show: ",show);
   return (
     <div className="carta-movimiento-container">
       {movimientos.map((movimiento, index) => (

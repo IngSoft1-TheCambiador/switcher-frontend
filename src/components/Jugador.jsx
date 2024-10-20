@@ -3,7 +3,7 @@ import { CartaFiguraAjena } from "./CartaFigura";
 import "./Jugador.css";
 import { AppContext } from "../App.jsx";
 import { CartaMovimientoAjena } from "./CartaMovimiento.jsx";
-import { CartasRestantes } from "./CartasRestantes.jsx";
+import CartasRestantes from "./CartasRestantes.jsx";
 
 
 function Jugador({ playerNames, playerColors, playerShapes, playerMovements, playersUsedMovs, currentPlayer, playerShapeCount}) {
@@ -35,7 +35,6 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
       {jugadores.map((jugador, index) => (
         <div key={index} className="jugador" style={{ backgroundColor: jugador.color }} >
           {console.log("jugador: ", jugador.nombre, "id: ", jugador.player_id, "turno actual: ", currentPlayer)}
-          {/*<CartasRestantes cantidad={jugador.cantFiguras} />*/}
           <div className="name-bar">
             <h3>{jugador.nombre}</h3>
             {parseInt(currentPlayer) === parseInt(jugador.player_id) &&
@@ -44,6 +43,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
           </div>
           <CartaFiguraAjena figuras={jugador.figuras} />
           <CartaMovimientoAjena movimientos={jugador.movimientos} show={jugador.movUsados} />
+          <CartasRestantes cantidad={jugador.cantFiguras} className="cartas-pequenas" />
         </div>
       ))}
     </div>

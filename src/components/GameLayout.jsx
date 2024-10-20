@@ -5,13 +5,13 @@ import BotonAbandonar from "./BotonAbandonar.jsx";
 import BotonDeshacer from "./BotonDeshacer.jsx";
 import { CartaFiguraPropia } from "./CartaFigura";
 import { CartaMovimientoPropia, calculatePositions } from "./CartaMovimiento";
+import CartasRestantes from "./CartasRestantes.jsx";
 import Jugador from "./Jugador";
 import Winner from "./Winner";
 import "./GameLayout.css";
 import { useLocation } from 'wouter';
 import { AppContext } from "../App.jsx";
 import { GET, POST, PUT, httpRequest } from "../services/HTTPServices";
-import { CartasRestantes } from "./CartasRestantes.jsx";
 
 
 
@@ -106,7 +106,7 @@ function GameLayout() {
     movimientos: playerMCards[clientId] || [],
     cantFiguras: playersCantFCards[clientId] || 0,
   };
-  const { figuras, movimientos, cantFiguras } = jugadorActual;
+  const { figuras, movimientos, cantFiguras} = jugadorActual;
 
   async function makePartialMove(x,y) {
     const requestData = {
@@ -193,14 +193,9 @@ function GameLayout() {
   }, [validPos]);
 
   function selectCell(x,y) {
-    console.log("inside selectCell");
     if (selectedCell.x != undefined){
-      console.log("inside if");
-      console.log("pos: ", [x,y]);
-      console.log("includes?: ", validPos.some(p => p[0]==x && p[1]==y));
       if (selectedCell.x==x && selectedCell.y==y){
         validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
-        console.log("deseleccionada");
         setSelectedCell({});
       }
       else if (validPos.some(p => p[0]==x && p[1]==y)){
@@ -208,12 +203,8 @@ function GameLayout() {
         makePartialMove(x,y);
       }
     } else if (selectedMov != null) {
-      console.log("inside else");
       setSelectedCell({x:x, y:y});
-      console.log("x: ",x);
-      console.log("y: ",y);
       setValidPos(calculatePositions(movimientos[selectedMov],x,y));
-      console.log("valid pos: ",calculatePositions(movimientos[selectedMov],x,y));
     } else if (selectedFCard != null && clientId === currentPlayer) {
       claimFigure(x,y);
     }
@@ -249,7 +240,6 @@ function GameLayout() {
   
 
   if (winner != "") {
-    console.log("winner: ", winner);
     return (<Winner winnerName = {winner} />);
   };
 
@@ -257,7 +247,7 @@ function GameLayout() {
     <div className="layout">
       <div className="board-side">
         <div className="bar">
-          <CartasRestantes cantidad={cantFiguras} />
+          <CartasRestantes cantidad={cantFiguras} className="cartas-grandes"/>
           <CartaFiguraPropia figuras={figuras} selectedFCard={selectedFCard} setSelectedFCard={(fig, i) => selectFigure(fig, i)} />
           <div className="turn-symbol-container">
             {(currentPlayer === clientId) &&

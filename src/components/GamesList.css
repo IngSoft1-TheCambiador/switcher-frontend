@@ -61,6 +61,18 @@
     background-color: #808264;
 }
 
+.infoLabel-GamesList {
+    color: #ffd9d9;
+  
+    /* hide infoLabels until it's needed */
+    display: none;
+  }
+
+/* set the color of the info label */
+.container-GamesList>*:nth-child(3) {
+    background-color: #808264;
+}
+
 /* change the color of the arrows */
 .container-GamesList>*:last-child {
     background-color: transparent;
