@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
+import './Inicio.css';
 
 function Inicio({ onSubmit }) {
 
@@ -22,8 +23,12 @@ function Inicio({ onSubmit }) {
 
   return (
     <div className="container">
-      <h1>EL SWITCHER </h1>
-      <form onSubmit={checkName}>
+      <div className='titles'>
+        <div className='h1-inicio'>EL SWITCHER</div>
+        <div className='h2-inicio'>Ingrese su nombre de jugador</div>
+      </div>
+
+      <form onSubmit={checkName} className='form'>
         <input
           placeholder='Nombre'
           value={tempName}

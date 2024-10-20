@@ -29,7 +29,7 @@ const imagenesFiguras = {
   s7: "fige07.svg",
 };
 
-export function CartaFiguraAjena({ figuras }) {
+export function CartaFiguraAjena({ figuras, cantFiguras }) {
   return (
     <div className="carta-figura-container">
       {figuras.slice(0, 3).map((figura, index) => (
@@ -37,6 +37,12 @@ export function CartaFiguraAjena({ figuras }) {
           <img src={imagenesFiguras[figura]} alt={`Figura ${figura}`} />
         </div>
       ))}
+      <div className="carta-figura">
+        <div className="image-withText">
+          <img src="back.svg" alt="back" />
+          <div className="text-overlay">{cantFiguras}</div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -46,8 +52,8 @@ export function CartaFiguraPropia({ figuras, selectedFCard, setSelectedFCard }) 
     <div className="carta-figura-container">
       {figuras.slice(0, 3).map((figura, index) => (
         <div key={index} className="carta-figura" onClick={() => setSelectedFCard(figura, index)}>
-          <img src={imagenesFiguras[figura]} alt={`Figura ${figura}`} 
-            style={{filter: selectedFCard == index ? 'drop-shadow(0px 0px 20px white)' : ''}}/>
+          <img src={imagenesFiguras[figura]} alt={`Figura ${figura}`}
+            style={{ filter: selectedFCard == index ? 'drop-shadow(0px 0px 20px white)' : '' }} />
         </div>
       ))}
     </div>

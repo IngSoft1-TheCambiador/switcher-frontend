@@ -85,7 +85,7 @@ function WaitRoom() {
                 </div>
             </div>
             <div className="players-layout">
-                <h2>JUGADORES</h2>
+                <h2>Jugadores</h2>
                 <div>
                     {Object.entries(playerNames).map(([id, player_name]) => (
                         <li className="player" key={id}>

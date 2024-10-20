@@ -8,14 +8,22 @@
 }
 
 .h1-gamesList {
-    font-size: 50px;
+    font-size: 60px;
     font-weight: bold;
+    color: #56351f;
+}
+
+.h2-gamesList {
+    font-size: 25px;
+    font-weight: bold;
+    color: #56351f;
 }
 
 /* leave more space for the game list than for the title */
 .container-General>*:first-child {
     height: 130px;
 }
+
 .container-General>*:last-child {
     height: 420px;
 }
@@ -31,6 +39,7 @@
     place-items: center;
     align-content: center;
     flex-direction: column;
+    font-weight: bold;
 }
 
 /* each game, the titles and the arrows are a row */
@@ -63,10 +72,10 @@
 
 .infoLabel-GamesList {
     color: #ffd9d9;
-  
+
     /* hide infoLabels until it's needed */
     display: none;
-  }
+}
 
 /* set the color of the info label */
 .container-GamesList>*:nth-child(3) {
@@ -94,18 +103,30 @@
 }
 
 .container-Botones {
-    display: grid;
-    grid-template-columns: repeat(50);
-        /* we don't know how else to separate the arrows
+    width: fit-content;
+    height: fit-content;
+    justify-self: center;
+    display: flex;
+    gap: 20px;
+    /*grid-template-columns: repeat(130);
+    /* we don't know how else to separate the arrows
         so we made a very large grid */
 }
 
-.container-Botones > *:first-child {
-    grid-column: 1;
+.container-Botones>*:first-child {
+    /*grid-column: 1;*/
     cursor: pointer;
 }
 
-.container-Botones > *:last-child {
-    grid-column: 50;
+.container-Botones>*:last-child {
+    /*grid-column: 130;*/
     cursor: pointer;
+}
+
+.arrow-img {
+    height: 4vh;
+}
+
+.arrow-img:hover{
+    filter: opacity(0.5);
 }

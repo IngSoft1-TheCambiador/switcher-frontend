@@ -1,3 +1,5 @@
-.game-button {
+.row-wrapper:hover{
     cursor: pointer;
+    color: white;
+    background-color: #808264;
 }

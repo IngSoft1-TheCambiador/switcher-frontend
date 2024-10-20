@@ -22,8 +22,8 @@ function GameRow({ gameID, gameName, minPlayers, maxPlayers }) {
   };
 
   return (
-    <div>
-      <div className="game-button" onClick={joinGame}>{gameName}</div>
+    <div class='row-wrapper' onClick={joinGame}>
+      <div className="game-button">{gameName}</div>
       <div>{minPlayers}</div>
       <div>{maxPlayers}</div>
     </div>

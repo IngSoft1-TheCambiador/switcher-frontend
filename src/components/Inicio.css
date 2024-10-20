@@ -1,0 +1,20 @@
+.titles {
+    margin: 10vh;
+}
+
+.h1-inicio {
+    font-size: 60px;
+    font-weight: bold;
+    color: #56351f;
+
+}
+
+.h2-inicio {
+    font-size: 25px;
+    font-weight: bold;
+    color: #56351f;
+}
+
+.button {
+    box-shadow: 0 0 10px 5px #74747471;
+}

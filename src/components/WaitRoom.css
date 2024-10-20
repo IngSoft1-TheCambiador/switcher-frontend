@@ -62,9 +62,10 @@ h2{
     cursor: default;
 }
 
-button{
+.players-layout > button{
     margin-top: 10vh;
     background-color: #ffd42a;
+    font-weight: bold;
     color: black;
 }
 

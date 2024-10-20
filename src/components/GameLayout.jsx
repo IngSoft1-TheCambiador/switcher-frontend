@@ -46,8 +46,8 @@ function GameLayout() {
       setMoves(params[1], params[2]);
       getGameState();
     } else if (lastMessage.data.includes("PARTIAL MOVES WERE DISCARDED")) {
-        getGameState();
-        resetPlayersUsedMoves();
+      getGameState();
+      resetPlayersUsedMoves();
     } else {
       getGameState();
     }
@@ -90,12 +90,12 @@ function GameLayout() {
       setPlayerIds(response.json.player_ids);
       setCurrentPlayer(response.json.current_player);
       setHighlightedCells(response.json.highlighted_squares);
-      if (Object.keys(playersUsedM).length === 0){
+      if (Object.keys(playersUsedM).length === 0) {
         setPlayersUsedM(
           Object.fromEntries(
             Object.entries(response.json.player_m_cards).map(([key, value]) => [
-                key,
-                value.map(() => false)
+              key,
+              value.map(() => false)
             ])
           )
         );
@@ -110,9 +110,9 @@ function GameLayout() {
     movimientos: playerMCards[clientId] || [],
     cantFiguras: playersCantFCards[clientId] || 0,
   };
-  const { figuras, movimientos, cantFiguras} = jugadorActual;
+  const { figuras, movimientos, cantFiguras } = jugadorActual;
 
-  async function makePartialMove(x,y) {
+  async function makePartialMove(x, y) {
     const requestData = {
       method: POST,
       service: `partial_move?game_id=${gameId}&player_id=${clientId}&mov=${selectedMov}&a=${selectedCell.x}&b=${selectedCell.y}&x=${x}&y=${y}`,
@@ -123,7 +123,7 @@ function GameLayout() {
 
     // hide the card
     var usedM = usedMoves;
-    usedM[selectedMov]=true;
+    usedM[selectedMov] = true;
     setUsedMoves(usedM);
 
     setSelectedMov(null);
@@ -131,10 +131,10 @@ function GameLayout() {
     setValidPos([]);
   }
 
-  function selectMov(mov,i) {
-    validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
-    if(currentPlayer == clientId && !usedMoves[i]){
-      if (i==selectedMov || selectedFCard != null){
+  function selectMov(mov, i) {
+    validPos.map(pos => updateCellOpacity(pos[0], pos[1], false));
+    if (currentPlayer == clientId && !usedMoves[i]) {
+      if (i == selectedMov || selectedFCard != null) {
         setSelectedCell({});
         setSelectedMov(null);
       } else {
@@ -143,9 +143,9 @@ function GameLayout() {
     }
   };
 
-  function selectFigure(fig, i){
-    if (currentPlayer == clientId){
-      if (i === selectedFCard || selectedMov != null){
+  function selectFigure(fig, i) {
+    if (currentPlayer == clientId) {
+      if (i === selectedFCard || selectedMov != null) {
         setSelectedFCard(null);
       } else {
         setSelectedFCard(i);
@@ -154,11 +154,11 @@ function GameLayout() {
   }
 
   async function claimFigure(x, y) {
-    
+
     // get the usedMoves str code for the endpoint to use
     const moves_to_remove = [];
 
-    for (let i = 0; i < usedMoves.length; i++){
+    for (let i = 0; i < usedMoves.length; i++) {
       if (usedMoves[i]) {
         moves_to_remove.push(movimientos[i]);
       }
@@ -168,17 +168,17 @@ function GameLayout() {
       method: PUT,
       service: `claim_figure?game_id=${gameId}&player_id=${clientId}&fig=${figuras[selectedFCard]}&used_movs=${moves_to_remove}&x=${x}&y=${y}`,
     }
-    
+
     const response = await httpRequest(requestData);
 
     console.log(response.json.true_board);
 
-    if (response.json.true_board != undefined){
+    if (response.json.true_board != undefined) {
       setBoardState(response.json.true_board);
       setUsedMoves([false, false, false]);
     }
 
-    
+
 
     setSelectedFCard(null);
     setSelectedCell({});
@@ -193,24 +193,24 @@ function GameLayout() {
   };
 
   useEffect(() => {
-    validPos.map(pos => updateCellOpacity(pos[0],pos[1],true));
+    validPos.map(pos => updateCellOpacity(pos[0], pos[1], true));
   }, [validPos]);
 
-  function selectCell(x,y) {
-    if (selectedCell.x != undefined){
-      if (selectedCell.x==x && selectedCell.y==y){
-        validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
+  function selectCell(x, y) {
+    if (selectedCell.x != undefined) {
+      if (selectedCell.x == x && selectedCell.y == y) {
+        validPos.map(pos => updateCellOpacity(pos[0], pos[1], false));
         setSelectedCell({});
       }
-      else if (validPos.some(p => p[0]==x && p[1]==y)){
-        validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
-        makePartialMove(x,y);
+      else if (validPos.some(p => p[0] == x && p[1] == y)) {
+        validPos.map(pos => updateCellOpacity(pos[0], pos[1], false));
+        makePartialMove(x, y);
       }
     } else if (selectedMov != null) {
-      setSelectedCell({x:x, y:y});
-      setValidPos(calculatePositions(movimientos[selectedMov],x,y));
+      setSelectedCell({ x: x, y: y });
+      setValidPos(calculatePositions(movimientos[selectedMov], x, y));
     } else if (selectedFCard != null && clientId === currentPlayer) {
-      claimFigure(x,y);
+      claimFigure(x, y);
     }
   }
 
@@ -241,40 +241,42 @@ function GameLayout() {
     }
 
   };
-  
+
 
   if (winner != "") {
-    return (<Winner winnerName = {winner} />);
+    return (<Winner winnerName={winner} />);
   };
 
   return (
     <div className="layout">
       <div className="board-side">
         <div className="bar">
-          <CartasRestantes cantidad={cantFiguras} className="cartas-grandes"/>
+          <CartasRestantes cantidad={cantFiguras} />
+
           <CartaFiguraPropia figuras={figuras} selectedFCard={selectedFCard} setSelectedFCard={(fig, i) => selectFigure(fig, i)} />
           <div className="turn-symbol-container">
             {(currentPlayer === clientId) &&
-              <img src="hourglass.svg" alt="hourglass" className="turn-symbol"/>
+              <img src="hourglass.svg" alt="hourglass" className="turn-symbol" />
             }
           </div>
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }} >
-          <Tablero boardState={boardState} setSelectedCell={(x,y)=>selectCell(x,y)} cellOpacity={cellOpacity} highlightedCells = {highlightedCells} />
+          <Tablero boardState={boardState} setSelectedCell={(x, y) => selectCell(x, y)} cellOpacity={cellOpacity} highlightedCells={highlightedCells} />
         </div>
         <div className="bar bar-movements">
-          <div className="button-container"> 
-              <BotonTurno resetUsedMoves={resetUsedMoves} setSelectedMov={setSelectedMov} setSelectedCell={setSelectedCell} setValidPos={setValidPos} 
-              setSelectedFCard={setSelectedFCard} validPos={validPos} updateCellOpacity={updateCellOpacity}/>
-              {(currentPlayer === clientId) &&
+          <div className="button-container">
+            <BotonTurno resetUsedMoves={resetUsedMoves} setSelectedMov={setSelectedMov} setSelectedCell={setSelectedCell} setValidPos={setValidPos}
+              setSelectedFCard={setSelectedFCard} validPos={validPos} updateCellOpacity={updateCellOpacity} />
+
+            {(currentPlayer === clientId) &&
               <BotonDeshacer setBoardState={setBoardState} />}
           </div>
-          <CartaMovimientoPropia movimientos={movimientos} selectedMov={selectedMov} setSelectedMov={(mov,i)=>selectMov(mov,i)} used={usedMoves} />
+          <CartaMovimientoPropia movimientos={movimientos} selectedMov={selectedMov} setSelectedMov={(mov, i) => selectMov(mov, i)} used={usedMoves} />
           <BotonAbandonar resetUsedMoves={resetUsedMoves} />
         </div>
       </div>
       <div className="players">
-        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards} playerMovements={playerMCards} playersUsedMovs={playersUsedM} currentPlayer={currentPlayer} playerShapeCount={playersCantFCards} initialFiguresCount={initialFiguresCount}/>
+        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards} playerMovements={playerMCards} playersUsedMovs={playersUsedM} currentPlayer={currentPlayer} playerShapeCount={playersCantFCards} initialFiguresCount={initialFiguresCount} />
       </div>
 
       {/*

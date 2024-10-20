@@ -48,11 +48,10 @@ function CrearPartida() {
 
   return (
     <div className="container-crearP">
-      <div className='h1-crearP'>CREAR PARTIDA</div>
+      <h1>Crear partida</h1>
       <form onSubmit={handleSubmit}>
-        <h3>Nombre de la partida</h3>
+        <h3>Nombre</h3>
         <input
-          placeholder='Nombre'
           value={tempGameName}
           onChange={e => setTempGameName(e.target.value)} />
         <div
@@ -60,13 +59,12 @@ function CrearPartida() {
           id="invalid-game-name" >
           Ingrese un nombre alfanumerico de hasta 15 caracteres
         </div>
-        <h3>Rango de jugadores</h3>
+        <h3>Máximo</h3>
         <input
-          placeholder='Mínimo'
           value={min}
           onChange={e => setMin(e.target.value)} />
+        <h3>Mínimo</h3>
         <input
-          placeholder='Máximo'
           value={max}
           onChange={e => setMax(e.target.value)} />
         <div
@@ -76,7 +74,7 @@ function CrearPartida() {
         </div>
         <button
           className="button-yellow">
-          Continuar
+          Crear
         </button>
       </form>
     </div>

@@ -8,3 +8,8 @@
   /* background-color: #A8D69F; */
   background-color: #B3D1AD;
 }
+
+* {
+  border: 0;
+  outline: none;
+}

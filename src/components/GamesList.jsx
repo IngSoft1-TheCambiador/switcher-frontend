@@ -12,18 +12,18 @@ function GamesList() {
   const [searchGame, setSearchGame] = useState("");
   const [searchMin, setSearchMin] = useState("");
   const [searchMax, setSearchMax] = useState("");
-  const [lastSearch, setLastSearch] = useState({game_name:"", min:"", max:""});
+  const [lastSearch, setLastSearch] = useState({ game_name: "", min: "", max: "" });
 
   useEffect(() => {
     getGames(page);
   }, [lastMessage]);
 
   async function getGames(
-      page,
-      game_name=lastSearch.game_name,
-      min=lastSearch.min,
-      max=lastSearch.max
-    ) {
+    page,
+    game_name = lastSearch.game_name,
+    min = lastSearch.min,
+    max = lastSearch.max
+  ) {
 
     if (page > 0) {
       const requestData = {
@@ -32,14 +32,14 @@ function GamesList() {
       };
 
       const response = await httpRequest(requestData);
-      if(response.json.response_status == 0){
+      if (response.json.response_status == 0) {
         document.getElementById("invalid-search").style.display = 'none';
-        if(page == 1 || response.json.games_list.length != 0){
+        if (page == 1 || response.json.games_list.length != 0) {
           setGames(response.json.games_list);
           setPage(page);
         }
         else {
-          getGames(page-1);
+          getGames(page - 1);
         }
       }
       else {
@@ -60,12 +60,13 @@ function GamesList() {
 
   return (
     <div className="container-General">
-      <div className='h1-gamesList '>EL SWITCHER</div>
+      <div>
+        <div className='h1-gamesList '>EL SWITCHER</div>
+      </div>
       <div className="container-GamesList">
         <div>
-          <div>Partida</div>
-          <div>Min</div>
-          <div>Max</div>
+          <div>Buscar partida</div>
+          
         </div>
         <form onSubmit={filterList}>
           <input
@@ -91,8 +92,12 @@ function GamesList() {
           <GameRow key={game_id} gameID={game_id} gameName={game_name}
             minPlayers={min_players} maxPlayers={max_players} />)}
         <div className='container-Botones'>
-          <div onClick={() => getGames(page - 1)}>⬅️</div>
-          <div onClick={() => getGames(page + 1)}>➡️</div>
+          <div onClick={() => getGames(page - 1)}>
+            <img src="arrowL.png" alt="Abandonar Partida" class='arrow-img' />
+          </div>
+          <div onClick={() => getGames(page + 1)}>
+            <img src="arrowR.png" alt="Abandonar Partida" class='arrow-img' />
+          </div>
         </div>
       </div>
     </div>
