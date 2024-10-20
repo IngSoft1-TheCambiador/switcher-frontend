@@ -1,5 +1,8 @@
 import React from "react";
 import "./Ficha.css";
+import sync from "css-animation-sync";
+
+sync('resplandorAnimation');
 
 const imagenesFichas = {
   "r": "A.svg",
