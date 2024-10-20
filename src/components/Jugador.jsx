@@ -6,7 +6,7 @@ import { CartaMovimientoAjena } from "./CartaMovimiento.jsx";
 import CartasRestantes from "./CartasRestantes.jsx";
 
 
-function Jugador({ playerNames, playerColors, playerShapes, playerMovements, playersUsedMovs, currentPlayer, playerShapeCount}) {
+function Jugador({ playerNames, playerColors, playerShapes, playerMovements, playersUsedMovs, currentPlayer, playerShapeCount, initialFiguresCount}) {
 
   const { clientId } = useContext(AppContext);
 
@@ -27,6 +27,7 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
         movimientos: playerMovements[id],
         movUsados: playersUsedMovs[id],
         cantFiguras: playerShapeCount[id],
+        cantFigurasInicial: initialFiguresCount[id],
       }
     ));
 
@@ -36,14 +37,13 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
         <div key={index} className="jugador" style={{ backgroundColor: jugador.color }} >
           {console.log("jugador: ", jugador.nombre, "id: ", jugador.player_id, "turno actual: ", currentPlayer)}
           <div className="name-bar">
-            <h3>{jugador.nombre}</h3>
+            <h3>{jugador.nombre} {jugador.cantFiguras} / {jugador.cantFigurasInicial} </h3>
             {parseInt(currentPlayer) === parseInt(jugador.player_id) &&
-              <img src="hourglass.svg" alt="hourglass" className="turn-symbol"/>
+              <img src="hourglass.svg" alt="hourglass" className="other-turn-symbol"/>
             }
           </div>
           <CartaFiguraAjena figuras={jugador.figuras} />
           <CartaMovimientoAjena movimientos={jugador.movimientos} show={jugador.movUsados} />
-          <CartasRestantes cantidad={jugador.cantFiguras} className="cartas-pequenas" />
         </div>
       ))}
     </div>

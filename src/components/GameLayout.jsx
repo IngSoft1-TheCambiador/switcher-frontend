@@ -23,6 +23,7 @@ function GameLayout() {
   const [playerColors, setPlayerColors] = useState({});
   const [playerFCards, setPlayerFCards] = useState({});
   const [playersCantFCards, setPlayersCantFCards] = useState({});
+  const [initialFiguresCount, setInitialFiguresCount] = useState({});
   const [playerMCards, setPlayerMCards] = useState({});
   const [playersUsedM, setPlayersUsedM] = useState({});
   const [, navigate] = useLocation();
@@ -81,6 +82,9 @@ function GameLayout() {
         ])
       );
       setPlayersCantFCards(playerCantFCards);
+      if (Object.keys(initialFiguresCount).length === 0) {
+        setInitialFiguresCount(playerCantFCards);
+      }
       setPlayerFCards(response.json.player_f_hand);
       setPlayerMCards(response.json.player_m_cards);
       setPlayerIds(response.json.player_ids);
@@ -270,7 +274,7 @@ function GameLayout() {
         </div>
       </div>
       <div className="players">
-        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards} playerMovements={playerMCards} playersUsedMovs={playersUsedM} currentPlayer={currentPlayer} playerShapeCount={playersCantFCards}/>
+        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards} playerMovements={playerMCards} playersUsedMovs={playersUsedM} currentPlayer={currentPlayer} playerShapeCount={playersCantFCards} initialFiguresCount={initialFiguresCount}/>
       </div>
 
       {/*
