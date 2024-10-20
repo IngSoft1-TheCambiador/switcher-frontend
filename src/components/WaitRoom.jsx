@@ -16,10 +16,8 @@ function WaitRoom() {
 
     useEffect(() => {
         if (lastMessage.data.includes("GAME CANCELLED BY OWNER") && ownerId !== clientId){
-            console.log(gameId);
             navigate("/ListaPartidas");
         } else {
-            console.log(gameId);
             getGameState();
         }
     }, [lastMessage]);
