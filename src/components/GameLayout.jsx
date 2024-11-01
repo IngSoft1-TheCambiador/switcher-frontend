@@ -36,6 +36,7 @@ function GameLayout() {
   const [cellOpacity, setCellOpacity] = useState(Array(6).fill().map(() => Array(6).fill(false)));
   const [highlightedCells, setHighlightedCells] = useState([]);
   const [selectedFCard, setSelectedFCard] = useState(null);
+  const [forbiddenColor, setForbiddenColor] = useState("");
 
   useEffect(() => {
     if (lastMessage.data.includes("GAME_ENDED")) {
@@ -100,6 +101,7 @@ function GameLayout() {
           )
         );
       }
+      setForbiddenColor(response.json.forbidden_color);
       console.log("CURRENT PLAYER: ", response.json.current_player);
     }
   }
@@ -261,7 +263,7 @@ function GameLayout() {
           </div>
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }} >
-          <Tablero boardState={boardState} setSelectedCell={(x, y) => selectCell(x, y)} cellOpacity={cellOpacity} highlightedCells={highlightedCells} />
+          <Tablero boardState={boardState} setSelectedCell={(x, y) => selectCell(x, y)} cellOpacity={cellOpacity} highlightedCells={highlightedCells} forbiddenColor={forbiddenColor} />
         </div>
         <div className="bar bar-movements">
           <div className="button-container">
