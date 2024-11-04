@@ -21,7 +21,8 @@ function GameLayout() {
   const [boardState, setBoardState] = useState([]);
   const [playerNames, setPlayerNames] = useState([]);
   const [playerColors, setPlayerColors] = useState({});
-  const [playerFCards, setPlayerFCards] = useState({});
+  const [playerFCards_id, setPlayerFCards_id] = useState({});
+  const [playerFCards_type, setPlayerFCards_type] = useState({});
   const [playersCantFCards, setPlayersCantFCards] = useState({});
   const [initialFiguresCount, setInitialFiguresCount] = useState({});
   const [playerMCards, setPlayerMCards] = useState({});
@@ -86,7 +87,8 @@ function GameLayout() {
       if (Object.keys(initialFiguresCount).length === 0) {
         setInitialFiguresCount(playerCantFCards);
       }
-      setPlayerFCards(response.json.player_f_hand);
+      setPlayerFCards_id(response.json.player_f_hand_ids);
+      setPlayerFCards_type(response.json.player_f_hand);
       setPlayerMCards(response.json.player_m_cards);
       setPlayerIds(response.json.player_ids);
       setCurrentPlayer(response.json.current_player);
@@ -108,7 +110,7 @@ function GameLayout() {
 
   const jugadorActual = {
     nombre: playerNames[clientId],
-    figuras: playerFCards[clientId] || [],
+    figuras: playerFCards_id[clientId] || [],
     movimientos: playerMCards[clientId] || [],
     cantFiguras: playersCantFCards[clientId] || 0,
   };
@@ -145,7 +147,7 @@ function GameLayout() {
     }
   };
 
-  function selectFigure(fig, i) {
+  function selectFigure(i) {
     if (currentPlayer == clientId) {
       if (i === selectedFCard || selectedMov != null) {
         setSelectedFCard(null);
@@ -168,14 +170,15 @@ function GameLayout() {
 
     const requestData = {
       method: PUT,
-      service: `claim_figure?game_id=${gameId}&player_id=${clientId}&fig=${figuras[selectedFCard]}&used_movs=${moves_to_remove}&x=${x}&y=${y}`,
+      service: `claim_figure?game_id=${gameId}&player_id=${clientId}&fig_id=${figuras[selectedFCard]}&used_movs=${moves_to_remove}&x=${x}&y=${y}`,
     }
 
     const response = await httpRequest(requestData);
 
-    console.log(response.json.true_board);
-
-    if (response.json.true_board != undefined) {
+    if (response.json.response_status != 0){
+      console.log(response.json.message);
+    }
+    else {
       setBoardState(response.json.true_board);
       setUsedMoves([false, false, false]);
     }
@@ -255,7 +258,7 @@ function GameLayout() {
         <div className="bar">
           <CartasRestantes cantidad={cantFiguras} />
 
-          <CartaFiguraPropia figuras={figuras} selectedFCard={selectedFCard} setSelectedFCard={(fig, i) => selectFigure(fig, i)} />
+          <CartaFiguraPropia FCardsType={playerFCards_type[clientId] || []} selectedFCard={selectedFCard} setSelectedFCard={(i) => selectFigure(i)} />
           <div className="turn-symbol-container">
             {(currentPlayer === clientId) &&
               <img src="hourglass.svg" alt="hourglass" className="turn-symbol" />
@@ -278,7 +281,7 @@ function GameLayout() {
         </div>
       </div>
       <div className="players">
-        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards} playerMovements={playerMCards} playersUsedMovs={playersUsedM} currentPlayer={currentPlayer} playerShapeCount={playersCantFCards} initialFiguresCount={initialFiguresCount} />
+        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards_type} playerMovements={playerMCards} playersUsedMovs={playersUsedM} currentPlayer={currentPlayer} playerShapeCount={playersCantFCards} initialFiguresCount={initialFiguresCount} />
       </div>
 
       {/*
