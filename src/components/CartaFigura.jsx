@@ -47,11 +47,11 @@ export function CartaFiguraAjena({ figuras, cantFiguras }) {
   );
 }
 
-export function CartaFiguraPropia({ figuras, selectedFCard, setSelectedFCard }) {
+export function CartaFiguraPropia({ FCardsType, selectedFCard, setSelectedFCard }) {
   return (
     <div className="carta-figura-container">
-      {figuras.slice(0, 3).map((figura, index) => (
-        <div key={index} className="carta-figura" onClick={() => setSelectedFCard(figura, index)}>
+      {FCardsType.slice(0, 3).map((figura, index) => (
+        <div key={index} className="carta-figura" onClick={() => setSelectedFCard(index)}>
           <img src={imagenesFiguras[figura]} alt={`Figura ${figura}`}
             style={{ filter: selectedFCard == index ? 'drop-shadow(0px 0px 20px white)' : '' }} />
         </div>
