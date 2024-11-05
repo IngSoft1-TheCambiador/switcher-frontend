@@ -8,6 +8,7 @@ import { CartaMovimientoPropia, calculatePositions } from "./CartaMovimiento";
 import CartasRestantes from "./CartasRestantes.jsx";
 import Jugador from "./Jugador";
 import Winner from "./Winner";
+import Chat from "./Chat.jsx";
 import "./GameLayout.css";
 import { useLocation } from 'wouter';
 import { AppContext } from "../App.jsx";
@@ -284,16 +285,10 @@ function GameLayout() {
         <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards_type} playerMovements={playerMCards} playersUsedMovs={playersUsedM} currentPlayer={currentPlayer} playerShapeCount={playersCantFCards} initialFiguresCount={initialFiguresCount} />
       </div>
 
-      {/*
-        chat, si queres ponerlo, en el css en el grid template, en vez de "grid-template-columns: auto 25vw;" pone "grid-template-columns: auto 25vw 20vw;", el 20vw seria
-        la 3er columna (correspondiente al chat)
-
-        <div className="chat">
-            chat
-            <input type="text" placeholder="Type something">
-            </input>
-        </div>
-        */}
+      <div className="chat">
+        <Chat/>
+      </div>
+       
     </div>
   );
 }
