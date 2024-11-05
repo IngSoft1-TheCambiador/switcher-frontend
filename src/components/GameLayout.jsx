@@ -286,7 +286,7 @@ function GameLayout() {
       </div>
 
       <div className="chat">
-        <Chat/>
+        <Chat playerNames={playerNames} playerColors={playerColors}/>
       </div>
        
     </div>
