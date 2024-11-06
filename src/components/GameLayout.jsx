@@ -14,12 +14,14 @@ import { useLocation } from 'wouter';
 import { AppContext } from "../App.jsx";
 import { GET, POST, PUT, httpRequest } from "../services/HTTPServices";
 
-
-
 function GameLayout() {
   const { socketId, lastMessage, clientId, gameId } = useContext(AppContext);
   const [winner, setWinner] = useState("");
-  const [boardState, setBoardState] = useState([]);
+  const [boardState, setBoardState] = useState(() => {
+    const savedBoardState = localStorage.getItem("boardState");
+    console.log("Recovered board state from localStorage:", savedBoardState);
+    return savedBoardState ? savedBoardState : "";
+  });
   const [playerNames, setPlayerNames] = useState([]);
   const [playerColors, setPlayerColors] = useState({});
   const [playerFCards_id, setPlayerFCards_id] = useState({});
@@ -41,20 +43,28 @@ function GameLayout() {
   const [forbiddenColor, setForbiddenColor] = useState("");
 
   useEffect(() => {
-    if (lastMessage.data.includes("GAME_ENDED")) {
-      const splitMsg = lastMessage.data.split(' ');
-      setWinner(splitMsg[1]);
-    } else if (lastMessage.data.includes("PARTIAL_MOVE")) {
-      const params = lastMessage.data.split(" ");
-      setMoves(params[1], params[2]);
-      getGameState();
-    } else if (lastMessage.data.includes("PARTIAL MOVES WERE DISCARDED")) {
-      getGameState();
-      resetPlayersUsedMoves();
-    } else {
-      getGameState();
+    if (lastMessage && lastMessage.data) {
+      if (lastMessage.data.includes("GAME_ENDED")) {
+        const splitMsg = lastMessage.data.split(' ');
+        setWinner(splitMsg[1]);
+      } else if (lastMessage.data.includes("PARTIAL_MOVE")) {
+        const params = lastMessage.data.split(" ");
+        setMoves(params[1], params[2]);
+        getGameState();
+      } else if (lastMessage.data.includes("PARTIAL MOVES WERE DISCARDED")) {
+        getGameState();
+        resetPlayersUsedMoves();
+      } else {
+        getGameState();
+      }
     }
   }, [lastMessage]);
+
+  useEffect(() => {
+    console.log("Board state before refresh:", boardState);
+    localStorage.setItem("boardState", boardState);
+    console.log("Board state saved to localStorage:", boardState);
+  }, [boardState]);
 
   function setMoves(player_id, card_id) {
     var usedM = playersUsedM;
@@ -70,16 +80,18 @@ function GameLayout() {
 
     const response = await httpRequest(requestData);
 
-    if (response.json.player_names.length === 1) {
+    if (response.json && response.json.player_names && response.json.player_names.length === 1) {
       console.log("QUEDA 1 JUGADOR");
       setWinner(response.json.player_names[0]);
-    }
-    else {
-      setBoardState(response.json.actual_board);
-      setPlayerNames(response.json.player_names);
-      setPlayerColors(response.json.player_colors);
+    } else if (response.json) {
+      if (response.json.actual_board) {
+        setBoardState(response.json.actual_board);
+        console.log("Board state updated from server:", response.json.actual_board);
+      }
+      setPlayerNames(response.json.player_names || []);
+      setPlayerColors(response.json.player_colors || {});
       const playerCantFCards = Object.fromEntries(
-        Object.entries(response.json.player_f_cards).map(([key, value]) => [
+        Object.entries(response.json.player_f_cards || {}).map(([key, value]) => [
           key,
           value.length,
         ])
@@ -88,24 +100,23 @@ function GameLayout() {
       if (Object.keys(initialFiguresCount).length === 0) {
         setInitialFiguresCount(playerCantFCards);
       }
-      setPlayerFCards_id(response.json.player_f_hand_ids);
-      setPlayerFCards_type(response.json.player_f_hand);
-      setPlayerMCards(response.json.player_m_cards);
-      setPlayerIds(response.json.player_ids);
-      setCurrentPlayer(response.json.current_player);
-      setHighlightedCells(response.json.highlighted_squares);
+      setPlayerFCards_id(response.json.player_f_hand_ids || {});
+      setPlayerFCards_type(response.json.player_f_hand || {});
+      setPlayerMCards(response.json.player_m_cards || {});
+      setPlayerIds(response.json.player_ids || []);
+      setCurrentPlayer(response.json.current_player || -1);
+      setHighlightedCells(response.json.highlighted_squares || []);
       if (Object.keys(playersUsedM).length === 0) {
         setPlayersUsedM(
           Object.fromEntries(
-            Object.entries(response.json.player_m_cards).map(([key, value]) => [
+            Object.entries(response.json.player_m_cards || {}).map(([key, value]) => [
               key,
               value.map(() => false)
             ])
           )
         );
       }
-      setForbiddenColor(response.json.forbidden_color);
-      console.log("CURRENT PLAYER: ", response.json.current_player);
+      setForbiddenColor(response.json.forbidden_color || "");
     }
   }
 
@@ -124,7 +135,10 @@ function GameLayout() {
     };
 
     const response = await httpRequest(requestData);
-    setBoardState(response.json.actual_board);
+    if (response.json.actual_board) {
+      setBoardState(response.json.actual_board);
+      console.log("Board state updated after partial move:", response.json.actual_board);
+    }
 
     // hide the card
     var usedM = usedMoves;
@@ -159,7 +173,6 @@ function GameLayout() {
   }
 
   async function claimFigure(x, y) {
-
     // get the usedMoves str code for the endpoint to use
     const moves_to_remove = [];
 
@@ -180,11 +193,12 @@ function GameLayout() {
       console.log(response.json.message);
     }
     else {
-      setBoardState(response.json.true_board);
+      if (response.json.true_board) {
+        setBoardState(response.json.true_board);
+        console.log("Board state updated after claiming figure:", response.json.true_board);
+      }
       setUsedMoves([false, false, false]);
     }
-
-
 
     setSelectedFCard(null);
     setSelectedCell({});
@@ -220,7 +234,6 @@ function GameLayout() {
     }
   }
 
-
   const resetPlayersUsedMoves = () => {
     setUsedMoves([false, false, false]);
 
@@ -240,14 +253,13 @@ function GameLayout() {
     };
 
     const response = await httpRequest(requestData);
-    if (response.ok) {
+    if (response.ok && response.json.true_board) {
       setBoardState(response.json.true_board);
+      console.log("Board state updated after undoing moves:", response.json.true_board);
     } else {
       console.error("Error al deshacer movimientos:", response);
     }
-
   };
-
 
   if (winner != "") {
     return (<Winner winnerName={winner} />);
