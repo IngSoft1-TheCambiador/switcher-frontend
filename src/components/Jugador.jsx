@@ -34,13 +34,10 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
   return (
     <div className="jugadores">
       {jugadores.map((jugador, index) => (
-        <div key={index} className="jugador" style={{ backgroundColor: jugador.color }} >
+        <div key={index} className={parseInt(currentPlayer) === parseInt(jugador.player_id) ? "jugador-actual jugador" : "jugador"} style={{ backgroundColor: jugador.color }} >
           {console.log("jugador: ", jugador.nombre, "id: ", jugador.player_id, "turno actual: ", currentPlayer)}
           <div className="name-bar">
             <h3>{jugador.nombre} </h3>
-            {parseInt(currentPlayer) === parseInt(jugador.player_id) &&
-              <img src="hourglass.svg" alt="hourglass" className="other-turn-symbol" />
-            }
           </div>
           <CartaFiguraAjena figuras={jugador.figuras} cantFiguras={jugador.cantFiguras} />
           <CartaMovimientoAjena movimientos={jugador.movimientos} show={jugador.movUsados} />

@@ -259,12 +259,8 @@ function GameLayout() {
         <div className="bar">
           <CartasRestantes cantidad={cantFiguras} />
 
-          <CartaFiguraPropia FCardsType={playerFCards_type[clientId] || []} selectedFCard={selectedFCard} setSelectedFCard={(i) => selectFigure(i)} />
-          <div className="turn-symbol-container">
-            {(currentPlayer === clientId) &&
-              <img src="hourglass.svg" alt="hourglass" className="turn-symbol" />
-            }
-          </div>
+          <CartaFiguraPropia FCardsType={playerFCards_type[clientId] || []} selectedFCard={selectedFCard} setSelectedFCard={(i) => selectFigure(i)} currentPlayer={currentPlayer} />
+          
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }} >
           <Tablero boardState={boardState} setSelectedCell={(x, y) => selectCell(x, y)} cellOpacity={cellOpacity} highlightedCells={highlightedCells} forbiddenColor={forbiddenColor} />
@@ -277,7 +273,7 @@ function GameLayout() {
             {(currentPlayer === clientId) &&
               <BotonDeshacer setBoardState={setBoardState} />}
           </div>
-          <CartaMovimientoPropia movimientos={movimientos} selectedMov={selectedMov} setSelectedMov={(mov, i) => selectMov(mov, i)} used={usedMoves} />
+          <CartaMovimientoPropia movimientos={movimientos} selectedMov={selectedMov} setSelectedMov={(mov, i) => selectMov(mov, i)} used={usedMoves} currentPlayer={currentPlayer} />
           <BotonAbandonar resetUsedMoves={resetUsedMoves} />
         </div>
       </div>
