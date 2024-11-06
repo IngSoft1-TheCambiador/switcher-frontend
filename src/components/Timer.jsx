@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Timer = ({ initialSeconds }) => {
-    const [seconds, setSeconds] = useState(initialSeconds);
+const Timer = ({ seconds, setSeconds }) => {
 
     useEffect(() => {
         // Exit early if countdown is finished

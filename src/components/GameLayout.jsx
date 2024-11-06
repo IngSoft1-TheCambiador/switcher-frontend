@@ -40,6 +40,7 @@ function GameLayout() {
   const [highlightedCells, setHighlightedCells] = useState([]);
   const [selectedFCard, setSelectedFCard] = useState(null);
   const [forbiddenColor, setForbiddenColor] = useState("");
+  const [seconds, setSeconds] = useState(10);
 
   useEffect(() => {
     if (lastMessage.data.includes("GAME_ENDED")) {
@@ -106,6 +107,15 @@ function GameLayout() {
         );
       }
       setForbiddenColor(response.json.forbidden_color);
+      if (currentPlayer !== response.json.current_player) {
+        setSeconds(10);
+        setSelectedMov(null);
+        setSelectedCell({});
+        setSelectedFCard(null);
+        validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
+        setValidPos([]);
+        resetUsedMoves();
+      }
       console.log("CURRENT PLAYER: ", response.json.current_player);
     }
   }
@@ -266,7 +276,7 @@ function GameLayout() {
               <img src="hourglass.svg" alt="hourglass" className="turn-symbol" />
             }
           </div>
-          <Timer initialSeconds={10}></Timer>
+          <Timer seconds={seconds} setSeconds={setSeconds}></Timer>
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }} >
           <Tablero boardState={boardState} setSelectedCell={(x, y) => selectCell(x, y)} cellOpacity={cellOpacity} highlightedCells={highlightedCells} forbiddenColor={forbiddenColor} />
