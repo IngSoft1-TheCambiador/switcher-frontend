@@ -112,7 +112,7 @@ function GameLayout() {
         setSelectedMov(null);
         setSelectedCell({});
         setSelectedFCard(null);
-        validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
+        validPos.map(pos => updateCellOpacity(pos[0], pos[1], false));
         setValidPos([]);
         resetUsedMoves();
       }
@@ -269,13 +269,7 @@ function GameLayout() {
       <div className="board-side">
         <div className="bar">
           <CartasRestantes cantidad={cantFiguras} />
-
-          <CartaFiguraPropia FCardsType={playerFCards_type[clientId] || []} selectedFCard={selectedFCard} setSelectedFCard={(i) => selectFigure(i)} />
-          <div className="turn-symbol-container">
-            {(currentPlayer === clientId) &&
-              <img src="hourglass.svg" alt="hourglass" className="turn-symbol" />
-            }
-          </div>
+          <CartaFiguraPropia FCardsType={playerFCards_type[clientId] || []} selectedFCard={selectedFCard} setSelectedFCard={(i) => selectFigure(i)} currentPlayer={currentPlayer} />
           <Timer seconds={seconds} setSeconds={setSeconds}></Timer>
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }} >
@@ -289,7 +283,7 @@ function GameLayout() {
             {(currentPlayer === clientId) &&
               <BotonDeshacer setBoardState={setBoardState} />}
           </div>
-          <CartaMovimientoPropia movimientos={movimientos} selectedMov={selectedMov} setSelectedMov={(mov, i) => selectMov(mov, i)} used={usedMoves} />
+          <CartaMovimientoPropia movimientos={movimientos} selectedMov={selectedMov} setSelectedMov={(mov, i) => selectMov(mov, i)} used={usedMoves} currentPlayer={currentPlayer} />
           <BotonAbandonar resetUsedMoves={resetUsedMoves} />
         </div>
       </div>

@@ -25,14 +25,6 @@
   -webkit-text-stroke-color: black;
 }
 
-.name-bar {
-  display: flex;
-  justify-content: center;
-  width: auto;
-}
-
-.other-turn-symbol {
-  width: 35px;
-  animation: spin 3s ease-in-out infinite;
-  margin-left: 15px;
+.jugador-actual {
+  box-shadow: 0 0 10px 5px #ffffffb9;
 }

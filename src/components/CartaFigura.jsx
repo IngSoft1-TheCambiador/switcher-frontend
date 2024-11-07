@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./CartaFigura.css";
+import { AppContext } from "../App";
 
 const imagenesFiguras = {
   h1: "fig01.svg",
@@ -47,13 +48,15 @@ export function CartaFiguraAjena({ figuras, cantFiguras }) {
   );
 }
 
-export function CartaFiguraPropia({ FCardsType, selectedFCard, setSelectedFCard }) {
+export function CartaFiguraPropia({ FCardsType, selectedFCard, setSelectedFCard, currentPlayer }) {
+  const { clientId } = useContext(AppContext);
+
   return (
     <div className="carta-figura-container">
       {FCardsType.slice(0, 3).map((figura, index) => (
         <div key={index} className="carta-figura" onClick={() => setSelectedFCard(index)}>
           <img src={imagenesFiguras[figura]} alt={`Figura ${figura}`}
-            style={{ filter: selectedFCard == index ? 'drop-shadow(0px 0px 20px white)' : '' }} />
+            style={{ filter: selectedFCard == index ? 'drop-shadow(0px 0px 20px white)' : '', opacity: (currentPlayer === clientId) ? 1 : 0.4}} />
         </div>
       ))}
     </div>
