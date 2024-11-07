@@ -77,6 +77,17 @@ function GameLayout() {
       setWinner(response.json.player_names[0]);
     }
     else {
+
+      if (currentPlayer !== response.json.current_player) {
+        setSeconds(120);
+        setSelectedMov(null);
+        setSelectedCell({});
+        setSelectedFCard(null);
+        validPos.map(pos => updateCellOpacity(pos[0], pos[1], false));
+        setValidPos([]);
+        resetUsedMoves();
+      }
+
       setBoardState(response.json.actual_board);
       setPlayerNames(response.json.player_names);
       setPlayerColors(response.json.player_colors);
@@ -107,15 +118,6 @@ function GameLayout() {
         );
       }
       setForbiddenColor(response.json.forbidden_color);
-      if (currentPlayer !== response.json.current_player) {
-        setSeconds(120);
-        setSelectedMov(null);
-        setSelectedCell({});
-        setSelectedFCard(null);
-        validPos.map(pos => updateCellOpacity(pos[0], pos[1], false));
-        setValidPos([]);
-        resetUsedMoves();
-      }
       console.log("CURRENT PLAYER: ", response.json.current_player);
     }
   }
