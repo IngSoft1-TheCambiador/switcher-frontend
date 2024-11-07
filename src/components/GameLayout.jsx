@@ -42,6 +42,20 @@ function GameLayout() {
   const [forbiddenColor, setForbiddenColor] = useState("");
   const [seconds, setSeconds] = useState(120);
 
+  async function onFocus() {
+    const requestData = {
+      method: GET,
+      service: `get_current_time?game_id=${gameId}`,
+    };
+
+    const response = await httpRequest(requestData);
+    setSeconds(response.json.current_time);
+  };
+
+  useEffect(() => {
+    window.addEventListener("focus", onFocus);
+  }, []);
+
   useEffect(() => {
     if (lastMessage.data.includes("GAME_ENDED")) {
       const splitMsg = lastMessage.data.split(' ');
