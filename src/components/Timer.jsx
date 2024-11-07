@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import "./Timer.css";
 
 const Timer = ({ seconds, setSeconds }) => {
 
@@ -28,7 +29,7 @@ const Timer = ({ seconds, setSeconds }) => {
 
     return (
         <div>
-            <p>{formatTime(seconds)}</p>
+            <p style={{ color: (seconds % 60) <= 10 && (Math.floor(seconds / 60) === 0) ? 'rgba(255, 0, 0, 0.849)' : 'rgba(255, 255, 255, 0.904)' }}>{formatTime(seconds)}</p>
         </div>
     );
 };
