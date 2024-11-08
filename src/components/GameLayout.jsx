@@ -13,6 +13,7 @@ import "./GameLayout.css";
 import { useLocation } from 'wouter';
 import { AppContext } from "../App.jsx";
 import { GET, POST, PUT, httpRequest } from "../services/HTTPServices";
+import Timer from "./Timer.jsx";
 
 function GameLayout() {
   const { socketId, lastMessage, clientId, gameId } = useContext(AppContext);
@@ -41,6 +42,21 @@ function GameLayout() {
   const [highlightedCells, setHighlightedCells] = useState([]);
   const [selectedFCard, setSelectedFCard] = useState(null);
   const [forbiddenColor, setForbiddenColor] = useState("");
+  const [seconds, setSeconds] = useState(120);
+
+  async function onFocus() {
+    const requestData = {
+      method: GET,
+      service: `get_current_time?game_id=${gameId}`,
+    };
+
+    const response = await httpRequest(requestData);
+    setSeconds(response.json.current_time);
+  };
+
+  useEffect(() => {
+    window.addEventListener("focus", onFocus);
+  }, []);
 
   useEffect(() => {
     if (lastMessage && lastMessage.data) {
@@ -84,6 +100,16 @@ function GameLayout() {
       console.log("QUEDA 1 JUGADOR");
       setWinner(response.json.player_names[0]);
     } else if (response.json) {
+      
+      if (currentPlayer !== response.json.current_player) {
+        setSeconds(120);
+        setSelectedMov(null);
+        setSelectedCell({});
+        setSelectedFCard(null);
+        validPos.map(pos => updateCellOpacity(pos[0], pos[1], false));
+        setValidPos([]);
+        resetUsedMoves();
+      }
       if (response.json.actual_board) {
         setBoardState(response.json.actual_board);
         console.log("Board state updated from server:", response.json.actual_board);
@@ -189,7 +215,7 @@ function GameLayout() {
 
     const response = await httpRequest(requestData);
 
-    if (response.json.response_status != 0){
+    if (response.json.response_status != 0) {
       console.log(response.json.message);
     }
     else {
@@ -270,9 +296,8 @@ function GameLayout() {
       <div className="board-side">
         <div className="bar">
           <CartasRestantes cantidad={cantFiguras} />
-
           <CartaFiguraPropia FCardsType={playerFCards_type[clientId] || []} selectedFCard={selectedFCard} setSelectedFCard={(i) => selectFigure(i)} currentPlayer={currentPlayer} />
-          
+          <Timer seconds={seconds} setSeconds={setSeconds}></Timer>
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }} >
           <Tablero boardState={boardState} setSelectedCell={(x, y) => selectCell(x, y)} cellOpacity={cellOpacity} highlightedCells={highlightedCells} forbiddenColor={forbiddenColor} />
@@ -294,9 +319,9 @@ function GameLayout() {
       </div>
 
       <div className="chat">
-        <Chat playerNames={playerNames} playerColors={playerColors}/>
+        <Chat playerNames={playerNames} playerColors={playerColors} />
       </div>
-       
+
     </div>
   );
 }
