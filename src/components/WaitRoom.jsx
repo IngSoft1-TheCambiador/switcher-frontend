@@ -16,6 +16,8 @@ function WaitRoom() {
 
     useEffect(() => {
         if (lastMessage.data.includes("GAME CANCELLED BY OWNER") && ownerId !== clientId){
+            sessionStorage.setItem("gameId", null);
+            sessionStorage.setItem("clientId", null);
             navigate("/ListaPartidas");
         } else {
             getGameState();
@@ -48,6 +50,8 @@ function WaitRoom() {
         };
         const response = await httpRequest(requestData);
         if (response.json.message.startsWith("Succesfully removed player")) {
+            sessionStorage.setItem("gameId", null);
+            sessionStorage.setItem("clientId", null);
             navigate("/ListaPartidas");
         }
     }

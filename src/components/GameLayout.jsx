@@ -100,7 +100,7 @@ function GameLayout() {
       console.log("QUEDA 1 JUGADOR");
       setWinner(response.json.player_names[0]);
     } else if (response.json) {
-      
+
       if (currentPlayer !== response.json.current_player) {
         setSeconds(120);
         setSelectedMov(null);

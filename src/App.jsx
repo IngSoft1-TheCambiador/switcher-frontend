@@ -15,10 +15,16 @@ export const AppContext = React.createContext();
 
 function App() {
 
-  const [playerName, setPlayerName] = useState();
+  const [playerName, setPlayerName] = useState(() => {
+    const savedName = sessionStorage.getItem("playerName");
+    return savedName ? savedName : "";
+  });
+
   const [socketId, setSocketId] = useState(-1);
-  const [gameId, setGameId] = useState(0);
-  const [clientId, setClientId] = useState(180);
+
+  const [gameId, setGameId] = useState(sessionStorage.getItem("gameId"));
+
+  const [clientId, setClientId] = useState(sessionStorage.getItem("clientId"));
 
   const socketUrl = "ws://localhost:8000/ws/connect";
   const { lastMessage, lastJsonMessage } = useWebSocket(
@@ -26,6 +32,13 @@ function App() {
     {
       shouldReconnect: (closeEvent) => {
         true
+      },
+      onOpen: () => {
+        if (sessionStorage.getItem("clientId") !== null && sessionStorage.getItem("gameId") !== null) {
+          console.log("SHOULD RECONNECT")
+          console.log(gameId);
+          console.log(clientId);
+        }
       },
       retryOnError: true
     });
@@ -36,16 +49,18 @@ function App() {
     }
   }, [lastJsonMessage]);
 
-  function handleNewPlayer(clientId, gameId) {
-    setClientId(clientId);
-    setGameId(gameId);
+  function handleNewPlayer(newClientId, newGameId) {
+    sessionStorage.setItem("clientId", newClientId);
+    sessionStorage.setItem("gameId", newGameId);
+    setClientId(newClientId);
+    setGameId(newGameId);
   }
 
   return (
     <AppContext.Provider value={{ playerName, socketId, lastMessage, handleNewPlayer, clientId, gameId }}>
       <div className="app-container">
         <Route path="/">
-          <Inicio onSubmit={(name) => setPlayerName(name)} />
+          <Inicio onSubmit={(name) => { setPlayerName(name); sessionStorage.setItem("playerName", name) }} />
         </Route>
         <Route path="/ListaPartidas">
           <ListaPartidas />
