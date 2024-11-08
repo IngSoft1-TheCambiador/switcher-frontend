@@ -3,11 +3,48 @@ import './Chat.css'
 import { AppContext } from "../App";
 import { POST, httpRequest } from "../services/HTTPServices";
 
-function Chat({playerNames, playerColors}) {
+function Chat() {
     const {clientId, lastMessage, gameId} = useContext(AppContext);
     const [mensajes, setMensajes] = useState([]);
     const [tempMsg, setTempMsg] = useState('');
 
+    const imagenesFiguras = {
+        h1: "fig01.svg",
+        h2: "fig02.svg",
+        h3: "fig03.svg",
+        h4: "fig04.svg",
+        h5: "fig05.svg",
+        h6: "fig06.svg",
+        h7: "fig07.svg",
+        h8: "fig08.svg",
+        h9: "fig09.svg",
+        h10: "fig10.svg",
+        h11: "fig11.svg",
+        h12: "fig12.svg",
+        h13: "fig13.svg",
+        h14: "fig14.svg",
+        h15: "fig15.svg",
+        h16: "fig16.svg",
+        h17: "fig17.svg",
+        h18: "fig18.svg",
+        s1: "fige01.svg",
+        s2: "fige02.svg",
+        s3: "fige03.svg",
+        s4: "fige04.svg",
+        s5: "fige05.svg",
+        s6: "fige06.svg",
+        s7: "fige07.svg",
+    };
+
+    const imagenesMovs = {
+        mov1: "mov1.svg",
+        mov2: "mov2.svg",
+        mov3: "mov3.svg",
+        mov4: "mov4.svg",
+        mov5: "mov5.svg",
+        mov6: "mov6.svg",
+        mov7: "mov7.svg",
+      };
 
     function parseColor(color) {
         if (color === "r") return "#ff5757";
@@ -32,9 +69,21 @@ function Chat({playerNames, playerColors}) {
     // TODO: Agregar logs
     useEffect(() => {
         console.log(lastMessage.data);
-        if (lastMessage.data.includes("message", "sender_id", "sender_name", "time")) {
-            let msgObj = JSON.parse(lastMessage.data)
-            setMensajes([...mensajes, {sender: msgObj.sender_name, color: playerColors[msgObj.sender_id], message: msgObj.message, time: msgObj.time}])
+        if (lastMessage.data.startsWith("NEW CHAT MSG:")) {
+            // quito el "tag" ("NEW CHAT MSG:")
+            console.log("mensaje broadcasteado para el chat: ", lastMessage.data);
+            let msgObj = JSON.parse(lastMessage.data.substring(13));
+            console.log("msgObj: ", msgObj);
+
+            setMensajes([...mensajes, {sender: msgObj.sender_name, color: msgObj.sender_color, message: msgObj.message, time: msgObj.time}]);
+        }
+        else if (lastMessage.data.startsWith("LOG:")) {
+            console.log("LOG broadcasteado para el chat: ", lastMessage.data);
+            // quito el "tag" ("NEW CHAT MSG:")
+            let logObj = JSON.parse(lastMessage.data.substring(4));
+            console.log("logObj: ", logObj);
+
+            setMensajes([...mensajes, {sender: "Log", color: "log", message: logObj.message, time: logObj.time, cards: logObj.cards}]);
         }
     }, [lastMessage])
 
@@ -53,7 +102,23 @@ function Chat({playerNames, playerColors}) {
                 <div className="mensajes">
                     {mensajes.map((mensaje, index) => (
                         <div key={index} className="mensaje" style={{ backgroundColor: parseColor(mensaje.color) }}>
-                            {mensaje.sender}: {mensaje.message}
+                            {mensaje.sender}: {mensaje.message} 
+                            {(mensaje.color === "log" && mensaje.cards !== undefined) &&
+                                <div className="log-img-container">
+                                    {mensaje.cards.map((carta, i) => (
+                                        <div className="log-card-img">
+                                            {(carta.startsWith("mov")) &&
+                                                <img key={i} src={imagenesMovs[carta]} alt={`Movimiento: ${[carta]}`} />}
+                                            {(carta.startsWith("h") || carta.startsWith("s")) &&
+                                                <img key={i} src={imagenesFiguras[carta]} alt={`Figura: ${[carta]}`} />}
+                                        </div>
+                                    ))}
+                                </div>
+                            }
+                                
+                                
+
+                                
                             <div style={{fontSize: "small", alignSelf: "end"}}>
                                 {mensaje.time}
                             </div>
