@@ -18,11 +18,7 @@ import Timer from "./Timer.jsx";
 function GameLayout() {
   const { socketId, lastMessage, clientId, gameId } = useContext(AppContext);
   const [winner, setWinner] = useState("");
-  const [boardState, setBoardState] = useState(() => {
-    const savedBoardState = localStorage.getItem("boardState");
-    console.log("Recovered board state from localStorage:", savedBoardState);
-    return savedBoardState ? savedBoardState : "";
-  });
+  const [boardState, setBoardState] = useState("");
   const [playerNames, setPlayerNames] = useState([]);
   const [playerColors, setPlayerColors] = useState({});
   const [playerFCards_id, setPlayerFCards_id] = useState({});
@@ -33,7 +29,10 @@ function GameLayout() {
   const [playersUsedM, setPlayersUsedM] = useState({});
   const [, navigate] = useLocation();
   const [playerIds, setPlayerIds] = useState([]);
-  const [currentPlayer, setCurrentPlayer] = useState(-1);
+  const [currentPlayer, setCurrentPlayer] = useState(() => {
+    const savedPlayer = sessionStorage.getItem("currentPlayer");
+    return savedPlayer ? savedPlayer : -1;
+  });
   const [selectedMov, setSelectedMov] = useState(null);
   const [selectedCell, setSelectedCell] = useState({});
   const [validPos, setValidPos] = useState([]);
@@ -75,12 +74,6 @@ function GameLayout() {
       }
     }
   }, [lastMessage]);
-
-  useEffect(() => {
-    console.log("Board state before refresh:", boardState);
-    localStorage.setItem("boardState", boardState);
-    console.log("Board state saved to localStorage:", boardState);
-  }, [boardState]);
 
   function setMoves(player_id, card_id) {
     var usedM = playersUsedM;
@@ -131,6 +124,7 @@ function GameLayout() {
       setPlayerMCards(response.json.player_m_cards || {});
       setPlayerIds(response.json.player_ids || []);
       setCurrentPlayer(response.json.current_player || -1);
+      sessionStorage.setItem("currentPlayer", response.json.current_player);
       setHighlightedCells(response.json.highlighted_squares || []);
       if (Object.keys(playersUsedM).length === 0) {
         setPlayersUsedM(

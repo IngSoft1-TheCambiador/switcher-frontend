@@ -10,6 +10,7 @@ import { Route } from "wouter";
 import GameRow from './components/GameRow';
 import Winner from './components/Winner';
 import useWebSocket from 'react-use-websocket';
+import { PUT, httpRequest } from "./services/HTTPServices";
 
 export const AppContext = React.createContext();
 
@@ -26,6 +27,14 @@ function App() {
 
   const [clientId, setClientId] = useState(sessionStorage.getItem("clientId"));
 
+  async function handleRelink(socketId) {
+    const requestData = {
+      "method": PUT,
+      "service": `relink_to_game?socket_id=${socketId}&game_id=${gameId}`
+    };
+    const response = await httpRequest(requestData);
+  }
+
   const socketUrl = "ws://localhost:8000/ws/connect";
   const { lastMessage, lastJsonMessage } = useWebSocket(
     socketUrl,
@@ -33,19 +42,19 @@ function App() {
       shouldReconnect: (closeEvent) => {
         true
       },
-      onOpen: () => {
-        if (sessionStorage.getItem("clientId") !== null && sessionStorage.getItem("gameId") !== null) {
-          console.log("SHOULD RECONNECT")
-          console.log(gameId);
-          console.log(clientId);
-        }
-      },
+
       retryOnError: true
     });
 
   useEffect(() => {
-    if (socketId === -1 && lastJsonMessage !== null && lastJsonMessage.socketId !== null && lastJsonMessage.socketId !== undefined) {
+    if (lastJsonMessage !== null && lastJsonMessage.socketId !== null && lastJsonMessage.socketId !== undefined) {
       setSocketId(lastJsonMessage.socketId);
+      if (sessionStorage.getItem("clientId") !== null && sessionStorage.getItem("gameId") !== null) {
+        console.log("SHOULD RECONNECT")
+        console.log(gameId);
+        console.log(clientId);
+        handleRelink(lastJsonMessage.socketId);
+      }
     }
   }, [lastJsonMessage]);
 
