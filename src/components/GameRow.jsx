@@ -5,10 +5,11 @@ import '../index.css';
 import './GameRow.css';
 import { POST, httpRequest } from '../services/HTTPServices.jsx';
 
-function GameRow({ gameID, gameName, minPlayers, maxPlayers }) {
+function GameRow({ gameID, gameName, minPlayers, maxPlayers, isPrivate }) {
   const [, navigate] = useLocation();
   const { socketId, playerName, handleNewPlayer } = useContext(AppContext);
   const [password, setPassword] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
 
   const joinGame = async () => {
     const requestData = {
@@ -24,17 +25,45 @@ function GameRow({ gameID, gameName, minPlayers, maxPlayers }) {
     }
   };
 
+  const handleJoinClick = () => {
+    if (isPrivate) {
+      setShowPopup(true);
+    } else {
+      joinGame();
+    }
+  };
+
+  const handlePopupSubmit = (e) => {
+    e.preventDefault();
+    setShowPopup(false);
+    joinGame();
+  };
+
   return (
     <div className='row-wrapper'>
-      <div className="game-button" onClick={joinGame}>{gameName}</div>
+      <div className="game-button" onClick={handleJoinClick}>
+        {gameName}
+      </div>
+      {/*isPrivate && <div className="private-indicator">P</div> Falta mostrar de alguna forma que es privada*/}
       <div>{minPlayers}</div>
       <div>{maxPlayers}</div>
-      <input
-        type="password"
-        placeholder="Contraseña (opcional)"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-inner">
+            <h2>Ingrese la contraseña</h2>
+            <form onSubmit={handlePopupSubmit}>
+              <input
+                type="password"
+                placeholder="Contraseña"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+              />
+              <button type="submit">Unirse</button>
+              <button type="button" onClick={() => setShowPopup(false)}>Cancelar</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
