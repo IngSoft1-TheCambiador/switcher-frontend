@@ -95,6 +95,57 @@ function Chat() {
         }
     }
 
+
+    function renderLogWithImg(msg, cards){
+        let msgArray = msg.split("&?&");
+        if (msgArray.length === 1){
+            return(
+                <>
+                    {/* el 1er y unico elem seria el texto antes de la carta de fig usada */}
+                    Log: {msgArray[0]}
+                    <div className="log-img-container">
+                        {cards.map((carta, i) => (
+                            <div className="log-card-img">
+                                {(carta.startsWith("h") || carta.startsWith("s")) &&
+                                    <img key={i} src={imagenesFiguras[carta]} alt={`Figura: ${[carta]}`} />}
+                            </div>
+                        ))}
+                    </div>
+                </>
+            )
+        }
+        else if (msgArray.length === 2) {
+            return(
+                <>
+                    {/* el 1er elem seria el texto antes de las cartas de mov usadas */}
+                    Log: {msgArray[0]}
+                    <div className="log-img-container">
+                        {cards.map((carta, i) => (
+                            <>
+                                {(carta.startsWith("mov")) &&
+                                    <div className="log-card-img">
+                                        <img key={i} src={imagenesMovs[carta]} alt={`Movimiento: ${[carta]}`} />  
+                                    </div>}
+                            </>
+                        ))}
+                    </div>
+                    {/* el 2do elem seria el texto antes de la carta de fig usada */}
+                    Log: {msgArray[1]}
+                    <div className="log-img-container">
+                        {cards.map((carta, i) => (
+                            <>
+                                {(carta.startsWith("h") || carta.startsWith("s")) &&
+                                    <div className="log-card-img">
+                                        <img key={i} src={imagenesFiguras[carta]} alt={`Figura: ${[carta]}`} />
+                                </div>}
+                            </>
+                        ))}
+                    </div>
+                </>
+            )
+        }
+    }
+
     return(
         <>
             {/* mensajes */}
@@ -102,23 +153,11 @@ function Chat() {
                 <div className="mensajes">
                     {mensajes.map((mensaje, index) => (
                         <div key={index} className="mensaje" style={{ backgroundColor: parseColor(mensaje.color) }}>
-                            {mensaje.sender}: {mensaje.message} 
-                            {(mensaje.color === "log" && mensaje.cards !== undefined) &&
-                                <div className="log-img-container">
-                                    {mensaje.cards.map((carta, i) => (
-                                        <div className="log-card-img">
-                                            {(carta.startsWith("mov")) &&
-                                                <img key={i} src={imagenesMovs[carta]} alt={`Movimiento: ${[carta]}`} />}
-                                            {(carta.startsWith("h") || carta.startsWith("s")) &&
-                                                <img key={i} src={imagenesFiguras[carta]} alt={`Figura: ${[carta]}`} />}
-                                        </div>
-                                    ))}
-                                </div>
+                            {(mensaje.color === "log" && mensaje.cards !== undefined)?
+                                renderLogWithImg(mensaje.message, mensaje.cards)
+                                :
+                                `${mensaje.sender}: ${mensaje.message}`
                             }
-                                
-                                
-
-                                
                             <div style={{fontSize: "small", alignSelf: "end"}}>
                                 {mensaje.time}
                             </div>
