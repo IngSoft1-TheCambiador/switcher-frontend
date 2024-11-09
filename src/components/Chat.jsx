@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import './Chat.css'
 import { AppContext } from "../App";
-import { POST, httpRequest } from "../services/HTTPServices";
+import { GET, POST, httpRequest } from "../services/HTTPServices";
 
 function Chat() {
     const {clientId, lastMessage, gameId} = useContext(AppContext);
@@ -63,10 +63,21 @@ function Chat() {
         await httpRequest(requestData);
     }
 
-    // TODO: Agregar uso de endpoint para obtener los mensajes de la partida en la base de datos 
-        // (se usaria para cuando el jugador haga refresh o salga y vuelva a entrar a la partida)
+    // TODO: Usar para cuando se hace refresh o para cuando se abandona una partida y se vuelve a entrar
+    async function getMessages() {
+        const requestData = {
+            "method": GET,
+            "service": `get_messages?game_id=${gameId}`
+        };
+
+        const response = await httpRequest(requestData);
+
+        console.log("GET_MESSAGES RESPONSE: ", response.json.message_list)
+        console.log("GET_MESSAGES status: ", response.json.response_status)
+
+        setMensajes(response.json.message_list);
+    }
     
-    // TODO: Agregar logs
     useEffect(() => {
         console.log(lastMessage.data);
         if (lastMessage.data.startsWith("NEW CHAT MSG:")) {
