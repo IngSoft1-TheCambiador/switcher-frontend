@@ -22,27 +22,26 @@ function GamesList() {
     page,
     game_name = lastSearch.game_name,
     min = lastSearch.min,
-    max = lastSearch.max
+    max = lastSearch.max,
+    isPrivate = lastSearch.isPrivate
   ) {
 
     if (page > 0) {
       const requestData = {
         "method": GET,
-        "service": `search_games?page=${page}&text=${game_name}&min=${min}&max=${max}`
+        "service": `search_games?page=${page}&text=${game_name}&min=${min}&max=${max}&private=${isPrivate}`
       };
 
       const response = await httpRequest(requestData);
       if (response.json.response_status == 0) {
         document.getElementById("invalid-search").style.display = 'none';
-        if (page == 1 || response.json.games_list.length != 0) {
+        if (page == 1 || response.json.games_list.length !== 0) {
           setGames(response.json.games_list);
           setPage(page);
-        }
-        else {
+        } else {
           getGames(page - 1);
         }
-      }
-      else {
+      } else {
         document.getElementById("invalid-search").style.display = 'block';
       }
     }
@@ -66,7 +65,6 @@ function GamesList() {
       <div className="container-GamesList">
         <div>
           <div>Buscar partida</div>
-          
         </div>
         <form onSubmit={filterList}>
           <input
@@ -88,15 +86,15 @@ function GamesList() {
           id="invalid-search" >
           Datos de busqueda inválidos
         </div>
-        {games.map(({ game_id, game_name, min_players, max_players }) =>
+        {games.map(({ game_id, game_name, min_players, max_players, private: isPrivate }) =>
           <GameRow key={game_id} gameID={game_id} gameName={game_name}
-            minPlayers={min_players} maxPlayers={max_players} />)}
+            minPlayers={min_players} maxPlayers={max_players} isPrivate={isPrivate} />)}
         <div className='container-Botones'>
           <div onClick={() => getGames(page - 1)}>
-            <img src="arrowL.png" alt="Abandonar Partida" class='arrow-img' />
+            <img src="arrowL.png" alt="Abandonar Partida" className='arrow-img' />
           </div>
           <div onClick={() => getGames(page + 1)}>
-            <img src="arrowR.png" alt="Abandonar Partida" class='arrow-img' />
+            <img src="arrowR.png" alt="Abandonar Partida" className='arrow-img' />
           </div>
         </div>
       </div>
