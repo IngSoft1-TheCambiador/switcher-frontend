@@ -6,7 +6,10 @@ import { CartaMovimientoAjena } from "./CartaMovimiento.jsx";
 import CartasRestantes from "./CartasRestantes.jsx";
 
 
-function Jugador({ playerNames, playerColors, playerShapes, playerMovements, playersUsedMovs, currentPlayer, playerShapeCount, initialFiguresCount }) {
+function Jugador({
+  playerNames, playerColors, playerShapes, playerMovements, playersUsedMovs, playerShapeCount,
+  currentPlayer, selectedFCard, setSelectedFCard
+}) {
 
   const { clientId } = useContext(AppContext);
 
@@ -27,7 +30,6 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
         movimientos: playerMovements[id],
         movUsados: playersUsedMovs[id],
         cantFiguras: playerShapeCount[id],
-        cantFigurasInicial: initialFiguresCount[id],
       }
     ));
 
@@ -42,7 +44,9 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
               <img src="hourglass.svg" alt="hourglass" className="other-turn-symbol" />
             }
           </div>
-          <CartaFiguraAjena figuras={jugador.figuras} cantFiguras={jugador.cantFiguras} />
+          <CartaFiguraAjena FCardsType={jugador.figuras} cantFiguras={jugador.cantFiguras}
+            selectedFCard={selectedFCard.player_id == jugador.player_id ? selectedFCard.index : null}
+            setSelectedFCard={(i) => setSelectedFCard(jugador.player_id, i)} />
           <CartaMovimientoAjena movimientos={jugador.movimientos} show={jugador.movUsados} />
         </div>
       ))}
