@@ -57,7 +57,7 @@ function Chat() {
     async function sendMessage() {
         const requestData = {
             "method": POST,
-            "service": `send_message?game_id=${gameId}&sender_id=${clientId}&txt=${tempMsg}`
+            "service": `send_message?game_id=${gameId}&sender_id=${clientId}&txt=${encodeURIComponent(tempMsg)}`
         };
 
         await httpRequest(requestData);
