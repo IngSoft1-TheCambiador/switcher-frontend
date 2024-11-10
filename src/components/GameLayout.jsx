@@ -3,7 +3,7 @@ import Tablero from "./Tablero";
 import BotonTurno from "./BotonTurno.jsx";
 import BotonAbandonar from "./BotonAbandonar.jsx";
 import BotonDeshacer from "./BotonDeshacer.jsx";
-import { CartaFiguraPropia } from "./CartaFigura";
+import { CartaFigura } from "./CartaFigura";
 import { CartaMovimientoPropia, calculatePositions } from "./CartaMovimiento";
 import CartasRestantes from "./CartasRestantes.jsx";
 import Jugador from "./Jugador";
@@ -25,6 +25,7 @@ function GameLayout() {
   const [playerColors, setPlayerColors] = useState({});
   const [playerFCards_id, setPlayerFCards_id] = useState({});
   const [playerFCards_type, setPlayerFCards_type] = useState({});
+  const [playerFCards_bloqued, setPlayerFCards_bloqued] = useState({});
   const [playersCantFCards, setPlayersCantFCards] = useState({});
   const [initialFiguresCount, setInitialFiguresCount] = useState({});
   const [playerMCards, setPlayerMCards] = useState({});
@@ -38,7 +39,7 @@ function GameLayout() {
   const [usedMoves, setUsedMoves] = useState([false, false, false]);
   const [cellOpacity, setCellOpacity] = useState(Array(6).fill().map(() => Array(6).fill(false)));
   const [highlightedCells, setHighlightedCells] = useState([]);
-  const [selectedFCard, setSelectedFCard] = useState(null);
+  const [selectedFCard, setSelectedFCard] = useState({});
   const [forbiddenColor, setForbiddenColor] = useState("");
   const [seconds, setSeconds] = useState(120);
 
@@ -96,7 +97,7 @@ function GameLayout() {
         setSeconds(120);
         setSelectedMov(null);
         setSelectedCell({});
-        setSelectedFCard(null);
+        setSelectedFCard({});
         validPos.map(pos => updateCellOpacity(pos[0], pos[1], false));
         setValidPos([]);
         resetUsedMoves();
@@ -117,6 +118,8 @@ function GameLayout() {
       }
       setPlayerFCards_id(response.json.player_f_hand_ids);
       setPlayerFCards_type(response.json.player_f_hand);
+      setPlayerFCards_bloqued(response.json.player_f_hand_bloqued);
+      console.log("Bloqued: ",response.json.player_f_hand_bloqued);
       setPlayerMCards(response.json.player_m_cards);
       setPlayerIds(response.json.player_ids);
       setCurrentPlayer(response.json.current_player);
@@ -166,7 +169,7 @@ function GameLayout() {
   function selectMov(mov, i) {
     validPos.map(pos => updateCellOpacity(pos[0], pos[1], false));
     if (currentPlayer == clientId && !usedMoves[i]) {
-      if (i == selectedMov || selectedFCard != null) {
+      if (i == selectedMov || selectedFCard.player_id != undefined) {
         setSelectedCell({});
         setSelectedMov(null);
       } else {
@@ -175,12 +178,12 @@ function GameLayout() {
     }
   };
 
-  function selectFigure(i) {
+  function selectFigure(player_id, i) {
     if (currentPlayer == clientId) {
-      if (i === selectedFCard || selectedMov != null) {
-        setSelectedFCard(null);
+      if (i === selectedFCard.index || selectedMov != null) {
+        setSelectedFCard({});
       } else {
-        setSelectedFCard(i);
+        setSelectedFCard({player_id: player_id, index: i});
       }
     }
   }
@@ -198,7 +201,7 @@ function GameLayout() {
 
     const requestData = {
       method: PUT,
-      service: `claim_figure?game_id=${gameId}&player_id=${clientId}&fig_id=${figuras[selectedFCard]}&used_movs=${moves_to_remove}&x=${x}&y=${y}`,
+      service: `claim_figure?game_id=${gameId}&player_id=${clientId}&fig_id=${figuras[selectedFCard.index]}&used_movs=${moves_to_remove}&x=${x}&y=${y}`,
     }
 
     const response = await httpRequest(requestData);
@@ -211,9 +214,37 @@ function GameLayout() {
       setUsedMoves([false, false, false]);
     }
 
+    setSelectedFCard({});
+    setSelectedCell({});
+  }
 
+  async function blockFigure(x, y) {
 
-    setSelectedFCard(null);
+    // get the usedMoves str code for the endpoint to use
+    const moves_to_remove = [];
+
+    for (let i = 0; i < usedMoves.length; i++) {
+      if (usedMoves[i]) {
+        moves_to_remove.push(movimientos[i]);
+      }
+    }
+
+    const requestData = {
+      method: PUT,
+      service: `block_figure?game_id=${gameId}&player_id=${clientId}&fig_id=${playerFCards_id[selectedFCard.player_id][selectedFCard.index]}&used_movs=${moves_to_remove}&x=${x}&y=${y}`,
+    }
+
+    const response = await httpRequest(requestData);
+
+    if (response.json.response_status != 0) {
+      console.log(response.json.message);
+    }
+    else {
+      setBoardState(response.json.true_board);
+      setUsedMoves([false, false, false]);
+    }
+
+    setSelectedFCard({});
     setSelectedCell({});
   }
 
@@ -242,8 +273,12 @@ function GameLayout() {
     } else if (selectedMov != null) {
       setSelectedCell({ x: x, y: y });
       setValidPos(calculatePositions(movimientos[selectedMov], x, y));
-    } else if (selectedFCard != null && clientId === currentPlayer) {
-      claimFigure(x, y);
+    } else if (selectedFCard.player_id != undefined) {
+      if (selectedFCard.player_id == clientId){
+        claimFigure(x, y);
+      } else {
+        blockFigure(x, y);
+      }
     }
   }
 
@@ -285,26 +320,36 @@ function GameLayout() {
       <div className="board-side">
         <div className="bar">
           <CartasRestantes cantidad={cantFiguras} />
-          <CartaFiguraPropia FCardsType={playerFCards_type[clientId] || []} selectedFCard={selectedFCard} setSelectedFCard={(i) => selectFigure(i)} currentPlayer={currentPlayer} />
+          <CartaFigura FCardsType={playerFCards_type[clientId] || []}
+            selectedFCard={selectedFCard.player_id == clientId ? selectedFCard.index : null}
+            setSelectedFCard={(i) => selectFigure(clientId, i)}
+            currentPlayer={currentPlayer} FCardsBloqued={playerFCards_bloqued[clientId]} />
           <Timer seconds={seconds} setSeconds={setSeconds}></Timer>
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }} >
-          <Tablero boardState={boardState} setSelectedCell={(x, y) => selectCell(x, y)} cellOpacity={cellOpacity} highlightedCells={highlightedCells} forbiddenColor={forbiddenColor} />
+          <Tablero boardState={boardState} setSelectedCell={(x, y) => selectCell(x, y)}
+            cellOpacity={cellOpacity} highlightedCells={highlightedCells} forbiddenColor={forbiddenColor} />
         </div>
         <div className="bar bar-movements">
           <div className="button-container">
-            <BotonTurno resetUsedMoves={resetUsedMoves} setSelectedMov={setSelectedMov} setSelectedCell={setSelectedCell} setValidPos={setValidPos}
+            <BotonTurno resetUsedMoves={resetUsedMoves} setSelectedMov={setSelectedMov}
+              setSelectedCell={setSelectedCell} setValidPos={setValidPos}
               setSelectedFCard={setSelectedFCard} validPos={validPos} updateCellOpacity={updateCellOpacity} />
 
             {(currentPlayer === clientId) &&
               <BotonDeshacer setBoardState={setBoardState} />}
           </div>
-          <CartaMovimientoPropia movimientos={movimientos} selectedMov={selectedMov} setSelectedMov={(mov, i) => selectMov(mov, i)} used={usedMoves} currentPlayer={currentPlayer} />
+          <CartaMovimientoPropia movimientos={movimientos} selectedMov={selectedMov}
+            setSelectedMov={(mov, i) => selectMov(mov, i)} used={usedMoves} currentPlayer={currentPlayer} />
           <BotonAbandonar resetUsedMoves={resetUsedMoves} />
         </div>
       </div>
       <div className="players">
-        <Jugador playerNames={playerNames} playerColors={playerColors} playerShapes={playerFCards_type} playerMovements={playerMCards} playersUsedMovs={playersUsedM} currentPlayer={currentPlayer} playerShapeCount={playersCantFCards} initialFiguresCount={initialFiguresCount} />
+        <Jugador playerNames={playerNames} playerColors={playerColors}
+          playerShapes={playerFCards_type} playerMovements={playerMCards} playersUsedMovs={playersUsedM}
+          currentPlayer={currentPlayer} playerShapeCount={playersCantFCards} initialFiguresCount={initialFiguresCount}
+          selectedFCard={selectedFCard} setSelectedFCard={(player_id, i) => selectFigure(player_id, i)}
+          FCardsBloqued={playerFCards_bloqued} />
       </div>
 
       <div className="chat">

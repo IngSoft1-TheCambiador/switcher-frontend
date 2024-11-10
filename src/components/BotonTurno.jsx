@@ -13,13 +13,18 @@ function BotonTurno({ resetUsedMoves, setSelectedMov, setSelectedCell, setValidP
             service: `skip_turn?game_id=${gameId}&player_id=${clientId}`
         };
 
-        await httpRequest(requestData);
-        setSelectedMov(null);
-        setSelectedCell({});
-        setSelectedFCard(null);
-        validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
-        setValidPos([]);
-        resetUsedMoves();
+        const response = await httpRequest(requestData);
+
+        if (response.json.response_status != 0){
+            console.log(response.json.message);
+        } else {
+            setSelectedMov(null);
+            setSelectedCell({});
+            setSelectedFCard({});
+            validPos.map(pos => updateCellOpacity(pos[0],pos[1],false));
+            setValidPos([]);
+            resetUsedMoves();
+        }
     }
 
     return (
