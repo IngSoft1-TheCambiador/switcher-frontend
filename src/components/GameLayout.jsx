@@ -94,7 +94,7 @@ function GameLayout() {
       setWinner(response.json.player_names[0]);
     } else if (response.json) {
 
-      if (currentPlayer !== response.json.current_player) {
+      if (response.json.current_player !== undefined && currentPlayer !== response.json.current_player) {
         setSeconds(120);
         setSelectedMov(null);
         setSelectedCell({});
@@ -124,7 +124,7 @@ function GameLayout() {
       setPlayerMCards(response.json.player_m_cards || {});
       setPlayerIds(response.json.player_ids || []);
       setCurrentPlayer(response.json.current_player || -1);
-      sessionStorage.setItem("currentPlayer", response.json.current_player);
+      sessionStorage.setItem("currentPlayer", response.json.current_player || -1);
       setHighlightedCells(response.json.highlighted_squares || []);
       if (Object.keys(playersUsedM).length === 0) {
         setPlayersUsedM(

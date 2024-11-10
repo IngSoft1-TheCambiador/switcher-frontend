@@ -4,7 +4,7 @@ import { AppContext } from "../App";
 import { GET, POST, httpRequest } from "../services/HTTPServices";
 
 function Chat() {
-    const {clientId, lastMessage, gameId} = useContext(AppContext);
+    const { clientId, lastMessage, gameId } = useContext(AppContext);
     const [mensajes, setMensajes] = useState([]);
     const [tempMsg, setTempMsg] = useState('');
 
@@ -44,7 +44,7 @@ function Chat() {
         mov5: "mov5.svg",
         mov6: "mov6.svg",
         mov7: "mov7.svg",
-      };
+    };
 
     function parseColor(color) {
         if (color === "r") return "#ff5757";
@@ -77,25 +77,30 @@ function Chat() {
 
         setMensajes(response.json.message_list);
     }
-    
+
     useEffect(() => {
-        console.log(lastMessage.data);
-        if (lastMessage.data.startsWith("NEW CHAT MSG:")) {
-            // quito el "tag" ("NEW CHAT MSG:")
-            console.log("mensaje broadcasteado para el chat: ", lastMessage.data);
-            let msgObj = JSON.parse(lastMessage.data.substring(13));
-            console.log("msgObj: ", msgObj);
+        if (lastMessage && lastMessage.data) {
+            if (lastMessage.data.startsWith("NEW CHAT MSG:")) {
+                // quito el "tag" ("NEW CHAT MSG:")
+                console.log("mensaje broadcasteado para el chat: ", lastMessage.data);
+                let msgObj = JSON.parse(lastMessage.data.substring(13));
+                console.log("msgObj: ", msgObj);
 
-            setMensajes([...mensajes, {sender: msgObj.sender_name, color: msgObj.sender_color, message: msgObj.message, time: msgObj.time}]);
-        }
-        else if (lastMessage.data.startsWith("LOG:")) {
-            console.log("LOG broadcasteado para el chat: ", lastMessage.data);
-            // quito el "tag" ("NEW CHAT MSG:")
-            let logObj = JSON.parse(lastMessage.data.substring(4));
-            console.log("logObj: ", logObj);
+                setMensajes([...mensajes, { sender: msgObj.sender_name, color: msgObj.sender_color, message: msgObj.message, time: msgObj.time }]);
+            }
+            else if (lastMessage.data.startsWith("LOG:")) {
+                console.log("LOG broadcasteado para el chat: ", lastMessage.data);
+                // quito el "tag" ("NEW CHAT MSG:")
+                let logObj = JSON.parse(lastMessage.data.substring(4));
+                console.log("logObj: ", logObj);
 
-            setMensajes([...mensajes, {sender: "Log", color: "log", message: logObj.message, time: logObj.time, cards: logObj.cards}]);
+                setMensajes([...mensajes, { sender: "Log", color: "log", message: logObj.message, time: logObj.time, cards: logObj.cards }]);
+            }
+            else{
+                getMessages();
+            }
         }
+
     }, [lastMessage])
 
     const sendMsg = (e) => {
@@ -107,10 +112,10 @@ function Chat() {
     }
 
 
-    function renderLogWithImg(msg, cards){
+    function renderLogWithImg(msg, cards) {
         let msgArray = msg.split("&?&");
-        if (msgArray.length === 1){
-            return(
+        if (msgArray.length === 1) {
+            return (
                 <>
                     {/* el 1er y unico elem seria el texto antes de la carta de fig usada */}
                     Log: {msgArray[0]}
@@ -126,7 +131,7 @@ function Chat() {
             )
         }
         else if (msgArray.length === 2) {
-            return(
+            return (
                 <>
                     {/* el 1er elem seria el texto antes de las cartas de mov usadas */}
                     Log: {msgArray[0]}
@@ -135,7 +140,7 @@ function Chat() {
                             <>
                                 {(carta.startsWith("mov")) &&
                                     <div className="log-card-img">
-                                        <img key={i} src={imagenesMovs[carta]} alt={`Movimiento: ${[carta]}`} />  
+                                        <img key={i} src={imagenesMovs[carta]} alt={`Movimiento: ${[carta]}`} />
                                     </div>}
                             </>
                         ))}
@@ -148,7 +153,7 @@ function Chat() {
                                 {(carta.startsWith("h") || carta.startsWith("s")) &&
                                     <div className="log-card-img">
                                         <img key={i} src={imagenesFiguras[carta]} alt={`Figura: ${[carta]}`} />
-                                </div>}
+                                    </div>}
                             </>
                         ))}
                     </div>
@@ -157,19 +162,19 @@ function Chat() {
         }
     }
 
-    return(
+    return (
         <>
             {/* mensajes */}
             <div className="msg-scroller-container">
                 <div className="mensajes">
                     {mensajes.map((mensaje, index) => (
                         <div key={index} className="mensaje" style={{ backgroundColor: parseColor(mensaje.color) }}>
-                            {(mensaje.color === "log" && mensaje.cards !== undefined)?
+                            {(mensaje.color === "log" && mensaje.cards !== undefined) ?
                                 renderLogWithImg(mensaje.message, mensaje.cards)
                                 :
                                 `${mensaje.sender}: ${mensaje.message}`
                             }
-                            <div style={{fontSize: "small", alignSelf: "end"}}>
+                            <div style={{ fontSize: "small", alignSelf: "end" }}>
                                 {mensaje.time}
                             </div>
                         </div>
@@ -178,8 +183,8 @@ function Chat() {
             </div>
             {/* campo para escribir */}
             <form>
-                <input type="text" placeholder="Type something..." value={tempMsg} onChange={e => setTempMsg(e.target.value)} className="msg-textbox" maxLength={100}>  
-                </input>  
+                <input type="text" placeholder="Type something..." value={tempMsg} onChange={e => setTempMsg(e.target.value)} className="msg-textbox" maxLength={100}>
+                </input>
                 <button onClick={sendMsg} style={{ display: 'none' }} aria-hidden="true" />
             </form>
         </>
