@@ -16,7 +16,7 @@ import { GET, POST, PUT, httpRequest } from "../services/HTTPServices";
 import Timer from "./Timer.jsx";
 
 function GameLayout() {
-  const { socketId, lastMessage, clientId, gameId } = useContext(AppContext);
+  const { socketId, lastMessage, clientId, gameId, seconds, setSeconds } = useContext(AppContext);
   const [winner, setWinner] = useState("");
   const [boardState, setBoardState] = useState("");
   const [playerNames, setPlayerNames] = useState([]);
@@ -30,7 +30,7 @@ function GameLayout() {
   const [, navigate] = useLocation();
   const [playerIds, setPlayerIds] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState(() => {
-    const savedPlayer = sessionStorage.getItem("currentPlayer");
+    const savedPlayer = parseInt(sessionStorage.getItem("currentPlayer"));
     return savedPlayer ? savedPlayer : -1;
   });
   const [selectedMov, setSelectedMov] = useState(null);
@@ -41,7 +41,6 @@ function GameLayout() {
   const [highlightedCells, setHighlightedCells] = useState([]);
   const [selectedFCard, setSelectedFCard] = useState(null);
   const [forbiddenColor, setForbiddenColor] = useState("");
-  const [seconds, setSeconds] = useState(120);
 
   async function onFocus() {
     const requestData = {
@@ -89,55 +88,63 @@ function GameLayout() {
 
     const response = await httpRequest(requestData);
 
-    if (response.json && response.json.player_names && response.json.player_names.length === 1) {
-      console.log("QUEDA 1 JUGADOR");
-      setWinner(response.json.player_names[0]);
-    } else if (response.json) {
+    if (response.json && response.json.error) {
+      console.log("ERRRO EL ID DEL SOCKET NO ESTA EN LA LISTA");
+    } else {
+      if (response.json && response.json.player_names && response.json.player_names.length === 1) {
+        console.log("QUEDA 1 JUGADOR");
+        setWinner(response.json.player_names[0]);
+      } else if (response.json) {
 
-      if (response.json.current_player !== undefined && currentPlayer !== response.json.current_player) {
-        setSeconds(120);
-        setSelectedMov(null);
-        setSelectedCell({});
-        setSelectedFCard(null);
-        validPos.map(pos => updateCellOpacity(pos[0], pos[1], false));
-        setValidPos([]);
-        resetUsedMoves();
-      }
-      if (response.json.actual_board) {
-        setBoardState(response.json.actual_board);
-        console.log("Board state updated from server:", response.json.actual_board);
-      }
-      setPlayerNames(response.json.player_names || []);
-      setPlayerColors(response.json.player_colors || {});
-      const playerCantFCards = Object.fromEntries(
-        Object.entries(response.json.player_f_cards || {}).map(([key, value]) => [
-          key,
-          value.length,
-        ])
-      );
-      setPlayersCantFCards(playerCantFCards);
-      if (Object.keys(initialFiguresCount).length === 0) {
-        setInitialFiguresCount(playerCantFCards);
-      }
-      setPlayerFCards_id(response.json.player_f_hand_ids || {});
-      setPlayerFCards_type(response.json.player_f_hand || {});
-      setPlayerMCards(response.json.player_m_cards || {});
-      setPlayerIds(response.json.player_ids || []);
-      setCurrentPlayer(response.json.current_player || -1);
-      sessionStorage.setItem("currentPlayer", response.json.current_player || -1);
-      setHighlightedCells(response.json.highlighted_squares || []);
-      if (Object.keys(playersUsedM).length === 0) {
-        setPlayersUsedM(
-          Object.fromEntries(
-            Object.entries(response.json.player_m_cards || {}).map(([key, value]) => [
-              key,
-              value.map(() => false)
-            ])
-          )
+        if (response.json.current_player !== undefined && currentPlayer !== response.json.current_player) {
+          console.log("REINICIANDO TURNO");
+          console.log("CURRENTP BACK ", response.json.current_player);
+          console.log("CURRENTP STORAGE", currentPlayer)
+          setSeconds(120);
+          setSelectedMov(null);
+          setSelectedCell({});
+          setSelectedFCard(null);
+          validPos.map(pos => updateCellOpacity(pos[0], pos[1], false));
+          setValidPos([]);
+          resetUsedMoves();
+        }
+        if (response.json.actual_board) {
+          setBoardState(response.json.actual_board);
+          console.log("Board state updated from server:", response.json.actual_board);
+        }
+        setPlayerNames(response.json.player_names || []);
+        setPlayerColors(response.json.player_colors || {});
+        const playerCantFCards = Object.fromEntries(
+          Object.entries(response.json.player_f_cards || {}).map(([key, value]) => [
+            key,
+            value.length,
+          ])
         );
+        setPlayersCantFCards(playerCantFCards);
+        if (Object.keys(initialFiguresCount).length === 0) {
+          setInitialFiguresCount(playerCantFCards);
+        }
+        setPlayerFCards_id(response.json.player_f_hand_ids || {});
+        setPlayerFCards_type(response.json.player_f_hand || {});
+        setPlayerMCards(response.json.player_m_cards || {});
+        setPlayerIds(response.json.player_ids || []);
+        setCurrentPlayer(response.json.current_player || -1);
+        sessionStorage.setItem("currentPlayer", response.json.current_player || -1);
+        setHighlightedCells(response.json.highlighted_squares || []);
+        if (Object.keys(playersUsedM).length === 0) {
+          setPlayersUsedM(
+            Object.fromEntries(
+              Object.entries(response.json.player_m_cards || {}).map(([key, value]) => [
+                key,
+                value.map(() => false)
+              ])
+            )
+          );
+        }
+        setForbiddenColor(response.json.forbidden_color || "");
       }
-      setForbiddenColor(response.json.forbidden_color || "");
     }
+
   }
 
   const jugadorActual = {
