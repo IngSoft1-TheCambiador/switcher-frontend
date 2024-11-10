@@ -25,7 +25,7 @@ function GameLayout() {
   const [playerColors, setPlayerColors] = useState({});
   const [playerFCards_id, setPlayerFCards_id] = useState({});
   const [playerFCards_type, setPlayerFCards_type] = useState({});
-  const [playerFCards_bloqued, setPlayerFCards_bloqued] = useState({});
+  const [playerFCards_blocked, setPlayerFCards_blocked] = useState({});
   const [playersCantFCards, setPlayersCantFCards] = useState({});
   const [initialFiguresCount, setInitialFiguresCount] = useState({});
   const [playerMCards, setPlayerMCards] = useState({});
@@ -118,8 +118,8 @@ function GameLayout() {
       }
       setPlayerFCards_id(response.json.player_f_hand_ids);
       setPlayerFCards_type(response.json.player_f_hand);
-      setPlayerFCards_bloqued(response.json.player_f_hand_bloqued);
-      console.log("Bloqued: ",response.json.player_f_hand_bloqued);
+      setPlayerFCards_blocked(response.json.player_f_hand_blocked);
+      console.log("Blocked: ",response.json.player_f_hand_blocked);
       setPlayerMCards(response.json.player_m_cards);
       setPlayerIds(response.json.player_ids);
       setCurrentPlayer(response.json.current_player);
@@ -323,7 +323,7 @@ function GameLayout() {
           <CartaFigura FCardsType={playerFCards_type[clientId] || []}
             selectedFCard={selectedFCard.player_id == clientId ? selectedFCard.index : null}
             setSelectedFCard={(i) => selectFigure(clientId, i)}
-            currentPlayer={currentPlayer} FCardsBloqued={playerFCards_bloqued[clientId]} />
+            currentPlayer={currentPlayer} FCardsBlocked={playerFCards_blocked[clientId]} />
           <Timer seconds={seconds} setSeconds={setSeconds}></Timer>
         </div>
         <div style={{ justifySelf: "center", alignSelf: "center" }} >
@@ -349,7 +349,7 @@ function GameLayout() {
           playerShapes={playerFCards_type} playerMovements={playerMCards} playersUsedMovs={playersUsedM}
           currentPlayer={currentPlayer} playerShapeCount={playersCantFCards} initialFiguresCount={initialFiguresCount}
           selectedFCard={selectedFCard} setSelectedFCard={(player_id, i) => selectFigure(player_id, i)}
-          FCardsBloqued={playerFCards_bloqued} />
+          FCardsBlocked={playerFCards_blocked} />
       </div>
 
       <div className="chat">

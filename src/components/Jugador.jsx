@@ -8,7 +8,7 @@ import CartasRestantes from "./CartasRestantes.jsx";
 
 function Jugador({
   playerNames, playerColors, playerShapes, playerMovements, playersUsedMovs, playerShapeCount,
-  currentPlayer, selectedFCard, setSelectedFCard, FCardsBloqued
+  currentPlayer, selectedFCard, setSelectedFCard, FCardsBlocked
 }) {
 
   const { clientId } = useContext(AppContext);
@@ -27,7 +27,7 @@ function Jugador({
         player_id: id,
         color: parseColor(playerColors[id]),
         figuras: playerShapes[id],
-        fig_bloqueadas: FCardsBloqued[id],
+        fig_bloqueadas: FCardsBlocked[id],
         movimientos: playerMovements[id],
         movUsados: playersUsedMovs[id],
         cantFiguras: playerShapeCount[id],
@@ -44,7 +44,7 @@ function Jugador({
           <CartaFiguraAjena FCardsType={jugador.figuras} cantFiguras={jugador.cantFiguras}
             selectedFCard={selectedFCard.player_id == jugador.player_id ? selectedFCard.index : null}
             setSelectedFCard={(i) => setSelectedFCard(jugador.player_id, i)}
-            FCardsBloqued={jugador.fig_bloqueadas} />
+            FCardsBlocked={jugador.fig_bloqueadas} />
           <CartaMovimientoAjena movimientos={jugador.movimientos} show={jugador.movUsados} />
         </div>
       ))}
