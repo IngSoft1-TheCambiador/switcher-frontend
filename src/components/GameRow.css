@@ -5,9 +5,8 @@
 }
  
 .private-indicator {
-    margin-left: auto;
-    font-weight: bold;
-  }
+  margin-left: 5px;
+}
   
 .popup {
     position: fixed;
