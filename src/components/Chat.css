@@ -32,3 +32,14 @@
     padding: 5px;
     text-align: left;
 }
+
+.log-img-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.log-card-img {
+    width: 25%;
+    height: fit-content;
+}

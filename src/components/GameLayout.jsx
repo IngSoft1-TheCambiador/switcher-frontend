@@ -313,7 +313,7 @@ function GameLayout() {
       </div>
 
       <div className="chat">
-        <Chat playerNames={playerNames} playerColors={playerColors} />
+        <Chat />
       </div>
 
     </div>
