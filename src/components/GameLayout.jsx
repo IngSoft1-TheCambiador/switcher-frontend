@@ -36,7 +36,11 @@ function GameLayout() {
   const [selectedMov, setSelectedMov] = useState(null);
   const [selectedCell, setSelectedCell] = useState({});
   const [validPos, setValidPos] = useState([]);
-  const [usedMoves, setUsedMoves] = useState([false, false, false]);
+  const [usedMoves, setUsedMoves] = useState(() => {
+    const saved = sessionStorage.getItem("usedMoves");
+    console.log("LOS MOVIMIENTOS SE GUARDAN ASI: ", saved);
+    return saved ? saved.split(',').map((s) => { return !(s === 'false') }) : [false, false, false];
+  });
   const [cellOpacity, setCellOpacity] = useState(Array(6).fill().map(() => Array(6).fill(false)));
   const [highlightedCells, setHighlightedCells] = useState([]);
   const [selectedFCard, setSelectedFCard] = useState(null);
@@ -171,7 +175,7 @@ function GameLayout() {
     var usedM = usedMoves;
     usedM[selectedMov] = true;
     setUsedMoves(usedM);
-
+    sessionStorage.setItem("usedMoves", usedM.toString());
     setSelectedMov(null);
     setSelectedCell({});
     setValidPos([]);
@@ -225,6 +229,7 @@ function GameLayout() {
         console.log("Board state updated after claiming figure:", response.json.true_board);
       }
       setUsedMoves([false, false, false]);
+      sessionStorage.setItem("usedMoves", [false, false, false].toString());
     }
 
     setSelectedFCard(null);
@@ -263,7 +268,7 @@ function GameLayout() {
 
   const resetPlayersUsedMoves = () => {
     setUsedMoves([false, false, false]);
-
+    sessionStorage.setItem("usedMoves", [false, false, false].toString());
     setPlayersUsedM(prevState => {
       const newState = { ...prevState };
       Object.keys(newState).forEach(playerId => {
