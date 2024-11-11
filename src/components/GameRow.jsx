@@ -18,8 +18,13 @@ function GameRow({ gameID, gameName, minPlayers, maxPlayers, isPrivate, isActive
     };
     const response = await httpRequest(requestData);
     if (response.json.response_status == 0) {
-      handleNewPlayer(response.json.player_id, gameID);
-      navigate('/WaitRoom');
+      if (isActive && response.json.is_init) {
+        navigate('/GameLayout');
+      } else {
+        handleNewPlayer(response.json.player_id, gameID);
+        navigate('/WaitRoom');
+      }
+
     } else {
       alert('Contraseña incorrecta o error al unirse a la partida');
     }
