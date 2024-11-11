@@ -5,21 +5,26 @@ import '../index.css';
 import './GameRow.css';
 import { POST, httpRequest } from '../services/HTTPServices.jsx';
 
-function GameRow({ gameID, gameName, minPlayers, maxPlayers, isPrivate }) {
+function GameRow({ gameID, gameName, minPlayers, maxPlayers, isPrivate, isActive }) {
   const [, navigate] = useLocation();
-  const { socketId, playerName, handleNewPlayer } = useContext(AppContext);
+  const { socketId, playerName, handleNewPlayer, clientId } = useContext(AppContext);
   const [password, setPassword] = useState('');
   const [showPopup, setShowPopup] = useState(false);
 
   const joinGame = async () => {
     const requestData = {
       "method": POST,
-      "service": `join_game/?socket_id=${socketId}&game_id=${gameID}&player_name=${playerName}&password=${password}`
+      "service": `join_game/?socket_id=${socketId}&game_id=${gameID}&player_name=${playerName}&password=${password}&player_id=${clientId}`
     };
     const response = await httpRequest(requestData);
     if (response.json.response_status == 0) {
-      handleNewPlayer(response.json.player_id, gameID);
-      navigate('/WaitRoom');
+      if (isActive && response.json.is_init) {
+        navigate('/GameLayout');
+      } else {
+        handleNewPlayer(response.json.player_id, gameID);
+        navigate('/WaitRoom');
+      }
+
     } else {
       alert('Contraseña incorrecta o error al unirse a la partida');
     }
@@ -40,10 +45,11 @@ function GameRow({ gameID, gameName, minPlayers, maxPlayers, isPrivate }) {
   };
 
   return (
-    <div className='row-wrapper'>
+    <div className='row-wrapper' style={{background : (isActive ? '#ffd42a' : '')}}>
       <div className="game-button" onClick={handleJoinClick}>
         {gameName}
         {isPrivate && <img src={"private.svg"} alt="Private" className="private-indicator" />}
+        {isActive && <img src={"active.png"} alt="Active" className="active-indicator" />}
       </div>
       <div>{minPlayers}</div>
       <div>{maxPlayers}</div>

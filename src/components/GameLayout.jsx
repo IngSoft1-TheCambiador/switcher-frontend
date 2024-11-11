@@ -116,7 +116,17 @@ function GameLayout() {
           console.log("REINICIANDO TURNO");
           console.log("CURRENTP BACK ", response.json.current_player);
           console.log("CURRENTP STORAGE", currentPlayer)
-          setSeconds(120);
+          const fetch_time = async () => {
+            const requestData = {
+              method: GET,
+              service: `get_current_time?game_id=${gameId}`,
+            };
+
+            const response = await httpRequest(requestData);
+            return response.json.current_time;
+          };
+
+          setSeconds(await fetch_time());
           setSelectedMov(null);
           setSelectedCell({});
           setSelectedFCard({});

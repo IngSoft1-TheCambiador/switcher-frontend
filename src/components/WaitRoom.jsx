@@ -51,9 +51,9 @@ function WaitRoom() {
         };
         const response = await httpRequest(requestData);
         if (response.json.message.startsWith("Succesfully removed player")) {
-            const name = sessionStorage.getItem("playerName");
-            sessionStorage.clear();
-            sessionStorage.setItem("playerName", name);
+            //const name = sessionStorage.getItem("playerName");
+            //sessionStorage.clear();
+            //sessionStorage.setItem("playerName", name);
             navigate("/ListaPartidas");
         }
     }

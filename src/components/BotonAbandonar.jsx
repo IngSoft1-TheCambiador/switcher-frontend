@@ -18,8 +18,8 @@ function BotonAbandonar({ resetUsedMoves }) {
         };
         const response = await httpRequest(requestData);
         if (response.ok) {
-            sessionStorage.setItem("gameId", null);
-            sessionStorage.setItem("clientId", null);
+            //sessionStorage.setItem("gameId", null);
+            //sessionStorage.setItem("clientId", null);
             navigate("/ListaPartidas");
         } else {
             console.error("Error al abandonar la partida: ", response);
