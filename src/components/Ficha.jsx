@@ -16,11 +16,12 @@ function Ficha({ id, x, y, color, setSelectedCell, cellOpacity, isHighlighted, f
   const classAttr = isHighlighted === '1' ? "intermitente" : "";
   const isForbidden = color === forbiddenColor;
   return (
-    <div className="ficha" onClick={() => setSelectedCell(x, y)}>
+    <div className="ficha" onClick={() => setSelectedCell(x, y)}
+    data-testid="ficha" >
       <img 
         src={imagen}  alt={`Ficha ${id}`} className={classAttr} 
         style = {{
-          filter: `${cellOpacity[x][y] ? 'drop-shadow(0px 0px 20px black)' : ''} ${isForbidden ? 'grayscale(100%)' : ''}`
+          filter: `${cellOpacity ? 'drop-shadow(0px 0px 20px black)' : ''} ${isForbidden ? 'grayscale(100%)' : ''}`
         }} 
       />
     </div>

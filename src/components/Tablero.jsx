@@ -18,7 +18,7 @@ function Tablero({ boardState, setSelectedCell, cellOpacity, highlightedCells, f
   return (
     <div className="tablero">
       {fichas.map(({ id, x, y, color, isHighlighted }) => (
-        <Ficha key={id} id={id} x={x} y={y} color={color} setSelectedCell={setSelectedCell} cellOpacity={cellOpacity} isHighlighted = {isHighlighted} forbiddenColor={forbiddenColor} />
+        <Ficha key={id} id={id} x={x} y={y} color={color} setSelectedCell={setSelectedCell} cellOpacity={cellOpacity[x][y]} isHighlighted = {isHighlighted} forbiddenColor={forbiddenColor} />
       ))}
     </div>
   );
