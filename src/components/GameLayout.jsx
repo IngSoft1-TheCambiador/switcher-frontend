@@ -17,7 +17,10 @@ import Timer from "./Timer.jsx";
 
 function GameLayout() {
   const { socketId, lastMessage, clientId, gameId, seconds, setSeconds } = useContext(AppContext);
-  const [winner, setWinner] = useState("");
+  const [winner, setWinner] = useState(() => {
+    const saved = sessionStorage.getItem("winner");
+    return saved ? saved : "";
+  });
   const [boardState, setBoardState] = useState("");
   const [playerNames, setPlayerNames] = useState([]);
   const [playerColors, setPlayerColors] = useState({});
@@ -65,7 +68,11 @@ function GameLayout() {
     if (lastMessage && lastMessage.data) {
       if (lastMessage.data.includes("GAME_ENDED")) {
         const splitMsg = lastMessage.data.split(' ');
+        const name = sessionStorage.getItem("playerName");
+        sessionStorage.clear();
+        sessionStorage.setItem("playerName", name);
         setWinner(splitMsg[1]);
+        sessionStorage.setItem("winner", splitMsg[1]);
       } else if (lastMessage.data.includes("PARTIAL_MOVE")) {
         const params = lastMessage.data.split(" ");
         setMoves(params[1], params[2]);
@@ -98,7 +105,11 @@ function GameLayout() {
     } else {
       if (response.json && response.json.player_names && response.json.player_names.length === 1) {
         console.log("QUEDA 1 JUGADOR");
+        const name = sessionStorage.getItem("playerName");
+        sessionStorage.clear();
+        sessionStorage.setItem("playerName", name);
         setWinner(response.json.player_names[0]);
+        sessionStorage.setItem("winner", response.json.player_names[0]);
       } else if (response.json) {
 
         if (response.json.current_player !== undefined && currentPlayer !== response.json.current_player) {
@@ -200,7 +211,7 @@ function GameLayout() {
       if (i === selectedFCard.index || selectedMov != null) {
         setSelectedFCard({});
       } else {
-        setSelectedFCard({player_id: player_id, index: i});
+        setSelectedFCard({ player_id: player_id, index: i });
       }
     }
   }
@@ -294,7 +305,7 @@ function GameLayout() {
       setSelectedCell({ x: x, y: y });
       setValidPos(calculatePositions(movimientos[selectedMov], x, y));
     } else if (selectedFCard.player_id != undefined) {
-      if (selectedFCard.player_id == clientId){
+      if (selectedFCard.player_id == clientId) {
         claimFigure(x, y);
       } else {
         blockFigure(x, y);

@@ -15,9 +15,10 @@ function WaitRoom() {
     const [name, setName] = useState('');
 
     useEffect(() => {
-        if (lastMessage.data.includes("GAME CANCELLED BY OWNER") && ownerId !== clientId){
-            //sessionStorage.setItem("gameId", null);
-            //sessionStorage.setItem("clientId", null);
+        if (lastMessage && lastMessage.data.includes("GAME CANCELLED BY OWNER") && ownerId !== clientId){
+            const name = sessionStorage.getItem("playerName");
+            sessionStorage.clear();
+            sessionStorage.setItem("playerName", name);
             navigate("/ListaPartidas");
         } else {
             getGameState();
@@ -50,8 +51,9 @@ function WaitRoom() {
         };
         const response = await httpRequest(requestData);
         if (response.json.message.startsWith("Succesfully removed player")) {
-            //sessionStorage.setItem("gameId", null);
-            //sessionStorage.setItem("clientId", null);
+            const name = sessionStorage.getItem("playerName");
+            sessionStorage.clear();
+            sessionStorage.setItem("playerName", name);
             navigate("/ListaPartidas");
         }
     }
