@@ -13,8 +13,8 @@ const imagenesFichas = {
 
 function Ficha({ id, x, y, color, setSelectedCell, cellOpacity, isHighlighted, forbiddenColor }) {
   const imagen = imagenesFichas[color];
-  const classAttr = isHighlighted === '1' ? "intermitente" : "";
   const isForbidden = color === forbiddenColor;
+  const classAttr = (isHighlighted === '1' && !isForbidden)? "intermitente" : "";
   return (
     <div className="ficha" onClick={() => setSelectedCell(x, y)}
     data-testid="ficha" >

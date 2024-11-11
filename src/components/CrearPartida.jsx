@@ -62,11 +62,11 @@ function CrearPartida() {
           id="invalid-game-name" >
           Ingrese un nombre alfanumerico de hasta 15 caracteres
         </div>
-        <h3>Máximo</h3>
+        <h3>Mínimo</h3>
         <input
           value={min}
           onChange={e => setMin(e.target.value)} />
-        <h3>Mínimo</h3>
+        <h3>Máximo</h3>
         <input
           value={max}
           onChange={e => setMax(e.target.value)} />
