@@ -43,8 +43,8 @@ function GameRow({ gameID, gameName, minPlayers, maxPlayers, isPrivate }) {
     <div className='row-wrapper'>
       <div className="game-button" onClick={handleJoinClick}>
         {gameName}
+        {isPrivate && <img src={"private.svg"} alt="Private" className="private-indicator" />}
       </div>
-      {/*isPrivate && <div className="private-indicator">P</div> Falta mostrar de alguna forma que es privada*/}
       <div>{minPlayers}</div>
       <div>{maxPlayers}</div>
       {showPopup && (
