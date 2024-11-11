@@ -22,7 +22,15 @@ function App() {
   });
 
   const [socketId, setSocketId] = useState(-1);
-  const [seconds, setSeconds] = useState(120);
+  const [seconds, setSeconds] = useState(async () => {
+    const requestData = {
+      method: GET,
+      service: `get_current_time?game_id=${gameId}`,
+    };
+
+    const response = await httpRequest(requestData);
+    return response.json.current_time;
+  });
 
   const [gameId, setGameId] = useState(() => {
     const saved = parseInt(sessionStorage.getItem("gameId"));

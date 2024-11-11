@@ -4,7 +4,7 @@
     background-color: #808264;
 }
  
-.private-indicator {
+.private-indicator, .active-indicator {
   margin-left: 5px;
 }
   

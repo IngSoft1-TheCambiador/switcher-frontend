@@ -45,7 +45,7 @@ function GameRow({ gameID, gameName, minPlayers, maxPlayers, isPrivate, isActive
   };
 
   return (
-    <div className='row-wrapper'>
+    <div className='row-wrapper' style={{background : (isActive ? '#ffd42a' : '')}}>
       <div className="game-button" onClick={handleJoinClick}>
         {gameName}
         {isPrivate && <img src={"private.svg"} alt="Private" className="private-indicator" />}
