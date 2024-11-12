@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./CartaMovimiento.css";
+import { AppContext } from "../App";
 // import { assert } from "vitest";
 
 const BOARD_SIZE = 6;
@@ -84,13 +85,14 @@ export function CartaMovimientoAjena({ movimientos, show }) {
   );
 }
 
-export function CartaMovimientoPropia({ movimientos, selectedMov, setSelectedMov, used }) {
+export function CartaMovimientoPropia({ movimientos, selectedMov, setSelectedMov, used, currentPlayer }) {
+  const { clientId } = useContext(AppContext);
   return (
     <div className="carta-movimiento-container">
       {movimientos.map((movimiento, index) => (
         <div key={index} className="carta-movimiento" onClick={()=>setSelectedMov(movimiento, index)}>
           {<img src={imagenes[movimiento]} alt={`Movimiento ${movimiento}`}
-                style={{filter: selectedMov == index ? 'drop-shadow(0px 0px 20px white)' : '', opacity: used[index] ? 0.4 : 1}} />}
+                style={{filter: selectedMov == index ? 'drop-shadow(0px 0px 20px white)' : '', opacity: (currentPlayer === clientId) ? (used[index] ? 0.4 : 1) : 0.4}} />}
         </div>
       ))}
     </div>

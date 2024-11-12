@@ -6,7 +6,10 @@ import { CartaMovimientoAjena } from "./CartaMovimiento.jsx";
 import CartasRestantes from "./CartasRestantes.jsx";
 
 
-function Jugador({ playerNames, playerColors, playerShapes, playerMovements, playersUsedMovs, currentPlayer, playerShapeCount, initialFiguresCount }) {
+function Jugador({
+  playerNames, playerColors, playerShapes, playerMovements, playersUsedMovs, playerShapeCount,
+  currentPlayer, selectedFCard, setSelectedFCard, FCardsBlocked
+}) {
 
   const { clientId } = useContext(AppContext);
 
@@ -24,25 +27,24 @@ function Jugador({ playerNames, playerColors, playerShapes, playerMovements, pla
         player_id: id,
         color: parseColor(playerColors[id]),
         figuras: playerShapes[id],
+        fig_bloqueadas: FCardsBlocked[id],
         movimientos: playerMovements[id],
         movUsados: playersUsedMovs[id],
         cantFiguras: playerShapeCount[id],
-        cantFigurasInicial: initialFiguresCount[id],
       }
     ));
 
   return (
     <div className="jugadores">
       {jugadores.map((jugador, index) => (
-        <div key={index} className="jugador" style={{ backgroundColor: jugador.color }} >
-          {console.log("jugador: ", jugador.nombre, "id: ", jugador.player_id, "turno actual: ", currentPlayer)}
+        <div key={index} className={parseInt(currentPlayer) === parseInt(jugador.player_id) ? "jugador-actual jugador" : "jugador"} style={{ backgroundColor: jugador.color }} >
           <div className="name-bar">
             <h3>{jugador.nombre} </h3>
-            {parseInt(currentPlayer) === parseInt(jugador.player_id) &&
-              <img src="hourglass.svg" alt="hourglass" className="other-turn-symbol" />
-            }
           </div>
-          <CartaFiguraAjena figuras={jugador.figuras} cantFiguras={jugador.cantFiguras} />
+          <CartaFiguraAjena FCardsType={jugador.figuras} cantFiguras={jugador.cantFiguras}
+            selectedFCard={selectedFCard.player_id == jugador.player_id ? selectedFCard.index : null}
+            setSelectedFCard={(i) => setSelectedFCard(jugador.player_id, i)}
+            FCardsBlocked={jugador.fig_bloqueadas} />
           <CartaMovimientoAjena movimientos={jugador.movimientos} show={jugador.movUsados} />
         </div>
       ))}

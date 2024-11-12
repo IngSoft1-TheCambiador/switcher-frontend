@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./CartaFigura.css";
+import { AppContext } from "../App";
 
 const imagenesFiguras = {
   h1: "fig01.svg",
@@ -29,14 +30,21 @@ const imagenesFiguras = {
   s7: "fige07.svg",
 };
 
-export function CartaFiguraAjena({ figuras, cantFiguras }) {
+function ShowImages({ fig, blocked, shadow, opacity }){
+  return (
+    <img
+      src={ blocked ? "back.svg" : imagenesFiguras[fig]}
+      alt={`Figura ${fig}`}
+      style={{ filter: shadow, opacity: opacity}} />
+  )
+}
+
+export function CartaFiguraAjena({ FCardsType, cantFiguras, selectedFCard, setSelectedFCard, FCardsBlocked}) {
   return (
     <div className="carta-figura-container">
-      {figuras.slice(0, 3).map((figura, index) => (
-        <div key={index} className="carta-figura">
-          <img src={imagenesFiguras[figura]} alt={`Figura ${figura}`} />
-        </div>
-      ))}
+      <CartaFigura
+        FCardsType={FCardsType} selectedFCard={selectedFCard} setSelectedFCard={setSelectedFCard}
+        currentPlayer={null} FCardsBlocked={FCardsBlocked} />
       <div className="carta-figura">
         <div className="image-withText">
           <img src="back.svg" alt="back" />
@@ -47,13 +55,23 @@ export function CartaFiguraAjena({ figuras, cantFiguras }) {
   );
 }
 
-export function CartaFiguraPropia({ figuras, selectedFCard, setSelectedFCard }) {
+export function CartaFigura({ FCardsType, selectedFCard, setSelectedFCard, currentPlayer, FCardsBlocked}) {
+  const { clientId } = useContext(AppContext);
+
+  // currentPlayer is only used to set the opacity
+  // if no valid current player is passed, show the cards with full opacity
+  if (currentPlayer === null) {
+    currentPlayer = clientId;
+  }
+
   return (
     <div className="carta-figura-container">
-      {figuras.slice(0, 3).map((figura, index) => (
-        <div key={index} className="carta-figura" onClick={() => setSelectedFCard(figura, index)}>
-          <img src={imagenesFiguras[figura]} alt={`Figura ${figura}`}
-            style={{ filter: selectedFCard == index ? 'drop-shadow(0px 0px 20px white)' : '' }} />
+      {FCardsType.slice(0, 3).map((figura, index) => (
+        <div key={index} className="carta-figura" onClick={() => setSelectedFCard(index)}>
+          <ShowImages
+           fig={figura} blocked={FCardsBlocked[index]}
+           shadow={selectedFCard == index ? 'drop-shadow(0px 0px 20px white)' : ''}
+           opacity={(currentPlayer === clientId) ? 1 : 0.4} />
         </div>
       ))}
     </div>

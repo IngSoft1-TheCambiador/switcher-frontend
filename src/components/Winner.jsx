@@ -15,6 +15,9 @@ function Winner({ winnerName }) {
         ¡{winnerName} ganó la partida!
       </h1>
       <button className='button-return' onClick={() => {
+        const name = sessionStorage.getItem("playerName");
+        sessionStorage.clear();
+        sessionStorage.setItem("playerName", name);
         navigate("/ListaPartidas");
       }} >
         Volver
